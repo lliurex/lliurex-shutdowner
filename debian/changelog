@@ -1,0 +1,132 @@
+lliurex-shutdowner (0.98) xenial; urgency=high
+
+  * Fixed semi clients dialog
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 01 Oct 2018 17:14:08 +0200
+
+lliurex-shutdowner (0.96) xenial; urgency=high
+
+  * Fixed shutdown variable
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 13:07:50 +0200
+
+lliurex-shutdowner (0.95) xenial; urgency=high
+
+  * Close button label changed to Accept
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 12:50:55 +0200
+
+lliurex-shutdowner (0.94.2) xenial; urgency=high
+
+  * Fixing shutdown wait time on server
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 11:57:20 +0200
+
+lliurex-shutdowner (0.94) xenial; urgency=high
+
+   * Allowing to close window when countdown reaches 0
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 09:37:51 +0200
+
+lliurex-shutdowner (0.93) xenial; urgency=high
+
+  * Improved display detection
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 08:47:10 +0200
+
+lliurex-shutdowner (0.92.5) xenial; urgency=medium
+
+  * Updated categorization in zero-center
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 30 Apr 2018 09:16:06 +0200
+
+lliurex-shutdowner (0.92.4) xenial; urgency=high
+
+  * Trying to better support user display discovery
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 01 Mar 2018 12:10:43 +0100
+
+lliurex-shutdowner (0.92.3) xenial; urgency=high
+
+  * Countdown fix when server is configured to shutdown as well
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 18 Jul 2017 12:23:34 +0200
+
+lliurex-shutdowner (0.92.2) xenial; urgency=high
+
+  * Fixing desktop file
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 18 Jul 2017 10:24:16 +0200
+
+lliurex-shutdowner (0.92.1) xenial; urgency=high
+
+  * Better thin client support.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 18 Jul 2017 09:40:03 +0200
+
+lliurex-shutdowner (0.92) xenial; urgency=high
+
+  * Adding dialog support for thin clients
+  * Fixed user and display discovery
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 17 Jul 2017 14:29:25 +0200
+
+lliurex-shutdowner (0.91) xenial; urgency=high
+
+  * Adding application icon
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 11 Jul 2017 13:18:08 +0200
+
+lliurex-shutdowner (0.90) xenial; urgency=high
+
+  * Code and GUI redesign
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 30 Jun 2017 12:12:38 +0200
+
+lliurex-shutdowner (0.9) xenial; urgency=high
+
+  * Fixed daynames when using translations 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 11 May 2017 10:30:05 +0200
+
+lliurex-shutdowner (0.8) xenial; urgency=medium
+
+  * Fix translations
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 06 Sep 2016 12:00:40 +0200
+
+lliurex-shutdowner (0.7) xenial; urgency=medium
+
+  * Fix desktop file
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Thu, 01 Sep 2016 13:13:28 +0200
+
+lliurex-shutdowner (0.6) xenial; urgency=medium
+
+  * Fix valencian translation in desktop file
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Thu, 01 Sep 2016 11:26:49 +0200
+
+lliurex-shutdowner (0.5) xenial; urgency=medium
+
+  * Copy trusty code
+
+ -- M.Angel Juan <m.angel.juan@gmail.com>  Tue, 09 Feb 2016 16:25:33 +0100
+
+lliurex-shutdowner (0.3) trusty; urgency=medium
+
+  * Added icon & desktop launcher
+
+ -- Miguel Angel <m.angel.juan@gmail.com>  Mon, 23 Nov 2015 09:48:30 +0100
+
+lliurex-shutdowner (0.2) trusty; urgency=medium
+
+  * Updated UI, new hidden password textentry
+
+ -- lliurex <m.angel.juan@gmail.com>  Wed, 18 Nov 2015 13:36:46 +0100
+
+lliurex-shutdowner (0.1) trusty; urgency=high
+
+  * Initial release.
+
+ -- M.Angel Juan <m.angel.juan@gmail.com>  Fri, 05 Sep 2014 12:46:16 +0200
