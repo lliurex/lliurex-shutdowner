@@ -1,0 +1,128 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk,GObject, GLib
+
+import signal
+import gettext
+import os
+import time
+import sys
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+gettext.textdomain('lliurex-shutdowner-common')
+_ = gettext.gettext
+
+class ShutdownDialog:
+	
+	def __init__(self,wait_time):
+		
+		self.msg=_("System will shutdown in %s seconds. Please, save your files.")
+		
+		self.countdown=wait_time*60
+		self.current_counter=0
+		
+		self.block_destroy=True
+		
+		self.start_gui()
+		
+		
+	#def init
+	
+	def start_gui(self):
+
+		builder=Gtk.Builder()
+		builder.set_translation_domain('lliurex-shutdowner-common')
+		builder.add_from_file("/usr/share/lliurex-shutdowner/rsrc/shutdowner-lliurex-dialog.ui")
+		self.main_window=builder.get_object("shutdown_window")
+		
+		self.msg_label=builder.get_object("msg_label")
+		self.pbar=builder.get_object("progressbar")
+		self.buttons_box=builder.get_object("buttons_box")
+		self.cancel_button=builder.get_object("cancel_button")
+		self.shutdown_button=builder.get_object("shutdown_button")
+		
+		self.init_values()
+		self.connect_signals()
+		
+		GObject.threads_init()
+		Gtk.main()
+		
+	#def start_gui
+	
+	def init_values(self):
+		
+		ret=os.system("lliurex-version -t server 2>/dev/null")
+		
+		is_thin=os.system("lliurex-version -x thin")
+		
+		if ret!=0 or is_thin==0:
+			self.buttons_box.hide()
+			
+		self.msg_label.set_text(self.msg%self.countdown)
+		
+		# The way this is beeing executed, shutdown -h now is missing authentication to work
+		self.shutdown_button.hide()
+		
+		self.main_window.show()
+		
+	#def set_values
+	
+	def connect_signals(self):
+		
+		self.cancel_button.connect("clicked",self.cancel_clicked)
+		self.shutdown_button.connect("clicked",self.shutdown_clicked)
+		self.main_window.connect("delete-event",self.close_window_clicked)
+		GLib.timeout_add(1000,self.update_pbar)
+		
+	#def connect_signals
+	
+	def close_window_clicked(self,widget,event):
+		
+		return self.block_destroy
+		
+	#def close_window_clicked
+	
+	def cancel_clicked(self,button):
+		
+		command="shutdown -c"
+		os.system(command)
+		Gtk.main_quit()
+		
+	#def cancel_clicked
+	
+	def shutdown_clicked(self,button):
+		
+		command="shutdown -c; shutdown -h now"
+		os.system(command)
+		Gtk.main_quit()
+		
+	#def shutdown_clicked
+	
+	def update_pbar(self):
+		
+		if self.countdown-self.current_counter > 0 :
+		
+			self.current_counter+=1
+			p=self.current_counter*1.0/self.countdown
+			self.pbar.set_fraction(p)
+			self.msg_label.set_text(self.msg%(self.countdown-self.current_counter))
+			return True
+		
+		self.block_destroy=False
+		return False
+		
+	#def update_pbar
+	
+	
+	
+#class ShutdownDialog
+
+if __name__=="__main__":
+	
+	try:
+		sd=ShutdownDialog(int(sys.argv[1]))
+	except Exception as e:
+		print(e)

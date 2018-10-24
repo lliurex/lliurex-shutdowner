@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+
+import subprocess
+import os
+import time
+
+is_server=os.system("lliurex-version -t server")
+is_thin=os.system("lliurex-version -x thin")
+is_semi=os.system("lliurex-version -x semi")
+
+thinclient_cron_file="/etc/cron.d/lliurex-shutdowner-thinclients"
+
+#in minutes
+client_wait_time=1
+server_wait_time=2
+
+
+t=time.localtime()
+
+if is_server==0:
+	tmp_wait_time=server_wait_time
+else:
+	tmp_wait_time=client_wait_time
+
+shutdown_date="%s:%s"%(t.tm_hour,t.tm_min+tmp_wait_time)
+
+
+if is_thin!=0:
+	
+	if not os.path.exists(thinclient_cron_file) and is_semi!=0:
+		
+		# thinclient_cron_file shouldn't exist on fat clients, it may be located on server, which means if it's not there
+		# server also needs to be shutdown, and if so, local users have to be notified
+		# semi clients don't show tty information, thin_client logic is enough
+		
+		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
+		displays=set()
+		for item in standalone.strip("\n").split("\n"):
+			
+			display=None		
+			x=item.split(" ")
+			user=x[0]
+			display=x[-1]
+			
+			if "(" not in display or ")" not in display or ":" not in display:
+				continue
+				
+			display=display.lstrip("(").rstrip(")")
+			
+			if is_server==0:
+				tmp_wait_time=server_wait_time
+			else:
+				tmp_wait_time=client_wait_time
+			
+			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog %s' %s &"%(display,tmp_wait_time,user)
+			os.system(command)
+			
+	if is_server==0 or is_semi==0:
+		
+		# whether thinclient_cron_file exists or not, server HAS to handle thinclients notifications
+		
+		tmp_wait_time=1
+		thinclients=subprocess.Popen(["ps aux| grep LTSP_CLIENT | grep DISPLAY"],shell=True,stdout=subprocess.PIPE).communicate()[0]
+		thinclients=thinclients.strip("\n").split("\n")
+			
+		for tc in thinclients:
+			if "DISPLAY=" in tc:
+				tmp=tc.split(" ")
+				user=tmp[29]
+				for item in tmp:
+					if "DISPLAY=" in item:
+						display=item.split("=")[1]
+						command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog %s' %s &"%(display,tmp_wait_time,user)
+						os.system(command)
+						break
+
+
+if is_thin!=0 and not os.path.exists(thinclient_cron_file):
+	if is_server==0:
+		tmp_wait_time=server_wait_time
+	else:
+		tmp_wait_time=client_wait_time
+	command="/sbin/shutdown -h +%s"%tmp_wait_time
+	os.system(command)
+
+if is_thin==0 and not os.path.exists(thinclient_cron_file):
+	time.sleep(60*client_wait_time)
+	command="n4d-client -r -m shutdown -c ShutdownerClient"
+	os.system(command)

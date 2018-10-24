@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-04 13:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:163
+msgid "Validating user..."
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:191
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:222
+msgid "Invalid user"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:205
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:231
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:292
+#, python-format
+msgid "Currently detected clients: %s"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:32
+msgid "Automatic client shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:88
+msgid "15"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:104
+msgid ":"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:116
+msgid "30"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:142
+msgid "Monday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:157
+msgid "Tuesday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:172
+msgid "Wednesday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:187
+msgid "Thursday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:202
+msgid "Friday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:224
+msgid "Shutdown server as well (2 minutes later)"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:303
+msgid "Shutdown clients now"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:362
+msgid "User"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:376
+msgid "Password"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:388
+msgid "Server IP    (Default value : server)"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:397
+msgid "Login"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:436
+msgid "Lliurex Shutdowner"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:468
+msgid "Close"
+msgstr ""

@@ -1,0 +1,22 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LliureX Shutdowner
+Name[es]=Lliurex Shutdowner
+Name[qcv]=Lliurex Shutdowner
+Name[ca_ES@valencia]=Lliurex Shutdowner
+Name[ca_ES.UTF-8@valencia]=Lliurex Shutdowner
+TryExec=/usr/sbin/lliurex-shutdowner
+Comment=Shutdown program for the classroom
+Comment[qcv]=Programa la desconnexió dels clients de l'aula
+Comment[ca_ES@valencia]=Programa la desconnexió dels clients de l'aula
+Comment[ca_ES.UTF-8@valencia]=Programa la desconnexió dels clients de l'aula
+Comment[ca_ES]=Programa la desconnexió dels clients de l'aulala
+Comment[es]=Programa la desconexión de los clientes del aula
+StartupNotify=true
+Exec=/usr/sbin/lliurex-shutdowner
+Icon=lliurex-shutdowner
+Terminal=false
+Type=Application
+X-GNOME-Settings-Panel=lliurex-shutdowner
+X-Unity-Settings-Panel=lliurex-shutdowner
+Categories=PackageManager;X-GNOME-Settings-Panel;X-GNOME-SystemSettings;X-Unity-Settings-Panel;LliureX-Administration;

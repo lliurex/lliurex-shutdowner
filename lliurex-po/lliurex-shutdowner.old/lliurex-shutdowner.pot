@@ -1,0 +1,91 @@
+# Lliurex Shutdowner.
+# Copyright (C) 2016
+# This file is distributed under the same license as the LliureX Shutdowner package.
+# LliureX Team <lliurex@gva.es>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-01 14:17+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Pilar Embid <pembid_mar@gva.es>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:19
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:225
+msgid "Scheduled shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:28
+msgid "Monday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:45
+msgid "Tuesday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:62
+msgid "Wednesday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:80
+msgid "Thursday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:97
+msgid "Friday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:118
+msgid "Hours"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:131
+msgid "Minutes"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:151
+msgid "Shutdown schedule"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:188
+msgid "00:00"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:269
+msgid "User"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:285
+msgid "Password"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:307
+msgid "Login"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:351
+msgid "Immediate shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:369
+msgid " Immediate shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:385
+msgid "  Scheduled shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/shutdowner.ui:402
+msgid "Remove scheduled shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/sbin/shutdowner:141
+msgid "Clientes detectados:\n"
+msgstr ""
