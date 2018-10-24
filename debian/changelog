@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.0) bionic; urgency=medium
+
+  * Initital release for bionic
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 24 Oct 2018 12:11:11 +0200
+
 lliurex-shutdowner (0.98) xenial; urgency=high
 
   * Fixed semi clients dialog
