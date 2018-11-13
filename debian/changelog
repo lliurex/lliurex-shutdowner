@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.1) bionic; urgency=medium
+
+  * Adaptation of the gui to the new style
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 13 Nov 2018 09:26:58 +0100
+
 lliurex-shutdowner (1.0) bionic; urgency=medium
 
   * Initital release for bionic
