@@ -3,7 +3,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk,GObject, GLib
+from gi.repository import Gtk,GObject, GLib,Gdk,Gio
 
 import signal
 import gettext
@@ -17,6 +17,7 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 gettext.textdomain('lliurex-shutdowner')
 _ = gettext.gettext
 
+CSS_FILE="/usr/share/lliurex-shutdowner/rsrc/style.css"
 
 class LliurexShutdowner:
 	
@@ -47,7 +48,9 @@ class LliurexShutdowner:
 		self.main_box=builder.get_object("main_box")
 		self.login_box=builder.get_object("login_box")
 		self.cron_box=builder.get_object("cron_box")
-		self.cron_frame=builder.get_object("cron_frame")
+		self.cron_box_data=builder.get_object("cron_box_data")
+		self.cron_box_client=builder.get_object("cron_box_client")
+		#self.cron_frame=builder.get_object("cron_frame")
 		
 		self.stack=Gtk.Stack()
 		self.stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
@@ -58,7 +61,7 @@ class LliurexShutdowner:
 		
 		self.main_box.pack_start(self.stack,True,True,0)
 		
-		self.close_button=builder.get_object("close_button")
+		#self.close_button=builder.get_object("close_button")
 		self.login_button=builder.get_object("login_button")
 		self.shutdown_button=builder.get_object("shutdown_button")
 		
@@ -68,26 +71,28 @@ class LliurexShutdowner:
 		
 		self.login_msg_label=builder.get_object("login_msg_label")
 		self.detected_clients_label=builder.get_object("detected_clients_label")
+		self.automatic_shutdown_label=builder.get_object("automatic_shutdown_label")
 		self.cron_switch=builder.get_object("cron_switch")
 		self.hour_spinbutton=builder.get_object("hour_spinbutton")
 		self.minute_spinbutton=builder.get_object("minute_spinbutton")
-		self.monday_cb=builder.get_object("monday_checkbutton")
-		self.tuesday_cb=builder.get_object("tuesday_checkbutton")
-		self.wednesday_cb=builder.get_object("wednesday_checkbutton")
-		self.thursday_cb=builder.get_object("thursday_checkbutton")
-		self.friday_cb=builder.get_object("friday_checkbutton")
+		self.monday_tb=builder.get_object("monday_togglebutton")
+		self.tuesday_tb=builder.get_object("tuesday_togglebutton")
+		self.wednesday_tb=builder.get_object("wednesday_togglebutton")
+		self.thursday_tb=builder.get_object("thursday_togglebutton")
+		self.friday_tb=builder.get_object("friday_togglebutton")
 		self.server_shutdown_cb=builder.get_object("server_shutdown_checkbutton")
-		
+
 		self.weekdays=[]
-		self.weekdays.append(self.monday_cb)
-		self.weekdays.append(self.tuesday_cb)
-		self.weekdays.append(self.wednesday_cb)
-		self.weekdays.append(self.thursday_cb)
-		self.weekdays.append(self.friday_cb)
+		self.weekdays.append(self.monday_tb)
+		self.weekdays.append(self.tuesday_tb)
+		self.weekdays.append(self.wednesday_tb)
+		self.weekdays.append(self.thursday_tb)
+		self.weekdays.append(self.friday_tb)
 		
 		self.login_button.grab_focus()
 		
 		self.connect_signals()
+		self.set_css_info()
 		self.main_window.show()
 		
 	#def start_gui
@@ -95,7 +100,7 @@ class LliurexShutdowner:
 	
 	def connect_signals(self):
 		
-		self.main_window.connect("destroy",Gtk.main_quit)
+		self.main_window.connect("destroy",self.quit)
 		self.main_window.connect("delete_event",self.check_changes)
 		self.login_button.connect("clicked",self.login_clicked)
 		self.user_entry.connect("activate",self.entries_press_event)
@@ -103,12 +108,29 @@ class LliurexShutdowner:
 		self.server_ip_entry.connect("activate",self.entries_press_event)
 		
 		self.cron_switch.connect("notify::active",self.cron_switch_changed)
-		self.close_button.connect("clicked",self.check_changes)
+		#self.close_button.connect("clicked",self.check_changes)
 		self.shutdown_button.connect("clicked",self.shutdown_button_clicked)
 		
 	#def connect_signals
 	
 	
+	# CSS ###########################################################
+	def set_css_info(self):
+		
+		self.style_provider=Gtk.CssProvider()
+		f=Gio.File.new_for_path(CSS_FILE)
+		self.style_provider.load_from_file(f)
+		Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),self.style_provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+		self.user_entry.set_name("CUSTOM-ENTRY")
+		self.password_entry.set_name("CUSTOM-ENTRY")
+		self.server_ip_entry.set_name("CUSTOM-ENTRY")
+		self.cron_box_data.set_name("CARD-ITEM")
+		self.cron_box_client.set_name("CARD-ITEM")
+		self.detected_clients_label.set_name("DEFAULT-LABEL")
+		self.automatic_shutdown_label.set_name("DEFAULT-LABEL")
+
+	#def set_css_info	
+
 	# SIGNALS ########################################################
 	
 	def entries_press_event(self,widget):
@@ -120,8 +142,16 @@ class LliurexShutdowner:
 	
 	def cron_switch_changed(self,widget,data):
 		
-		self.cron_frame.set_sensitive(widget.get_active())
+		#self.cron_frame.set_sensitive(widget.get_active())
+
+		self.hour_spinbutton.set_sensitive(widget.get_active())
+		self.minute_spinbutton.set_sensitive(widget.get_active())
+
+		for item in self.weekdays:
+			item.set_sensitive(widget.get_active())
 		
+		self.server_shutdown_cb.set_sensitive(widget.get_active())
+
 	#def cron_switch_changed
 	
 	
@@ -209,7 +239,7 @@ class LliurexShutdowner:
 			if group_found:
 				self.login_msg_label.set_text("")
 				
-				self.cron_frame.set_sensitive(self.n4d_man.is_cron_enabled())
+				#self.cron_frame.set_sensitive(self.n4d_man.is_cron_enabled())
 				self.cron_switch.set_active(self.n4d_man.is_cron_enabled())
 				
 				self.detected_clients_label.set_text(_("Currently detected clients: %s")%self.n4d_man.detected_clients)
@@ -218,11 +248,11 @@ class LliurexShutdowner:
 
 				values=self.n4d_man.get_cron_values()
 				if values!=None:
-					self.monday_cb.set_active(values["weekdays"][0])
-					self.tuesday_cb.set_active(values["weekdays"][1])
-					self.wednesday_cb.set_active(values["weekdays"][2])
-					self.thursday_cb.set_active(values["weekdays"][3])
-					self.friday_cb.set_active(values["weekdays"][4])
+					self.monday_tb.set_active(values["weekdays"][0])
+					self.tuesday_tb.set_active(values["weekdays"][1])
+					self.wednesday_tb.set_active(values["weekdays"][2])
+					self.thursday_tb.set_active(values["weekdays"][3])
+					self.friday_tb.set_active(values["weekdays"][4])
 					self.hour_spinbutton.set_value(values["hour"])
 					self.minute_spinbutton.set_value(values["minute"])
 					self.server_shutdown_cb.set_active(values["server_shutdown"])
@@ -278,11 +308,11 @@ class LliurexShutdowner:
 				minute=self.minute_spinbutton.get_value_as_int()
 				hour=self.hour_spinbutton.get_value_as_int()
 				
-				new_var["cron_values"]["weekdays"][0]=self.monday_cb.get_active()
-				new_var["cron_values"]["weekdays"][1]=self.tuesday_cb.get_active()
-				new_var["cron_values"]["weekdays"][2]=self.wednesday_cb.get_active()
-				new_var["cron_values"]["weekdays"][3]=self.thursday_cb.get_active()
-				new_var["cron_values"]["weekdays"][4]=self.friday_cb.get_active()
+				new_var["cron_values"]["weekdays"][0]=self.monday_tb.get_active()
+				new_var["cron_values"]["weekdays"][1]=self.tuesday_tb.get_active()
+				new_var["cron_values"]["weekdays"][2]=self.wednesday_tb.get_active()
+				new_var["cron_values"]["weekdays"][3]=self.thursday_tb.get_active()
+				new_var["cron_values"]["weekdays"][4]=self.friday_tb.get_active()
 				new_var["cron_values"]["server_shutdown"]=self.server_shutdown_cb.get_active()
 				new_var["cron_values"]["hour"]=hour
 				new_var["cron_values"]["minute"]=minute
@@ -304,6 +334,13 @@ class LliurexShutdowner:
 		return new_var
 		
 	#def gather_values
+
+	def quit(self,widget):
+
+		self.check_changes()
+		Gtk.main_quit()	
+
+	#def quit		
 	
 #class LliurexShutdowner
 
