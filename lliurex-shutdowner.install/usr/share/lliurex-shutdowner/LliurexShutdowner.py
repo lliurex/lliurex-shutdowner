@@ -231,7 +231,7 @@ class LliurexShutdowner:
 			self.login_msg_label.set_markup("<span foreground='red'>"+_("Invalid user")+"</span>")
 		else:
 			group_found=False
-			for g in ["adm","admins","teachers"]:
+			for g in ["sudo","admins","teachers"]:
 				if g in self.n4d_man.user_groups:
 					group_found=True
 					break
