@@ -175,7 +175,7 @@ GtkToolbar
 		color: @default-grey;
 		border: none;
 		/*border-radius: 5px;*/
-		background-color: @arc-blue;
+		/*background-color: @arc-blue;*/
 		border-bottom: 1px solid #aaaaaa;
 		padding: 4px;
 		/*background: #eeeeee;*/
