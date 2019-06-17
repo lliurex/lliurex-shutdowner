@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.5) bionic; urgency=medium
+
+  * Fixed valencian translations
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 17 Jun 2019 13:43:31 +0200
+
 lliurex-shutdowner (1.4) bionic; urgency=medium
 
   * Fixed css file and changed icon
