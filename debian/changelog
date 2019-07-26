@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.6.1) bionic; urgency=medium
+
+  * Non-maintainer upload.
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 26 Jul 2019 11:26:02 +0200
+
 lliurex-shutdowner (1.6) bionic; urgency=medium
 
   * Fixed login window
