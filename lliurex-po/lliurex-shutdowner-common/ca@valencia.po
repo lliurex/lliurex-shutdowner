@@ -20,4 +20,4 @@ msgstr ""
 #: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog:22
 #, python-format
 msgid "System will shutdown in %s seconds. Please, save your files."
-msgstr ""
+msgstr "El sistema s'apagarà en %s segons. Per favor, guarda els teus fitxers."

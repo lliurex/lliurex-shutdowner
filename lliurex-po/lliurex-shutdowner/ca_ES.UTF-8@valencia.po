@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-13 09:13+0100\n"
-"PO-Revision-Date: 2018-11-13 09:21+0100\n"
+"PO-Revision-Date: 2019-07-30 10:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: ca_ES.UTF-8@valencia\n"
 "MIME-Version: 1.0\n"
@@ -18,23 +18,23 @@ msgstr ""
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:203
 msgid "Validating user..."
-msgstr ""
+msgstr "S'està validant l'usuari..."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:231
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:262
 msgid "Invalid user"
-msgstr ""
+msgstr "L'usuari no és vàlid "
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:245
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:271
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:285
 #, python-format
 msgid "Currently detected clients: %s"
-msgstr ""
+msgstr "Clients detectats actualment: %s"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:40
 msgid "Automatic client shutdown"
-msgstr ""
+msgstr "Apagat automàtic dels clients"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:103
 msgid "15"
@@ -50,47 +50,47 @@ msgstr ""
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:160
 msgid "M"
-msgstr ""
+msgstr "Dl."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:173
 msgid "T"
-msgstr ""
+msgstr "Dt."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:186
 msgid "W"
-msgstr ""
+msgstr "Dc."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:199
 msgid "R"
-msgstr ""
+msgstr "Dj."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:212
 msgid "F"
-msgstr ""
+msgstr "Dv."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:232
 msgid "Shutdown server as well (2 minutes later)"
-msgstr ""
+msgstr "Apaga el servidor també (2 minuts més tard)"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:296
 msgid "Shutdown clients now"
-msgstr ""
+msgstr "Apaga els clients ara"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:355
 msgid "User"
-msgstr ""
+msgstr "Usuari"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:369
 msgid "Password"
-msgstr ""
+msgstr "Contrasenya"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:381
 msgid "Server IP    (Default value : server)"
-msgstr ""
+msgstr "IP del servidor  (valor per defecte : servidor) "
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:390
 msgid "Login"
-msgstr ""
+msgstr "Inicia la sessió  "
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:429
 msgid "Lliurex Shutdowner"
