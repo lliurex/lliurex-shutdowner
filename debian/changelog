@@ -1,3 +1,10 @@
+lliurex-shutdowner (1.7) bionic; urgency=medium
+
+  * Remade shutdown script. Should be easier to maintain and understand.
+  * Added window icon to shutdown dialog
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 21 Aug 2019 13:50:12 +0200
+
 lliurex-shutdowner (1.6.2) bionic; urgency=medium
 
   * Added valencian translations
