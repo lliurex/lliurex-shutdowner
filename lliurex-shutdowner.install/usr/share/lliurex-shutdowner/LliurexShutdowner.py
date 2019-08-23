@@ -114,6 +114,17 @@ class LliurexShutdowner:
 	#def connect_signals
 	
 	
+	def change_sensitive_status(self,status):
+		
+		self.hour_spinbutton.set_sensitive(status)
+		self.minute_spinbutton.set_sensitive(status)
+		for item in self.weekdays:
+			item.set_sensitive(status)
+		self.server_shutdown_cb.set_sensitive(status)
+					
+	#def change_sensitive_status
+		
+	
 	# CSS ###########################################################
 	def set_css_info(self):
 		
@@ -142,15 +153,8 @@ class LliurexShutdowner:
 	
 	def cron_switch_changed(self,widget,data):
 		
-		#self.cron_frame.set_sensitive(widget.get_active())
-
-		self.hour_spinbutton.set_sensitive(widget.get_active())
-		self.minute_spinbutton.set_sensitive(widget.get_active())
-
-		for item in self.weekdays:
-			item.set_sensitive(widget.get_active())
-		
-		self.server_shutdown_cb.set_sensitive(widget.get_active())
+		status=widget.get_active()
+		self.change_sensitive_status(status)
 
 	#def cron_switch_changed
 	
@@ -241,6 +245,9 @@ class LliurexShutdowner:
 				
 				#self.cron_frame.set_sensitive(self.n4d_man.is_cron_enabled())
 				self.cron_switch.set_active(self.n4d_man.is_cron_enabled())
+				
+				if not self.cron_switch.get_active():
+					self.change_sensitive_status(False)
 				
 				self.detected_clients_label.set_text(_("Currently detected clients: %s")%self.n4d_man.detected_clients)
 				GLib.timeout_add(2000,self.client_list_listener)
