@@ -25,9 +25,10 @@ class LliurexShutdowner:
 		
 		self.shutdown_bin="/usr/sbin/shutdown-lliurex"
 		self.cron_content="%s %s * * %s root %s >> /var/log/syslog\n"
-		self.standalone_mode=self.is_standalone_mode()
 		
 		self.n4d_man=N4dManager.N4dManager()
+		self.standalone_mode=self.is_standalone_mode()
+		
 		if self.standalone_mode:
 			args_dic["server"]="localhost"
 		
@@ -46,7 +47,7 @@ class LliurexShutdowner:
 	
 	def is_standalone_mode(self):
 		
-		return True
+		return self.n4d_man.is_standalone_mode()
 		
 	#def is_standalone_mode
 	
