@@ -25,9 +25,15 @@ class LliurexShutdowner:
 		
 		self.shutdown_bin="/usr/sbin/shutdown-lliurex"
 		self.cron_content="%s %s * * %s root %s >> /var/log/syslog\n"
+		self.standalone_mode=self.is_standalone_mode()
 		
 		self.n4d_man=N4dManager.N4dManager()
+		if self.standalone_mode:
+			args_dic["server"]="localhost"
+		
 		self.n4d_man.set_server(args_dic["server"])
+		
+		
 		
 		if args_dic["gui"]:
 			
@@ -36,6 +42,13 @@ class LliurexShutdowner:
 			Gtk.main()
 		
 	#def __init__(self):
+	
+	
+	def is_standalone_mode(self):
+		
+		return True
+		
+	#def is_standalone_mode
 	
 	
 	def start_gui(self):
@@ -93,6 +106,22 @@ class LliurexShutdowner:
 		
 		self.connect_signals()
 		self.set_css_info()
+		
+		if self.standalone_mode:
+		
+			#box3=builder.get_object("box3")
+			box4=builder.get_object("box4")
+			box4.set_margin_bottom(20)
+			self.automatic_shutdown_label.set_text("Enable automatic shutdown")
+			box8=builder.get_object("box8")
+			self.server_ip_entry.set_text("localhost")
+			self.server_ip_entry.hide()
+			
+			
+			self.standalone_items=[self.server_shutdown_cb,self.cron_box_client]
+			
+			
+		
 		self.main_window.show()
 		
 	#def start_gui
@@ -264,7 +293,12 @@ class LliurexShutdowner:
 					self.minute_spinbutton.set_value(values["minute"])
 					self.server_shutdown_cb.set_active(values["server_shutdown"])
 				
+				
 				self.stack.set_visible_child_name("cron")
+				
+				for item in self.standalone_items:
+					item.hide()
+					
 			else:
 				self.login_msg_label.set_markup("<span foreground='red'>"+_("Invalid user")+"</span>")
 				
