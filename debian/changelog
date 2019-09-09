@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.8) bionic; urgency=medium
+
+  * Adding standalone support 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 09 Sep 2019 09:22:26 +0200
+
 lliurex-shutdowner (1.7.1) bionic; urgency=medium
 
   * Gui controls are disabled when launching if cron setting is disabled.
