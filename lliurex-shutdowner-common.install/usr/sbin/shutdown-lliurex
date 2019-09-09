@@ -46,7 +46,9 @@ class Shutdowner:
 		self.shutdown_function["thin"]=self.thin_shutdown
 		self.shutdown_function["semi"]=self.semi_shutdown
 		self.shutdown_function["client"]=self.client_shutdown
+		self.shutdown_function["desktop"]=self.standalone_shutdown
 		self.shutdown_function["unknown"]=self.basic_shutdown
+		
 		
 	#def init_var
 	
@@ -60,6 +62,8 @@ class Shutdowner:
 			self.lliurex_flavour["thin"]=True
 		if os.system("lliurex-version -x semi")==0:
 			self.lliurex_flavour["semi"]=True
+		if os.system("lliurex-version -x desktop")==0:
+			self.lliurex_flavour["desktop"]=True
 			
 		# order is important here. Thin is also detected as server
 		# semi is also detected as client
@@ -72,6 +76,8 @@ class Shutdowner:
 			return "semi"
 		if self.lliurex_flavour["client"]:
 			return "client"
+		if self.lliurex_flavour["desktop"]:
+			return "desktop"
 			
 		return "unknown"
 		
