@@ -108,6 +108,7 @@ class LliurexShutdowner:
 		self.connect_signals()
 		self.set_css_info()
 		
+		self.standalone_items=[]
 		if self.standalone_mode:
 		
 			#box3=builder.get_object("box3")
