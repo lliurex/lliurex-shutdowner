@@ -119,6 +119,7 @@ class N4dManager:
 	
 	
 	def is_standalone_mode(self):
+
 		context=ssl._create_unverified_context()	
 		client=xmlrpc.client.ServerProxy("https://localhost:9779",allow_none=True,context=context)
 		
@@ -132,8 +133,6 @@ class N4dManager:
 		except:
 			
 			return True
-			
-		
 		
 	#def is_standalone_mode
 	
