@@ -55,11 +55,12 @@ class ShutdownDialog:
 	def init_values(self):
 		
 		ret=os.system("lliurex-version -t server 2>/dev/null")
-		
 		is_thin=os.system("lliurex-version -x thin")
+		is_desktop=os.system("lliurex-version -x desktop")
 		
 		if ret!=0 or is_thin==0:
-			self.buttons_box.hide()
+			if is_desktop !=0:
+				self.buttons_box.hide()
 			
 		self.msg_label.set_text(self.msg%self.countdown)
 		
