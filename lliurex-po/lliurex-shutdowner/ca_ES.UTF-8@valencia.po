@@ -23,7 +23,7 @@ msgstr "S'està validant l'usuari..."
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:231
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:262
 msgid "Invalid user"
-msgstr "L'usuari no és vàlid "
+msgstr "L'usuari no és vàlid"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:245
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:271
@@ -38,15 +38,15 @@ msgstr "Apagat automàtic dels clients"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:103
 msgid "15"
-msgstr ""
+msgstr "15"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:119
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:131
 msgid "30"
-msgstr ""
+msgstr "30"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:160
 msgid "M"
@@ -70,7 +70,7 @@ msgstr "Dv."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:232
 msgid "Shutdown server as well (2 minutes later)"
-msgstr "Apaga el servidor també (2 minuts més tard)"
+msgstr "Apaga el servidor també (2 minuts després)"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:296
 msgid "Shutdown clients now"
@@ -86,7 +86,7 @@ msgstr "Contrasenya"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:381
 msgid "Server IP    (Default value : server)"
-msgstr "IP del servidor  (valor per defecte : servidor) "
+msgstr "IP del servidor  (Valor per defecte : server) "
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:390
 msgid "Login"
@@ -94,4 +94,4 @@ msgstr "Inicia la sessió  "
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:429
 msgid "Lliurex Shutdowner"
-msgstr ""
+msgstr "Lliurex Shutdowner"
