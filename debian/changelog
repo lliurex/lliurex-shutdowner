@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.8.2) bionic; urgency=medium
+
+  * Fixed bug in warning shutdown window in server-lite
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 10 Feb 2021 13:05:31 +0100
+
 lliurex-shutdowner (1.8.1) bionic; urgency=medium
 
   * Fixed empty list when not in standalone mode
