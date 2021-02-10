@@ -54,9 +54,15 @@ class ShutdownDialog:
 	
 	def init_values(self):
 		
-		ret=os.system("lliurex-version -t server 2>/dev/null")
-		is_thin=os.system("lliurex-version -x thin")
+		is_server=os.system("lliurex-version -t server 2>/dev/null")
+		is_server_lite=os.system("lliurex-version -t server-lite 2>/dev/null")
+		is_thin=os.system("lliurex-version -x thin")	
 		is_desktop=os.system("lliurex-version -x desktop")
+		
+		if is_server==0 or is_server_lite==0:
+			ret=0
+		else:
+			ret=1
 		
 		if ret!=0 or is_thin==0:
 			if is_desktop !=0:
