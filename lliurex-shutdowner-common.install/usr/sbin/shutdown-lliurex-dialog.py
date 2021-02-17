@@ -20,12 +20,20 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 
+		self.indicatorColor="#3daee9"
 		self.countdown=int(wait_time)*60
 		self.current_counter=0
 		self.block_destroy=True
 		self.countdown_timer = QTimer(None)
 		self.countdown_timer.timeout.connect(self.updateCountDown)
+
+		if wait_time=="2":
+			self._timeRemaining=["02:00",self.indicatorColor]
+		else:
+			self._timeRemaining=["01:00",self.indicatorColor]
+
 		self.initValues()
+
 
 	#def __init__
 	
@@ -51,7 +59,7 @@ class Bridge(QObject):
 		cancelBtn_msg=_("Cancel shutdown")
 
 		self._translateMsg=[warning_msg,cancelBtn_msg]
-		self._visibleCancelBtn=True
+		self._visibleCancelBtn=visibleBtn
 		self.countdown_timer.start(1000)
 	
 	#def init_values
@@ -59,28 +67,30 @@ class Bridge(QObject):
 
 	def updateCountDown(self):
 
+		self.current_counter+=1
+
 		if self.countdown-self.current_counter >=0:
 			count=self.countdown-self.current_counter
 			
 			if count==120:
-				self.timeRemaining.emit("02:00") 
+				self.timeRemaining=["02:00",self.indicatorColor]
 			elif count>69:
-				self.timeRemaining.emit("01:"+str(count-60))
+				self.timeRemaining=["01:"+str(count-60),self.indicatorColor]
 			elif count>60:
-				self.timeRemaining.emit("01:0"+str(count-60))
+				self.timeRemaining=["01:0"+str(count-60),self.indicatorColor]
 			elif count==60:
-				self.timeRemaining.emit("01:00")
+				self.timeRemaining=["01:00",self.indicatorColor]
 			elif count<10:
-				self.timeRemaining.emit("00:0"+str(count))
+				self.indicatorColor="#ff0000"
+				self.timeRemaining=["00:0"+str(count),self.indicatorColor]
 			else:
-				self.timeRemaining.emit("00:"+str(count))
-	
+				if count==10:
+					self.indicatorColor="#ff0000"
+				self.timeRemaining=["00:"+str(count),self.indicatorColor]
 			self.block_destroy=False		
 		else:
 			self.countdown_timer.stop()
 			self.block_destroy=True
-
-		self.current_counter+=1
 
 		
 	#def updateCountDown
@@ -97,6 +107,18 @@ class Bridge(QObject):
 
 	#def _getVisibleCancelBtn	
 
+	def _getTimeRemaining(self):
+
+		return self._timeRemaining
+
+	#def _getTimeRemaining	
+
+	def _setTimeRemaining(self,timeRemaining):
+
+		self._timeRemaining=timeRemaining
+		self.on_timeRemaining.emit()	
+
+	#def _setTimeRemaining
 
 	@Slot()
 	def cancelClicked(self):
@@ -114,7 +136,8 @@ class Bridge(QObject):
 
 	#def closed	
 		
-	timeRemaining=Signal(str,arguments=['timeRemaining'])
+	on_timeRemaining=Signal()
+	timeRemaining=Property('QVariantList',_getTimeRemaining,_setTimeRemaining, notify=on_timeRemaining)
 	translateMsg=Property('QVariantList',_getTranslateMsg,constant=True)
 	visibleCancelBtn=Property(bool,_getVisibleCancelBtn,constant=True)
 
