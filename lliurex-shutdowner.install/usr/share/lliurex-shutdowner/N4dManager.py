@@ -1,26 +1,19 @@
-import xmlrpc.client
-import ssl
+import n4d.client
 import threading
 import time
 
 
 class N4dManager:
 	
-	def __init__(self,server=None):
-		
+	def __init__(self,ticket):
+
 		self.debug=True
-		
-		self.client=None
-		self.user_validated=False
-		self.user_groups=[]
+		ticket=ticket.replace('##U+0020##',' ')
 		self.detected_clients=0
-		self.validation=None
-		
-		if server!=None:
-			self.set_server(server)
+		self.set_server(ticket)
+		self.load_info()
 		
 	#def init
-	
 	
 	def dprint(self,msg):
 		
@@ -30,38 +23,32 @@ class N4dManager:
 	#def dprint
 		
 	
-	def set_server(self,server):
+	def set_server(self,ticket):
 		
-		context=ssl._create_unverified_context()	
-		self.client=xmlrpc.client.ServerProxy("https://%s:9779"%server,allow_none=True,context=context)
+		tk=n4d.client.Ticket(ticket)
+		self.client=n4d.client.Client(ticket=tk)
 		
 	#def set_server
 	
 	
-	def validate_user(self,user,password):
-		
-		ret=self.client.validate_user(user,password)
-		self.user_validated,self.user_groups=ret
-			
-		
-		if self.user_validated:
-			self.validation=(user,password)
-			self.get_shutdowner_values()
+	def load_info(self):
+
+		self.get_shutdowner_values()
+	
+		if not self.is_standalone_mode():
 			self.get_client_list()
-			
 			t=threading.Thread(target=self.update_client_list_thread)
 			t.daemon=True
 			t.start()
 		
-		return self.user_validated
-		
-	#def validate_user
+	
+	#def load_info
 	
 	
 	def get_shutdowner_values(self):
 		
-		self.shutdowner_var=self.client.get_variable("","VariablesManager","SHUTDOWNER")
-		
+		self.shutdowner_var=self.client.get_variable("SHUTDOWNER")
+	
 	#def get_shutdowner_values
 	
 	
@@ -69,7 +56,7 @@ class N4dManager:
 		
 		return self.shutdowner_var["cron_enabled"]
 		
-	#def cron_enabled
+	#def is_cron_enabled
 	
 	
 	def get_cron_values(self):
@@ -83,8 +70,8 @@ class N4dManager:
 	
 	def get_client_list(self):
 		
-		self.client.manual_client_list_check(self.validation,"ShutdownerManager")
-		ret=self.client.get_client_list("","VariablesManager")
+		self.client.ShutdownerManager.manual_client_list_check()
+		ret=self.client.get_client_list()
 		
 		count=0
 		for item in ret:
@@ -107,32 +94,26 @@ class N4dManager:
 	
 	def set_shutdowner_values(self):
 		
-		self.client.save_variable(self.validation,"ShutdownerManager",self.shutdowner_var)
+		self.client.ShutdownerManager.save_variable(self.shutdowner_var)
 		
 	#def set_shutdowner_values
 	
 	def shutdown_clients(self):
 		
-		self.client.update_shutdown_signal(self.validation,"ShutdownerManager")
+		self.client.ShutdownerManager.update_shutdown_signal()
 		
 	#def shutdown_clients
 	
 	
 	def is_standalone_mode(self):
 
-		context=ssl._create_unverified_context()	
-		client=xmlrpc.client.ServerProxy("https://localhost:9779",allow_none=True,context=context)
-		
 		try:
+			client=self.client.get_variable("SRV_IP")
+			return False
 			
-			if client.get_variable("","VariablesManager","SRV_IP") == None:
-				return True
-			else:
-				return False
-			
-		except:
-			
+		except Exception as e:
 			return True
+	
 		
 	#def is_standalone_mode
 	

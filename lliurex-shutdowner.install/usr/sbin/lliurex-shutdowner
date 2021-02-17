@@ -1,13 +1,66 @@
 #! /usr/bin/python3
+from PySide2.QtWidgets import QApplication
+from PySide2.QtQuick import QQuickView
+from PySide2.QtCore import QUrl, QObject, Slot, Signal, Property
+import os
 import sys
-sys.path.append('/usr/share/lliurex-shutdowner/')
+import subprocess
 
-import LliurexShutdowner
+class Tunnel(QObject):
 
-if __name__=="__main__":
-	
-	args={}
-	args["gui"]=True
-	args["server"]="server"
-	ls=LliurexShutdowner.LliurexShutdowner(args)
-	
+	def __init__(self):
+
+		QObject.__init__(self)
+		self.isStandAlone()
+
+	#def __init	
+
+	def isStandAlone(self):
+
+		cmd='lliurex-version -v'
+		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+		result=p.communicate()[0]
+
+		if type(result) is bytes:
+			result=result.decode()
+		flavours = [ x.strip() for x in result.split(',') ]
+
+		for item in flavours:
+			if 'server' in item:
+				self._standAlone=False
+				break
+			elif 'client' in item:
+				self._standAlone=False
+				break
+			elif 'desktop' in item:
+				self._standAlone=True
+
+		self._standAlone=False
+	#def is_StandAlone
+
+	def _getStandAlone(self):
+
+		return self._standAlone
+
+	#def _getLoadState	
+
+		
+	standAlone=Property(bool,_getStandAlone,constant=True)
+
+	@Slot(str)
+	def on_ticket(self,ticket):
+
+		ticket=ticket.replace(' ','##U+0020##')
+		print(ticket)
+		os.system("python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py %s &"%ticket)
+		app.quit()
+
+app = QApplication([])
+tunnel = Tunnel()
+view = QQuickView()
+view.rootContext().setContextProperty("tunnel", tunnel)
+url = QUrl("/usr/share/lliurex-shutdowner/rsrc/login.qml")
+view.setSource(url)
+view.show()
+
+sys.exit(app.exec_())
