@@ -15,7 +15,7 @@ Rectangle {
         showAddress:!tunnel.standAlone
         address:!showAddres?'localhost':'server'
         showCancel: false
-        inGroups:["sudo","admins"]
+        inGroups:["sudo","admins","teachers"]
         
         anchors.centerIn: parent
         

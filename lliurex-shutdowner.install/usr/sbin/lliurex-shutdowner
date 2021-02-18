@@ -42,7 +42,7 @@ class Tunnel(QObject):
 
 		return self._standAlone
 
-	#def _getLoadState	
+	#def _getStandAlone	
 
 		
 	standAlone=Property(bool,_getStandAlone,constant=True)
@@ -51,9 +51,12 @@ class Tunnel(QObject):
 	def on_ticket(self,ticket):
 
 		ticket=ticket.replace(' ','##U+0020##')
-		print(ticket)
 		os.system("python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py %s &"%ticket)
 		app.quit()
+
+	#def on_ticket
+	
+#class Tunnel	
 
 app = QApplication([])
 tunnel = Tunnel()

@@ -68,9 +68,21 @@ ApplicationWindow {
 
 	       		Item {
 	       			Layout.fillWidth: true
-	       			Layout.topMargin: (mainLayout.Layout.minimumHeight-bannerBox.Layout.minimumHeight)/2-2*loadGrid.Layout.topMargin
+	       			Layout.topMargin: (mainLayout.Layout.minimumHeight-bannerBox.Layout.minimumHeight)/2-40
     			}
-
+    			RowLayout {
+    				Layout.fillWidth: true
+    				Layout.alignment:Qt.AlignHCenter
+    				Rectangle{
+    					color:"transparent"
+    					width:30
+    					height:30
+    					AnimatedImage{
+    						source: "/usr/share/lliurex-shutdowner/rsrc/loading.gif"
+    						transform: Scale {xScale:0.15;yScale:0.15}
+    					}
+    				}
+    			}   	
     			RowLayout {
     				Layout.fillWidth: true
 	               	Layout.alignment:Qt.AlignHCenter
@@ -79,8 +91,7 @@ ApplicationWindow {
            				text:i18nd("lliurex-shutdowner", "Loading information. Wait a moment...")
            				font.family: "Quattrocento Sans Bold"
            				font.pointSize: 10
-           				color:"black"
-           				Layout.alignment:Qt.AlignCenter
+           				Layout.alignment:Qt.AlignHCenter
            			}
            		}
            		RowLayout {
@@ -136,7 +147,6 @@ ApplicationWindow {
 			                	text:!shutBridge.isStandAlone? i18nd("lliurex-shutdowner","Automatic client shutdown"):i18nd("lliurex-shutdowner","Automatic shutdown")
 					    		font.family: "Quattrocento Sans Bold"
 					   			font.pointSize: 10
-					    		color: "black"
 					    		Layout.alignment:Qt.AlignVCenter
 					    		Layout.leftMargin:5
 
@@ -190,7 +200,7 @@ ApplicationWindow {
 				            Layout.bottomMargin: 10
 						  	Layout.preferredWidth: 555
 							height: 1
-							border.color: "black"
+							border.color:"black"
 							border.width: 5
 							radius: 10
 						}
@@ -500,7 +510,6 @@ ApplicationWindow {
 					       	text:i18nd("lliurex-shutdowner","Currently detected clients: ")
 					        font.family: "Quattrocento Sans Bold"
 					  		font.pointSize: 10
-						   	color: "black"
 						  	Layout.alignment:Qt.AlignVCenter
         					Layout.minimumWidth:10
         					Layout.leftMargin:5
@@ -512,7 +521,6 @@ ApplicationWindow {
 					       	text:shutBridge.detectedClients
 					        font.family: "Quattrocento Sans Bold"
 							font.pointSize: 10
-						  	color: "black"
         					Layout.maximumWidth:240
         					Layout.fillWidth: true
 	  	
