@@ -68,7 +68,6 @@ ApplicationWindow {
 	   				text:bridge.translateMsg[0]
 	   				font.family: "Quattrocento Sans Bold"
 	   				font.pointSize: 11
-	   				color:"#000000"
 	   				anchors.left: parent.left
 	   				anchors.verticalCenter:parent.verticalCenter
 	   			}
