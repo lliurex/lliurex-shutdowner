@@ -1,3 +1,11 @@
+lliurex-shutdowner (2.8.1) focal; urgency=medium
+
+  * Initial release for focal
+  * Migrated to PySide2-QML
+  * Integrated with new n4d login agent and n4d client
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Thu, 18 Feb 2021 09:48:41 +0100
+
 lliurex-shutdowner (1.8.1) bionic; urgency=medium
 
   * Fixed empty list when not in standalone mode
