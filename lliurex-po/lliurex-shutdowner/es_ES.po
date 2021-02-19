@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 13:31+0100\n"
-"PO-Revision-Date: 2021-02-17 13:44+0100\n"
+"POT-Creation-Date: 2021-02-19 11:33+0100\n"
+"PO-Revision-Date: 2021-02-19 11:39+0100\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -19,46 +19,54 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:79
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:91
 msgid "Loading information. Wait a moment..."
 msgstr "Cargando información. Espere un momento..."
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:136
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:147
 msgid "Automatic client shutdown"
 msgstr "Apagado automatico de clientes"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:136
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:147
 msgid "Automatic shutdown"
 msgstr "Apagado automatico"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:328
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:287
+msgid "You can use the mouse wheel to change the hour"
+msgstr "Puede utilizar la rueda del ratón para cambiar la hora"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:320
+msgid "You can use the mouse wheel to change the minutes"
+msgstr "Puede utilizar la rueda del ratón para cambiar los minutos"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:346
 msgid "Monday"
 msgstr "Lunes"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:354
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:373
 msgid "Tuesday"
 msgstr "Martes"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:381
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:400
 msgid "Wednesday"
 msgstr "Miércoles"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:408
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:427
 msgid "Thursday"
 msgstr "Jueves"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:434
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:453
 msgid "Friday"
 msgstr "Viernes"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:468
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:487
 msgid "Shutdown server as well (2 minutes later)"
 msgstr "Apagar el servidor también (2 minutos después)"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:500
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:519
 msgid "Currently detected clients: "
 msgstr "Clientes detectados actualmente: "
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:525
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:542
 msgid "Shutdown clients now"
 msgstr "Apagar clientes ahora"
