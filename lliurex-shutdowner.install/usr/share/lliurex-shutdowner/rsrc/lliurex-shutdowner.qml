@@ -181,13 +181,11 @@ ApplicationWindow {
 					        		if (toggleswitch.checked)
 						        		clockLayout.enabled=true,
 						        		daysLayout.enabled=true,
-						        		serverLayout.enabled=true,
-						        		clientBox.enabled=true;
+						        		serverLayout.enabled=true;
 						        	else
 						        		clockLayout.enabled=false,
 						        		daysLayout.enabled=false,
-						        		serverLayout.enabled=false,
-						        		clientBox.enabled=false;
+						        		serverLayout.enabled=false;
 					        		
 						       	}
 										
@@ -346,20 +344,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Monday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										mondaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										mondaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										mondaybtn.checked? "white": "black";
-									else
-										mondaybtn.checked? "white": "#b9babc";
-									
-								}	
-
+								palette.button:paletteBtn(mondaybtn.checked)
+								palette.buttonText:paletteBtnText(mondaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["MO",mondaybtn.checked]);
@@ -373,19 +359,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Tuesday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										tuesdaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										tuesdaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										tuesdaybtn.checked? "white": "black";
-									else
-										tuesdaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(tuesdaybtn.checked)
+								palette.buttonText:paletteBtnText(tuesdaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["TU",tuesdaybtn.checked]);
@@ -400,19 +375,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Wednesday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										wednesdaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										wednesdaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										wednesdaybtn.checked? "white": "black";
-									else
-										wednesdaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(wednesdaybtn.checked)
+								palette.buttonText:paletteBtnText(wednesdaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["WE",wednesdaybtn.checked]);
@@ -427,19 +391,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Thursday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										thursdaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										thursdaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										thursdaybtn.checked? "white": "black";
-									else
-										thursdaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(thursdaybtn.checked)
+								palette.buttonText:paletteBtnText(thursdaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["TH",thursdaybtn.checked]);
@@ -453,19 +406,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Friday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										fridaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										fridaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										fridaybtn.checked? "white": "black";
-									else
-										fridaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(fridaybtn.checked)
+								palette.buttonText:paletteBtnText(fridaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["FR",fridaybtn.checked]);
@@ -553,6 +495,34 @@ ApplicationWindow {
 				}
 			}
 		}
+	}
+
+	function paletteBtn(status){
+		if (daysLayout.enabled)
+			if (status)
+				return "#3daee9";
+			else 
+				return "#f0f1f2";
+		else
+			if (status)
+				return "#87cefa";
+			else
+				return "#e4e5e7";
+
+	}
+
+	function paletteBtnText(status){
+		if (daysLayout.enabled)
+			if (status)
+				return "white";
+			else 
+				return "black";
+		else
+			if (status)
+				return "white";
+			else
+				return "#b9babc";
+
 	}
 
 	function formatText(count, modelData) {
