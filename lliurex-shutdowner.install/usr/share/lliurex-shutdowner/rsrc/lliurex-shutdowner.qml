@@ -181,13 +181,11 @@ ApplicationWindow {
 					        		if (toggleswitch.checked)
 						        		clockLayout.enabled=true,
 						        		daysLayout.enabled=true,
-						        		serverLayout.enabled=true,
-						        		clientBox.enabled=true;
+						        		serverLayout.enabled=true;
 						        	else
 						        		clockLayout.enabled=false,
 						        		daysLayout.enabled=false,
-						        		serverLayout.enabled=false,
-						        		clientBox.enabled=false;
+						        		serverLayout.enabled=false;
 					        		
 						       	}
 										
@@ -213,12 +211,58 @@ ApplicationWindow {
 				            Layout.bottomMargin: 10
 				           	Layout.fillWidth: true
 				           	Layout.alignment:Qt.AlignHCenter
-				               	
+				            spacing:10   	
 				          	Item {
 				        		Layout.fillWidth: true
 				        		width:200
 			    			}
-				               	
+							Component {
+						        id: delegateComponent
+						        Label {
+						        	font.pointSize: 55
+						        	color: clockLayout.enabled? "#3daee9":"#87cefa"
+						        	text: formatText(Tumbler.tumbler.count, modelData)
+						        	horizontalAlignment: Text.AlignHCenter
+						        	verticalAlignment: Text.AlignVCenter
+						        	MouseArea {
+						        		id: mouseAreaHour
+						        		anchors.fill: parent
+						        		hoverEnabled: true
+						        		onEntered: {
+						        			parent.color="#add8e6"
+						        		}
+						        		onExited: {
+						        			parent.color="#3daee9"
+						        		}
+						        		onWheel:{
+						        			var index=modelData
+						        			wheel.accepted=false
+						        			if (wheel.angleDelta.y>0)
+						        				if (modelData==0)
+						        					if (Tumbler.tumbler.count==24)
+						        						Tumbler.tumbler.currentIndex=23;
+						        					else
+						        						Tumbler.tumbler.currentIndex=59;
+						        				else
+						        					Tumbler.tumbler.currentIndex=modelData-1;
+						        			else
+						        				if (modelData==23)
+						        					if (Tumbler.tumbler.count==24)
+						        						Tumbler.tumbler.currentIndex=0;
+						        					else
+						        						Tumbler.tumbler.currentIndex=modelData+1;	
+						        				else 
+						        					if (modelData==59)
+						        						if (Tumbler.tumbler.count==60)
+						        							Tumbler.tumbler.currentIndex=0;
+						        						else
+						        							Tumbler.tumbler.currentIndex=modelData+1;
+						        					else
+						        						Tumbler.tumbler.currentIndex=modelData+1;
+						                }
+						           }
+						        }
+						    }
 				            Rectangle {
 				             	anchors.topMargin: 4
 							    Layout.fillWidth: true
@@ -226,97 +270,59 @@ ApplicationWindow {
 							    height: 100
 							    width: 80
 							    color:"transparent"
-								       
-							    ListView {
-							    	id: hour
-							        highlightFollowsCurrentItem:true
-							        maximumFlickVelocity:1000
-							        anchors.fill: parent
-							        highlightRangeMode: ListView.StrictlyEnforceRange
-							        preferredHighlightBegin: height/10
-							        preferredHighlightEnd: height/10
-							        clip: true
-							        model: 24
-							        focus:true
-							     	currentIndex:shutBridge.initClock[0]
-							      
-							       onCurrentIndexChanged:{
-								    	shutBridge.getClokValues(["H",hour.currentIndex]);
-								       
-								    }
-								          
-								    delegate: Text {
-								    	font.pixelSize: 60;
-								        color: clockLayout.enabled? "#3daee9":"#87cefa"
-								        text: index<10?"0"+index:index
-										anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-								        MouseArea {
-								        	id: mouseAreaHour
-								            anchors.fill: parent
-								            hoverEnabled: true
-								            onEntered: {
-								            	parent.color="#add8e6"
-								            }
-								            onExited: {
-								            	parent.color="#3daee9"
-								            }
-								        }
-								    }
-								}
+							    Tumbler {
+							    	id: hoursTumbler
+							    	width:80
+					                height:100
+					                model: 24
+					                currentIndex:shutBridge.initClock[0]
+					                delegate:delegateComponent 
+					                visibleItemCount:1
+					                hoverEnabled:true
+		 			        	 	ToolTip.delay: 1000
+					                ToolTip.timeout: 3000
+					                ToolTip.visible: hovered
+					                ToolTip.text:i18nd("lliurex-shutdowner","You can use the mouse wheel to change the hour")
+					                onCurrentIndexChanged: {
+					                	shutBridge.getClokValues(["H",hoursTumbler.currentIndex]);
+					                } 
+					               
+          					  	}       
 							}
-				                	
-					        Text{
-					          	Layout.fillWidth: true
-					          	Layout.alignment:Qt.AlignVCenter
-						        font.pixelSize:60;
-								color: clockLayout.enabled? "#3daee9":"#87cefa"
-						        text:":"
-		 			        }
-				             		
-			             	Rectangle {
-			             		anchors.topMargin: 4
+							Text{
 								Layout.fillWidth: true
-					            Layout.alignment:Qt.AlignHCenter
-								height: 100
-								width: 80
-								color:"transparent"
-								ListView {
-									id: minute
-								    highlightFollowsCurrentItem:true
-								    maximumFlickVelocity:1000
-								    anchors.fill: parent
-								    highlightRangeMode: ListView.StrictlyEnforceRange
-								    preferredHighlightBegin: height/10
-								    preferredHighlightEnd: height/10
-								    clip: true
-								    model: 60
-								    focus:true
-								  	currentIndex:shutBridge.initClock[1]
+								Layout.alignment:Qt.AlignVCenter
+								font.pointSize:55;
+								color: clockLayout.enabled? "#3daee9":"#87cefa"
+								text:":"
+		 			        }
+		 			        Rectangle {
+		 			        	anchors.topMargin: 4
+		 			        	Layout.fillWidth: true
+		 			        	Layout.alignment:Qt.AlignHCenter
+		 			        	height: 100
+		 			        	width: 80
+		 			        	color:"transparent"
 
-								    onCurrentIndexChanged: {
-								    	shutBridge.getClokValues(["M",minute.currentIndex]);
-								     }
-								            
-								     delegate: Text {
-								     	font.pixelSize: 60
-								        color: clockLayout.enabled? "#3daee9":"#87cefa"
-								        text: index<10?"0"+index:index	
-										anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-					                    MouseArea {
-					                      	id: mouseAreaMinute
-								             anchors.fill: parent
-								             hoverEnabled: true
-								             onEntered: {
-								        	   	parent.color="#add8e6"
-								             }
-								             onExited: {
-								               	parent.color="#3daee9"
-								             }
-								         }
-								      }
-								 }
-				                	
-				            }
+		 			        	Tumbler {
+		 			        		id: minutesTumbler
+		 			        		height:100
+		 			        		width:80
+		 			        		model: 60
+		 			        		delegate: delegateComponent
+		 			        		visibleItemCount:1
+		 			        		hoverEnabled:true
+		 			        	 	ToolTip.delay: 1000
+					                ToolTip.timeout: 3000
+					                ToolTip.visible: hovered
+					                ToolTip.text:i18nd("lliurex-shutdowner","You can use the mouse wheel to change the minutes")
+		 			        		currentIndex:shutBridge.initClock[1]
+		 			        		onCurrentIndexChanged: {
+		 			        			shutBridge.getClokValues(["M",minutesTumbler.currentIndex]);
+		 			        		}
+		 			        	}
+						   }        
+								
 				           Item {
 				              	Layout.fillWidth: true
 				        		width:200
@@ -338,19 +344,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Monday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										mondaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										mondaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										mondaybtn.checked? "white": "black";
-									else
-										mondaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(mondaybtn.checked)
+								palette.buttonText:paletteBtnText(mondaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["MO",mondaybtn.checked]);
@@ -364,19 +359,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Tuesday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										tuesdaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										tuesdaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										tuesdaybtn.checked? "white": "black";
-									else
-										tuesdaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(tuesdaybtn.checked)
+								palette.buttonText:paletteBtnText(tuesdaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["TU",tuesdaybtn.checked]);
@@ -391,19 +375,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Wednesday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										wednesdaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										wednesdaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										wednesdaybtn.checked? "white": "black";
-									else
-										wednesdaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(wednesdaybtn.checked)
+								palette.buttonText:paletteBtnText(wednesdaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["WE",wednesdaybtn.checked]);
@@ -418,19 +391,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Thursday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										thursdaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										thursdaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										thursdaybtn.checked? "white": "black";
-									else
-										thursdaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(thursdaybtn.checked)
+								palette.buttonText:paletteBtnText(thursdaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["TH",thursdaybtn.checked]);
@@ -444,19 +406,8 @@ ApplicationWindow {
 								text:i18nd("lliurex-shutdowner","Friday")
 								Layout.preferredWidth: 100
 								Layout.preferredHeight: 40
-								palette.button:{
-									if (daysLayout.enabled)
-										fridaybtn.checked? "#3daee9": "#f0f1f2";
-									else
-										fridaybtn.checked? "#87cefa":"#e4e5e7";		
-								}	
-								palette.buttonText:{
-									if (daysLayout.enabled)
-										fridaybtn.checked? "white": "black";
-									else
-										fridaybtn.checked? "white": "#b9babc";
-									
-								}	
+								palette.button:paletteBtn(fridaybtn.checked)
+								palette.buttonText:paletteBtnText(fridaybtn.checked)
 								focusPolicy: Qt.NoFocus
 								onClicked: {
 									shutBridge.getWeekValues(["FR",fridaybtn.checked]);
@@ -546,6 +497,39 @@ ApplicationWindow {
 		}
 	}
 
+	function paletteBtn(status){
+		if (daysLayout.enabled)
+			if (status)
+				return "#3daee9";
+			else 
+				return "#f0f1f2";
+		else
+			if (status)
+				return "#87cefa";
+			else
+				return "#e4e5e7";
+
+	}
+
+	function paletteBtnText(status){
+		if (daysLayout.enabled)
+			if (status)
+				return "white";
+			else 
+				return "black";
+		else
+			if (status)
+				return "white";
+			else
+				return "#b9babc";
+
+	}
+
+	function formatText(count, modelData) {
+        var data = count === 12 ? modelData + 1 : modelData;
+        return data.toString().length < 2 ? "0" + data : data;
+    }
+
 	function removeConnection() {
 			timer.text="",
      		textMessage.text="",
@@ -553,8 +537,8 @@ ApplicationWindow {
 			mainLayout.Layout.minimumHeight=485,			
 			mainLayout.Layout.maximumHeight=485,
 			clockLayout.enabled=false,
-			hour.currentIndex="0",
-			minute.currentIndex="0",
+			hoursTumbler.currentIndex=0,
+			minutesTumbler.currentIndex=0,
 			daysLayout.enabled=false,
 			mondaybtn.checked=false,
 			tuesdaybtn.checked=false,
