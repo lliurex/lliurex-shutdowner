@@ -66,7 +66,13 @@ class N4dManager:
 		return None
 		
 	#def get_cron_values
-	
+
+	def get_server_cron_values(self):
+
+		return self.shutdowner_var["server_cron"]["cron_server_values"]
+
+	#def get_server_cron_values	
+
 	
 	def get_client_list(self):
 		
@@ -116,6 +122,13 @@ class N4dManager:
 	
 		
 	#def is_standalone_mode
-	
+
+	def is_server_shut(self):
+
+		server_shut=self.shutdowner_var["cron_values"]["server_shutdown"]
+		custom_server_shutdown=self.shutdowner_var["server_cron"]["custom_shutdown"]
+		
+		return [server_shut,custom_server_shutdown]
+	#def is_custom_server_shut
 	
 #class N4dManager
