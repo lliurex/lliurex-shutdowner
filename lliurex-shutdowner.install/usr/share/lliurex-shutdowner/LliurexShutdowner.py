@@ -461,10 +461,10 @@ class Bridge(QObject):
 	#def _open_help
 
 	@Slot(bool,result=bool)
-	def closed(self,state):
+	def closeShutdowner(self,state):
 		
-		aceptedClose=self.check_changes()
-		if aceptedClose:
+		acceptedClose=self.check_changes()
+		if acceptedClose:
 			if not self._isStandAlone:
 				self.client_timer.stop()
 			self.saveValues_timer.stop()
@@ -472,7 +472,7 @@ class Bridge(QObject):
 		else:
 			return False
 
-	#def closed	
+	#def closeShutdowner	
 
 	isStandAlone=Property(bool,_getIsStandAlone,constant=True)
 	isCronEnabled=Property(bool,_getIsCronEnabled,constant=True)
