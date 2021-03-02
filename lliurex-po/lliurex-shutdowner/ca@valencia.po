@@ -9,15 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-02 08:47+0100\n"
-"PO-Revision-Date: 2021-03-02 08:50+0100\n"
-"Last-Translator: lliurex <lliurex@gva.es>\n"
-"Language-Team: Spanish\n"
-"Language: es\n"
+"PO-Revision-Date: 2021-03-03 06:59+0000\n"
+"Last-Translator: Angels <gimenez_angcam@gva.es>\n"
+"Language-Team: Valencian <http://weblate.lliurex.net/projects/"
+"lliurex-shutdowner/lliurex-shutdowner/ca@valencia/>\n"
+"Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:95
 msgid "Loading information. Wait a moment..."
@@ -25,11 +26,11 @@ msgstr "S'està carregant la informació. Espereu un moment..."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:141
 msgid "Help"
-msgstr ""
+msgstr "Ajuda"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:168
 msgid "The client and server shutdown time are not compatible with each other"
-msgstr ""
+msgstr "L'hora de parada del client i el servidor no són compatibles entre si."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:171
 msgid "The client and server shutdown days are not compatible with each other"
