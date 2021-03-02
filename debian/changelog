@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.9) focal; urgency=medium
+
+  * Added support to custom server shutdown
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 02 Mar 2021 08:53:23 +0100
+
 lliurex-shutdowner (2.8.4) focal; urgency=medium
 
   * Improved controls to set hour and minutes
