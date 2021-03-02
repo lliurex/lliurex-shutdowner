@@ -28,6 +28,7 @@ class Bridge(QObject):
 		self._initFinish=False
 		self._detectedClients="0"
 		self._showMessage=[False,""]
+		self.previousError=""
 		self._isStandAlone=self.n4d_man.is_standalone_mode()
 		self._isCronEnabled=self.n4d_man.is_cron_enabled()
 		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
@@ -197,6 +198,7 @@ class Bridge(QObject):
 			error=self.check_compat_client_server(new_var)
 			if not error[0]:
 				self.n4d_man.shutdowner_var=new_var
+				self.previousError=""
 				print("[LliurexShutdowner] Updating value on close signal...")
 				self.n4d_man.set_shutdowner_values()
 				day_configured=False
@@ -210,7 +212,9 @@ class Bridge(QObject):
 			
 				return True
 			else:
-				self.showMessage=error
+				if self.previousError!=error[1]:
+					self.showMessage=error
+					self.previousError=error[1]
 				return False
 		
 		return True
@@ -340,21 +344,26 @@ class Bridge(QObject):
 	
 	def saveValues(self):
 
-		self.showMessage=[False,""]		
 		new_var=self.gather_values()
 
 		if new_var!=self.n4d_man.shutdowner_var:
 			error=self.check_compat_client_server(new_var)
 			if not error[0]:
+				self.showMessage=[False,""]
+				self.previousError=""
 				self.n4d_man.shutdowner_var=new_var
 				print("[LliurexShutdowner] Updating shutdowner variable...")
 				t=threading.Thread(target=self.n4d_man.set_shutdowner_values)
 				t.daemon=True
 				t.start()
 			else:
-				self.showMessage=error
+				if self.previousError!=error[1]:
+					self.showMessage=error
+					self.previousError=error[1]
 		else:
-			self.showMessage=[False,""]		
+			self.showMessage=[False,""]	
+			self.previousError=""
+	
 			
 	#def saveValues
 
@@ -461,10 +470,10 @@ class Bridge(QObject):
 	#def _open_help
 
 	@Slot(bool,result=bool)
-	def closed(self,state):
+	def closeShutdowner(self,state):
 		
-		aceptedClose=self.check_changes()
-		if aceptedClose:
+		acceptedClose=self.check_changes()
+		if acceptedClose:
 			if not self._isStandAlone:
 				self.client_timer.stop()
 			self.saveValues_timer.stop()

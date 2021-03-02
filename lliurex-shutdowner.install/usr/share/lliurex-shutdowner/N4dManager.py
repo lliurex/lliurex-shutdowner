@@ -125,10 +125,9 @@ class N4dManager:
 
 	def is_server_shut(self):
 
-		server_shut=self.shutdowner_var["cron_values"]["server_shutdown"]
-		custom_server_shutdown=self.shutdowner_var["server_cron"]["custom_shutdown"]
+		ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
 		
-		return [server_shut,custom_server_shutdown]
+		return [ret['status'],ret['custom_shutdown']]
 	#def is_custom_server_shut
 	
 #class N4dManager

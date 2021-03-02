@@ -13,12 +13,13 @@ GridLayout{
 	property alias currentMinutes: minutesTumbler.currentIndex
 	signal updateClock(variant value)
 	property alias daysLayoutEnabled:daysLayout.enabled
-	property alias mondayChecked:mondaybtn.checked
-	property alias tuesdayChecked:tuesdaybtn.checked
-	property alias wednesdayChecked:wednesdaybtn.checked
-	property alias thursdayChecked:thursdaybtn.checked
-	property alias fridayChecked:fridaybtn.checked
+	property alias mondayChecked:mondaybtn.dayBtnChecked
+	property alias tuesdayChecked:tuesdaybtn.dayBtnChecked
+	property alias wednesdayChecked:wednesdaybtn.dayBtnChecked
+	property alias thursdayChecked:thursdaybtn.dayBtnChecked
+	property alias fridayChecked:fridaybtn.dayBtnChecked
 	signal updateWeekDays(variant value)
+
 
 	RowLayout {
 		id:clockLayout
@@ -116,7 +117,7 @@ GridLayout{
 		Text{
 			Layout.fillWidth: true
 			Layout.alignment:Qt.AlignVCenter
-			font.pointSize:55;
+			font.pointSize:55
 			color: clockLayout.enabled? "#3daee9":"#87cefa"
 			text:":"
 	    }
@@ -159,116 +160,65 @@ GridLayout{
 	    Layout.fillWidth: true
 	    Layout.bottomMargin: 10
 	    spacing:8
-	        
-	    Button {
+
+	    DayButton {
 	      	id:mondaybtn
-			checkable: true
-			checked:mondayChecked
-			text:i18nd("lliurex-shutdowner","Monday")
-			Layout.preferredWidth: 100
-			Layout.preferredHeight: 40
-			palette.button:paletteBtn(mondaybtn.checked)
-			palette.buttonText:paletteBtnText(mondaybtn.checked)
-			focusPolicy: Qt.NoFocus
-			onClicked: {
-				updateWeekDays(["MO",mondaybtn.checked]);
+			dayBtnChecked:mondayChecked
+			dayBtnText:i18nd("lliurex-shutdowner","Monday")
+			Connections{
+				function onDayBtnClicked(value){
+					updateWeekDays(["MO",value]);	
+				}
 			}
+					
 		}
 				
-		Button {
+		DayButton {
 	       	id:tuesdaybtn
-			checkable: true
-			checked:tuesdayChecked
-			text:i18nd("lliurex-shutdowner","Tuesday")
-			Layout.preferredWidth: 100
-			Layout.preferredHeight: 40
-			palette.button:paletteBtn(tuesdaybtn.checked)
-			palette.buttonText:paletteBtnText(tuesdaybtn.checked)
-			focusPolicy: Qt.NoFocus
-			onClicked: {
-				updateWeekDays(["TU",tuesdaybtn.checked]);
+			dayBtnChecked:tuesdayChecked
+			dayBtnText:i18nd("lliurex-shutdowner","Tuesday")
+			Connections{
+				function onDayBtnClicked(value){
+					updateWeekDays(["TU",value]);
+				}
 			}
 		}
 		
-		Button {
+		DayButton {
 			id:wednesdaybtn
-			checkable: true
-			checked:wednesdayChecked
-			text:i18nd("lliurex-shutdowner","Wednesday")
-			Layout.preferredWidth: 100
-			Layout.preferredHeight: 40
-			palette.button:paletteBtn(wednesdaybtn.checked)
-			palette.buttonText:paletteBtnText(wednesdaybtn.checked)
-			focusPolicy: Qt.NoFocus
-			onClicked: {
-				updateWeekDays(["WE",wednesdaybtn.checked]);
+			dayBtnChecked:wednesdayChecked
+			dayBtnText:i18nd("lliurex-shutdowner","Wednesday")
+			Connections{
+				function onDayBtnClicked(value){
+					updateWeekDays(["WE",value]);
+				}
 			}
+			
 		}
 				
-		Button {
+		DayButton {
 			id:thursdaybtn
-			checkable: true
-			checked:thursdayChecked
-			text:i18nd("lliurex-shutdowner","Thursday")
-			Layout.preferredWidth: 100
-			Layout.preferredHeight: 40
-			palette.button:paletteBtn(thursdaybtn.checked)
-			palette.buttonText:paletteBtnText(thursdaybtn.checked)
-			focusPolicy: Qt.NoFocus
-			onClicked: {
-				updateWeekDays(["TH",thursdaybtn.checked]);
+			dayBtnChecked:thursdayChecked
+			dayBtnText:i18nd("lliurex-shutdowner","Thursday")
+			Connections{
+				function onDayBtnClicked(value){
+					updateWeekDays(["TH",value]);
+				}
 			}
 		}
 			
-		Button {
+		DayButton {
 			id:fridaybtn
-			checkable: true
-			checked:fridayChecked
-			text:i18nd("lliurex-shutdowner","Friday")
-			Layout.preferredWidth: 100
-			Layout.preferredHeight: 40
-			palette.button:paletteBtn(fridaybtn.checked)
-			palette.buttonText:paletteBtnText(fridaybtn.checked)
-			focusPolicy: Qt.NoFocus
-			onClicked: {
-				updateWeekDays(["FR",fridaybtn.checked]);
+			dayBtnChecked:fridayChecked
+			dayBtnText:i18nd("lliurex-shutdowner","Friday")
+			Connections{
+				function onDayBtnClicked(value){
+					updateWeekDays(["FR",value]);
+				}
 			}
 		}
 	}
 
-	function paletteBtn(status){
-		if (daysLayout.enabled){
-			if (status){
-				return "#3daee9";
-			}else{ 
-				return "#f0f1f2";
-			}
-		}else{
-			if (status){
-				return "#87cefa";
-			}else{
-				return "#e4e5e7";
-			}
-		}	
-
-	}
-
-	function paletteBtnText(status){
-		if (daysLayout.enabled){
-			if (status){
-				return "#ffffff";
-			}else{ 
-				return "#000000";
-			}	
-		}else{
-			if (status){
-				return "#ffffff";
-			}else{
-				return "#b9babc";
-			}
-		}	
-
-	}
 
 	function formatText(count, modelData) {
         var data = count === 12 ? modelData + 1 : modelData;
