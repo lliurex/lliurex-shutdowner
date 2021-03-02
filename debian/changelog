@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.9.1) focal; urgency=medium
+
+  * Fixed close function name
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 02 Mar 2021 09:06:06 +0100
+
 lliurex-shutdowner (2.9) focal; urgency=medium
 
   * Added support to custom server shutdown
