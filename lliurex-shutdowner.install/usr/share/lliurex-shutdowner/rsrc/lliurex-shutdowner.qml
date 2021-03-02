@@ -22,7 +22,7 @@ ApplicationWindow {
   }
 
   onClosing: {
-    if (shutBridge.closeShutDowner(true)){
+    if (shutBridge.closeShutdowner(true)){
       removeConnection(),
       close.accepted=true,
       console.log("Cleanup done, can close!");
