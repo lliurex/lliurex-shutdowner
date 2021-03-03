@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-02 08:47+0100\n"
-"PO-Revision-Date: 2021-03-03 06:59+0000\n"
+"PO-Revision-Date: 2021-03-04 07:41+0000\n"
 "Last-Translator: Angels <gimenez_angcam@gva.es>\n"
 "Language-Team: Valencian <http://weblate.lliurex.net/projects/"
 "lliurex-shutdowner/lliurex-shutdowner/ca@valencia/>\n"
@@ -30,29 +30,32 @@ msgstr "Ajuda"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:168
 msgid "The client and server shutdown time are not compatible with each other"
-msgstr "L'hora de parada del client i el servidor no són compatibles entre si."
+msgstr "L’hora de parada del client i del servidor no són compatibles entre si."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:171
 msgid "The client and server shutdown days are not compatible with each other"
 msgstr ""
+"Els dies de parada del client i del servidor no són compatibles entre si."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:174
 msgid ""
 "The client and server shutdown time and days are not compatible with each "
 "other"
 msgstr ""
+"El temps i els dies de parada del client i del servidor no són compatibles "
+"entre si."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:176
 msgid "Changes saved successfully"
-msgstr ""
+msgstr "Els canvis s'han guardat correctament."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:111
 msgid "You can use the mouse wheel to change the hour"
-msgstr ""
+msgstr "Podeu utilitzar la roda del ratolí per a canviar l’hora."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:144
 msgid "You can use the mouse wheel to change the minutes"
-msgstr ""
+msgstr "Podeu utilitzar la roda del ratolí per a canviar els minuts."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:167
 msgid "Monday"
@@ -76,19 +79,19 @@ msgstr "Divendres"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:37
 msgid "Automatic client shutdown"
-msgstr "Apagat automàtic dels clients"
+msgstr "Parada automàtica dels clients"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:37
 msgid "Automatic shutdown"
-msgstr "Apagat automàtic"
+msgstr "Parada automàtica"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:122
 msgid "Shutdown server as well:"
-msgstr ""
+msgstr "Parada del servidor també:"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:148
 msgid "Click to change server shutdown settings"
-msgstr ""
+msgstr "Feu clic per a canviar la configuració de parada del servidor."
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:176
 msgid "Currently detected clients:"
@@ -96,28 +99,28 @@ msgstr "Clients detectats actualment:"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:197
 msgid "Shutdown clients now"
-msgstr "Apaga els clients ara"
+msgstr "Para els clients ara"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:212
 msgid "Custom shutdown"
-msgstr ""
+msgstr "Parada personalitzada"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:214
 msgid "2 minutes after clients"
-msgstr ""
+msgstr "2 minuts després dels clients"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:217
 msgid "Not configured"
-msgstr ""
+msgstr "Sense configurar"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:39
 msgid "Automatic server shutdown"
-msgstr ""
+msgstr "Parada automàtica del servidor"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:91
 msgid "Shutdown server 2 minutes after clients)"
-msgstr ""
+msgstr "Para el servidor 2 minuts després dels clients)"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:108
 msgid "Custom:"
-msgstr ""
+msgstr "Personalitzada:"
