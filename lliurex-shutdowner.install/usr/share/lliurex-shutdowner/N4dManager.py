@@ -39,22 +39,16 @@ class N4dManager:
 	
 	
 	def validate_user(self,user,password):
-		
+			
 		ret=self.client.validate_user(user,password)
-		self.user_validated,self.user_groups=ret
+		user_validated,self.user_groups=ret
 			
 		
-		if self.user_validated:
+		if user_validated:
 			self.validation=(user,password)
-			self.get_shutdowner_values()
-			self.get_client_list()
-			
-			t=threading.Thread(target=self.update_client_list_thread)
-			t.daemon=True
-			t.start()
 		
-		return self.user_validated
-		
+		return user_validated
+
 	#def validate_user
 	
 	
@@ -135,6 +129,14 @@ class N4dManager:
 			return True
 		
 	#def is_standalone_mode
+
+
+	def is_server_shut(self):
+
+		ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
+		
+		return [ret['status'],ret['custom_shutdown']]
+	#def is_custom_server_shut
 	
 	
 #class N4dManager
