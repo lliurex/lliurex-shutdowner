@@ -15,6 +15,7 @@ class N4dManager:
 		self.user_groups=[]
 		self.detected_clients=0
 		self.validation=None
+		self.shutdowner_var={}
 		
 		if server!=None:
 			self.set_server(server)
@@ -28,33 +29,71 @@ class N4dManager:
 			print(str(msg))
 			
 	#def dprint
+
+
+	def is_standalone_mode(self):
+
+		try:
+			client=self.client.get_variable("SRV_IP")
+			return False
+			
+		except Exception as e:
+			return True	
+		
+	#def is_standalone_mode
+
+
+
+	def load_info(self):
+
+		pp=self.get_shutdowner_values()
+	
+		if not self.is_standalone_mode():
+			self.get_client_list()
+			t=threading.Thread(target=self.update_client_list_thread)
+			t.daemon=True
+			t.start()
+	
+	#def load_info
+
 		
 	
-	def set_server(self,server):
+	def set_server(self,server_ip):
 		
-		context=ssl._create_unverified_context()	
-		self.client=xmlrpc.client.ServerProxy("https://%s:9779"%server,allow_none=True,context=context)
-		
+		try:
+			context=ssl._create_unverified_context()
+			if server_ip in {'',None}:
+				server_ip="server"
+			if server_ip in {'localhost'}:
+				proxy="https://localhost:9779"
+				#print proxy
+				self.client=xmlrpc.client.ServerProxy(proxy,allow_none=True,context=context)
+			else:
+				proxy="https://%s:9779"%server_ip
+				#print proxy
+				self.client=xmlrpc.client.ServerProxy(proxy,allow_none=True,context=context)
+			
+			self.server=server_ip
+
+		except Exception as e:
+			print(e)
+			return [False,str(e)]
+
 	#def set_server
 	
 	
 	def validate_user(self,user,password):
-		
+			
 		ret=self.client.validate_user(user,password)
-		self.user_validated,self.user_groups=ret
+		user_validated,self.user_groups=ret
 			
 		
-		if self.user_validated:
+		if user_validated:
 			self.validation=(user,password)
-			self.get_shutdowner_values()
-			self.get_client_list()
-			
-			t=threading.Thread(target=self.update_client_list_thread)
-			t.daemon=True
-			t.start()
+			self.load_info()
 		
-		return self.user_validated
-		
+		return ret
+
 	#def validate_user
 	
 	
@@ -79,6 +118,21 @@ class N4dManager:
 		return None
 		
 	#def get_cron_values
+
+
+	def get_server_cron_values(self):
+
+		try:
+			return self.shutdowner_var["server_cron"]["cron_server_values"]
+		except Exception as e:
+			self.shutdowner_var["server_cron"]={}
+			self.shutdowner_var["server_cron"]["cron_server_values"]={}
+			self.shutdowner_var["server_cron"]["cron_server_values"]["minute"]=''
+			self.shutdowner_var["server_cron"]["cron_server_values"]["hour"]=''
+			self.shutdowner_var["server_cron"]["cron_server_values"]["weekdays"]=['','','','','']
+			return self.shutdowner_var["server_cron"]["cron_server_values"]
+
+	#def get_server_cron_values
 	
 	
 	def get_client_list(self):
@@ -106,7 +160,7 @@ class N4dManager:
 	
 	
 	def set_shutdowner_values(self):
-		
+
 		self.client.save_variable(self.validation,"ShutdownerManager",self.shutdowner_var)
 		
 	#def set_shutdowner_values
@@ -135,6 +189,17 @@ class N4dManager:
 			return True
 		
 	#def is_standalone_mode
+
+
+	def is_server_shut(self):
+
+		try:
+			ret=self.client.is_server_shutdown_enabled(self.validation,"ShutdownerManager")
+			return [ret['status'],ret['custom_shutdown']]
+		except Exception as e:
+			print('Exception: %s'%e)
+
+	#def is_custom_server_shut
 	
 	
 #class N4dManager
