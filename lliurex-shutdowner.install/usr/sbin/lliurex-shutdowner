@@ -17,6 +17,7 @@ class Tunnel(QObject):
 
 	def isStandAlone(self):
 
+		self._standAlone=False
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
@@ -34,8 +35,8 @@ class Tunnel(QObject):
 				break
 			elif 'desktop' in item:
 				self._standAlone=True
+				break
 
-		self._standAlone=False
 	#def is_StandAlone
 
 	def _getStandAlone(self):
