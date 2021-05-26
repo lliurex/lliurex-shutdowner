@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.9.4) focal; urgency=medium
+
+  * Fixed again detection of standalone mode
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 26 May 2021 17:20:11 +0200
+
 lliurex-shutdowner (2.9.3) focal; urgency=medium
 
   * Fixed function to detect standalone mode
