@@ -115,7 +115,31 @@ class N4dManager:
 
 		try:
 			client=self.client.get_variable("SRV_IP")
-			return False
+			
+			if client!=None:
+				return False
+			else:
+				standAlone=False
+				cmd='lliurex-version -v'
+				p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+				result=p.communicate()[0]
+
+				if type(result) is bytes:
+					result=result.decode()
+
+				flavours = [ x.strip() for x in result.split(',') ]
+
+				for item in flavours:
+					if 'server' in item:
+						standAlone=False
+						break
+					elif 'client' in item:
+						standAlone=False
+						break
+					elif 'desktop' in item:
+						standAlone=True
+				
+				return standAlone
 			
 		except Exception as e:
 			return True

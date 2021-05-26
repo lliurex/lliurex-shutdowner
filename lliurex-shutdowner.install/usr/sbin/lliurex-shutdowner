@@ -35,7 +35,6 @@ class Tunnel(QObject):
 				break
 			elif 'desktop' in item:
 				self._standAlone=True
-				break
 
 	#def is_StandAlone
 
