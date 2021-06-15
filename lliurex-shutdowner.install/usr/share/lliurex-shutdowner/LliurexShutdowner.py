@@ -13,11 +13,11 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 class Bridge(QObject):
 
 
-	def __init__(self,ticket=None):
+	def __init__(self):
 
 		QObject.__init__(self)
 
-		self.n4d_man=N4dManager.N4dManager(ticket)
+		self.n4d_man=N4dManager.N4dManager()
 		self.initBridge()
 
 	def printd(self,message):
@@ -36,14 +36,14 @@ class Bridge(QObject):
 		self.custom_shutdown_bin="/usr/sbin/shutdown-lliurex-server"
 		self._initFinish=False
 		self._running=False
-		self._detectedClients="0"
+		self._detectedClients=0
 		self._showMessage=[False,""]
 		self.previousError=""
 		self._isStandAlone=self.n4d_man.is_standalone_mode()
 		#self._isCronEnabled=self.n4d_man.is_cron_enabled()
-		self._initClockClient=['0','0']
+		self._initClockClient=[0,0]
 		self._initWeekDaysClient=[True,True,True,True,True]
-		self._initClockServer=['0','0']
+		self._initClockServer=[0,0]
 		self._initWeekDaysServer=[True,True,True,True,True]
 		self._isCronEnabled=False
 
@@ -86,12 +86,16 @@ class Bridge(QObject):
 	@Slot('QVariantList')
 	def validate(self,value):
 
+		self.showMessage=[False,""]
 		self.user=value[0]
 		self.password=value[1]
 		server=value[2]
 		
 		if server=='':
-			server='server'
+			if self._isStandAlone:
+				server='localhost'
+			else:
+				server='server'
 		
 		self.n4d_man.set_server(server)
 
@@ -105,12 +109,13 @@ class Bridge(QObject):
 
 	def _validate(self):
 
-		ret=self.n4d_man.validate_user(self.user,self.password)
+		LOGIN_FAILED=-40
+		ret=self.n4d_man.validate_user(self.user,self.password,self._isStandAlone)
 
-		if ret[0]:
+		if ret:
 			group_found=False
 			for g in ["sudo","admins","teachers","admin"]:
-				if g in ret[1]:
+				if g in self.n4d_man.user_groups:
 					group_found=True
 					break
 					
@@ -118,9 +123,11 @@ class Bridge(QObject):
 				self._loadInfo()
 				#self._getState()
 			else:
+				self.showMessage=[True,LOGIN_FAILED]
 				self.initFinish=False
 				self.running=False
 		else:
+			self.showMessage=[True,LOGIN_FAILED]
 			self.initFinish=False
 			self.running=False
 
@@ -474,7 +481,7 @@ class Bridge(QObject):
 					if self.customServerShut:
 						new_var=self.gather_values_server(new_var)	
 					else:
-						self.printd('SERVER CRON: FALSE')
+						self.printd('SERVER CUSTOM CRON: FALSE')
 						new_var["server_cron"]["custom_shutdown"]=False
 
 			else:

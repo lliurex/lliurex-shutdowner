@@ -107,7 +107,7 @@ class Shutdowner:
 				for item in tmp:
 					if "DISPLAY=" in item:
 						display=item.split("=")[1]
-						command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog %s' %s &"%(display,CLIENT_WAIT_TIME,user)
+						command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,CLIENT_WAIT_TIME,user)
 						self.dprint(command)
 						os.system(command)
 		
@@ -180,7 +180,7 @@ class Shutdowner:
 			display=display.lstrip("(").rstrip(")")
 
 			
-			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog %s' %s &"%(display,wait_time,user)
+			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 			self.dprint("\t%s"%command)
 			os.system(command)
 	

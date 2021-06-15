@@ -1,116 +1,143 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Spanish translations for PACKAGE package
+# Traducciones al español para el paquete PACKAGE.
+# Copyright (C) 2021 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# lliurex <lliurex@gva.es>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 09:13+0100\n"
-"PO-Revision-Date: 2018-11-13 09:16+0100\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2021-06-15 13:58+0200\n"
+"PO-Revision-Date: 2021-06-15 14:01+0200\n"
+"Last-Translator: lliurex <lliurex@gva.es>\n"
+"Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:203
-msgid "Validating user..."
-msgstr "Validando usuario..."
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:231
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:262
-msgid "Invalid user"
-msgstr "Usuario inválido"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:245
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/LliurexShutdowner.py:271
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:285
-#, python-format
-msgid "Currently detected clients: %s"
-msgstr "Clientes detectados actualmente: %s"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:40
-msgid "Automatic client shutdown"
-msgstr "Apagado automatico de clientes"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:103
-msgid "15"
-msgstr "15"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:119
-msgid ":"
-msgstr ":"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:131
-msgid "30"
-msgstr "30"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:160
-msgid "M"
-msgstr "L"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:173
-msgid "T"
-msgstr "M"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:186
-msgid "W"
-msgstr "X"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:199
-msgid "R"
-msgstr "J"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:212
-msgid "F"
-msgstr "V"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:232
-msgid "Shutdown server as well (2 minutes later)"
-msgstr "Apagar el servidor también (2 minutos después)"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:296
-msgid "Shutdown clients now"
-msgstr "Apagar clientes ahora"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:355
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:85
 msgid "User"
 msgstr "Usuario"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:369
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:102
 msgid "Password"
 msgstr "Contraseña"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:381
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:121
 msgid "Server IP    (Default value : server)"
-msgstr "IP del servidor    (Valor por defecto: server)"
+msgstr "IP del Servidor (Valor por defecto: server)"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:390
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:134
 msgid "Login"
 msgstr "Acceder"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.ui:429
-msgid "Lliurex Shutdowner"
-msgstr "Lliurex Shutdowner"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:136
+msgid "Validating user..."
+msgstr "Validando usuario..."
 
-#~ msgid "Monday"
-#~ msgstr "Lunes"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:204
+msgid "Help"
+msgstr "Ayuda"
 
-#~ msgid "Tuesday"
-#~ msgstr "Martes"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:231
+msgid "The client and server shutdown time are not compatible with each other"
+msgstr "La hora de apagado del cliente y servidor no son compatibles entre si"
 
-#~ msgid "Wednesday"
-#~ msgstr "Miércoles"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:234
+msgid "The client and server shutdown days are not compatible with each other"
+msgstr "Los días de apagado del cliente y servidor no son compatibles entre si"
 
-#~ msgid "Thursday"
-#~ msgstr "Jueves"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:237
+msgid ""
+"The client and server shutdown time and days are not compatible with each "
+"other"
+msgstr ""
+"La hora y días de apagado del cliente y servidor no son compatibles entre si"
 
-#~ msgid "Friday"
-#~ msgstr "Viernes"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:240
+msgid "Invalid user"
+msgstr "Usuario no válido"
 
-#~ msgid "Close"
-#~ msgstr "Cerrar"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml:242
+msgid "Changes saved successfully"
+msgstr "Cambios guardados correctamente"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:111
+msgid "You can use the mouse wheel to change the hour"
+msgstr "Puede utilizar la rueda del ratón para cambiar la hora"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:144
+msgid "You can use the mouse wheel to change the minutes"
+msgstr "Puede utilizar la rueda del ratón para cambiar los minutos"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:167
+msgid "Monday"
+msgstr "Lunes"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:179
+msgid "Tuesday"
+msgstr "Martes"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:190
+msgid "Wednesday"
+msgstr "Miércoles"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:202
+msgid "Thursday"
+msgstr "Jueves"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:213
+msgid "Friday"
+msgstr "Viernes"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:37
+msgid "Automatic client shutdown"
+msgstr "Apagado automatico de clientes"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:37
+msgid "Automatic shutdown"
+msgstr "Apagado automatico"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:122
+msgid "Shutdown server as well:"
+msgstr "Apagar el servidor también:"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:148
+msgid "Click to change server shutdown settings"
+msgstr "Haga clic para cambiar la configuración de apagado del servidor"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:176
+msgid "Currently detected clients:"
+msgstr "Clientes detectados actualmente:"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:197
+msgid "Shutdown clients now"
+msgstr "Apagar clientes ahora"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:212
+msgid "Custom shutdown"
+msgstr "Apagado personalizado"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:214
+msgid "2 minutes after clients"
+msgstr "2 minutos después que los clientes"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:217
+msgid "Not configured"
+msgstr "No configurado"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:39
+msgid "Automatic server shutdown"
+msgstr "Apagado automatico del servidor"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:91
+msgid "Shutdown server 2 minutes after clients)"
+msgstr "Apagar el servidor 2 minutos después que los clientes"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:108
+msgid "Custom:"
+msgstr "Personalizado:"
