@@ -70,24 +70,23 @@ ApplicationWindow {
         rowSpacing:10
 
         Item {
-      Layout.fillWidth: true
-       Layout.topMargin: 10
+        	Layout.fillWidth: true
+            Layout.topMargin:	(mainLayout.Layout.minimumHeight-bannerBox.Layout.minimumHeight)/2-loginGrid.rows*20
         }
         RowLayout {
           Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
           Image{
-        id:imgUsername
-        source: "images/username.svg"
-        }
+        	id:imgUsername
+        	source: "images/username.svg"
+          }
           TextField {
             id:userEntry
             placeholderText:i18nd("lliurex-shutdowner","User")
             implicitWidth:280
             font.family: "Quattrocento Sans Bold"
-      font.pointSize: 10
+      		font.pointSize: 10
             Layout.alignment:Qt.AlignCenter
-            
           }
           
         }
@@ -95,36 +94,36 @@ ApplicationWindow {
           Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
           Image{
-        id:imgPassword
-        source: "images/password.svg"
-      }
+        	id:imgPassword
+        	source: "images/password.svg"
+      	  }
           TextField {
             id:passwordEntry
             placeholderText:i18nd("lliurex-shutdowner","Password")
             echoMode:TextInput.Password
             implicitWidth: 280
             font.family: "Quattrocento Sans Bold"
-      font.pointSize: 10
+      		font.pointSize: 10
             Layout.alignment:Qt.AlignCenter
           }
-          }
-RowLayout {
+        }
+		RowLayout {
           Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
-  Image{
-        id:imgServer
-        source: "images/server.svg"
-      }
+  		  Image{
+        	id:imgServer
+        	source: "images/server.svg"
+      	  }
           TextField {
             id:serverEntry
             placeholderText:i18nd("lliurex-shutdowner","Server IP    (Default value : server)")
             implicitWidth: 280
             font.family: "Quattrocento Sans Bold"
-      font.pointSize: 10
+      		font.pointSize: 10
             Layout.alignment:Qt.AlignCenter
           }
         }
-      RowLayout {
+      	RowLayout {
           Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
           
@@ -134,49 +133,48 @@ RowLayout {
                   onClicked: {
                       loginLabel.text=i18nd("lliurex-shutdowner","Validating user...")
                       loginLabel.color="black"
-                    shutBridge.validate([userEntry.text,passwordEntry.text,serverEntry.text])
-                    loginGrid.enabled=false
+                    	shutBridge.validate([userEntry.text,passwordEntry.text,serverEntry.text])
+                    	loginGrid.enabled=false
 
                   }
            }
       
           }
         RowLayout{
-  Layout.fillWidth: true
+  		  Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
 
-              Text {
-                id:timer
-    text:shutBridge.running?shutBridge.initFinish:""
-    visible:false
-    Layout.alignment:Qt.AlignHCenter
-      onTextChanged:{
-        if (!shutBridge.running)
-            if (shutBridge.initFinish) 
-            stackLayout.currentIndex=1;
-          else
-            if (!shutBridge.running)
-                    loginLabel.text=i18nd("lliurex-shutdowner","Invalid user"),
-                    loginLabel.color="red";
-                    loginGrid.enabled=true
+          Text {
+          	id:timer
+    		text:shutBridge.running?shutBridge.initFinish:""
+    		visible:false
+    		Layout.alignment:Qt.AlignHCenter
+      		onTextChanged:{
+        		if (!shutBridge.running)
+            		if (shutBridge.initFinish) 
+            			stackLayout.currentIndex=1;
+          			else
+            			if (!shutBridge.running)
+                    		loginLabel.text=i18nd("lliurex-shutdowner","Invalid user"),
+                    		loginLabel.color="red";
+                    		loginGrid.enabled=true
           
-     } 
-  }   
-  Text {
-    id:loginLabel
-    text: ""
-    visible:true
-    Layout.alignment:Qt.AlignHCenter
-    font.family: "Quattrocento Sans Bold"
-      font.pointSize: 10
-      color:"black"
+     		} 
+  		}   
+  		Text {
+    		id:loginLabel
+    		text: ""
+    		visible:true
+    		Layout.alignment:Qt.AlignHCenter
+    		font.family: "Quattrocento Sans Bold"
+      		font.pointSize: 10
+      		color:"black"
 
-              }
-        
         }
+        
+     }
 
-       
-          
+           
     }
 
       ClientOptions{
