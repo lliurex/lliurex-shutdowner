@@ -40,21 +40,25 @@ class N4dManager:
 	#def set_server
 	
 	
-	def validate_user(self,user,password):
+	def validate_user(self,user,password,standAlone):
 			
 		user_validated=False
-		ret=self.client.validate_user(user,password)
+		try:
+			ret=self.client.validate_user(user,password)
+		except:
+			return user_validated
+			
 		user_validated,self.user_groups=ret
 			
 		
 		if user_validated:
 			self.validation=(user,password)
 			self.get_shutdowner_values()
-			self.get_client_list()
-
-			t=threading.Thread(target=self.update_client_list_thread)
-			t.daemon=True
-			t.start()
+			if not standAlone:
+				self.get_client_list()
+				t=threading.Thread(target=self.update_client_list_thread)
+				t.daemon=True
+				t.start()
 
 		
 		return user_validated
@@ -91,6 +95,8 @@ class N4dManager:
 			return self.shutdowner_var["server_cron"]["cron_server_values"]
 		except Exception as e:
 			self.shutdowner_var["server_cron"]={}
+			self.shutdowner_var["server_cron"]["custom_shutdown"]=False
+			self.shutdowner_var["server_cron"]["cron_server_content"]=""
 			self.shutdowner_var["server_cron"]["cron_server_values"]={}
 			self.shutdowner_var["server_cron"]["cron_server_values"]["minute"]=0
 			self.shutdowner_var["server_cron"]["cron_server_values"]["hour"]=0
@@ -144,9 +150,9 @@ class N4dManager:
 		
 		try:
 			
-			client.get_variable("","VariablesManager","SRV_IP")
+			ret=client.get_variable("","VariablesManager","SRV_IP")
 			
-			if client!=None:
+			if ret!=None:
 				return False
 			else:
 				

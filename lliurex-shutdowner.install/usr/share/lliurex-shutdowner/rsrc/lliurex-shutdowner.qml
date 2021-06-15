@@ -37,8 +37,8 @@ ApplicationWindow {
     anchors.margins: margin
     Layout.minimumWidth:600	
     Layout.maximumWidth:600
-    Layout.minimumHeight:shutBridge.isStandAlone? 440:570
-    Layout.maximumHeight:shutBridge.isStandAlone? 440:570
+    Layout.minimumHeight:shutBridge.isStandAlone? 450:570
+    Layout.maximumHeight:shutBridge.isStandAlone? 450:570
 
     RowLayout {
       id: bannerBox
@@ -108,8 +108,10 @@ ApplicationWindow {
           }
         }
 		RowLayout {
+          id:serverRow
           Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
+          visible:!shutBridge.isStandAlone
   		  Image{
         	id:imgServer
         	source: "images/server.svg"
@@ -248,6 +250,7 @@ ApplicationWindow {
     timer.text="",
     mainLayout.Layout.minimumHeight=570,
     mainLayout.Layout.maximumHeight=570,
+    serverRow.visible=false,
     helpBtn.visible=false,
     messageLabel.visible=false,
     messageLabel.text="",

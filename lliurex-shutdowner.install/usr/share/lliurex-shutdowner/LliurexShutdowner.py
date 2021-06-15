@@ -92,7 +92,10 @@ class Bridge(QObject):
 		server=value[2]
 		
 		if server=='':
-			server='server'
+			if self._isStandAlone:
+				server='localhost'
+			else:
+				server='server'
 		
 		self.n4d_man.set_server(server)
 
@@ -107,7 +110,7 @@ class Bridge(QObject):
 	def _validate(self):
 
 		LOGIN_FAILED=-40
-		ret=self.n4d_man.validate_user(self.user,self.password)
+		ret=self.n4d_man.validate_user(self.user,self.password,self._isStandAlone)
 
 		if ret:
 			group_found=False
