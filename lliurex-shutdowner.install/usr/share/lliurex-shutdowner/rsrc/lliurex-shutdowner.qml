@@ -155,8 +155,8 @@ ApplicationWindow {
             			stackLayout.currentIndex=1;
           			else
             			if (!shutBridge.running)
-                    		loginLabel.text=i18nd("lliurex-shutdowner","Invalid user"),
-                    		loginLabel.color="red";
+                    		loginLabel.text=""
+                    		/*loginLabel.color="red";*/
                     		loginGrid.enabled=true
           
      		} 
@@ -234,7 +234,11 @@ ApplicationWindow {
         if (shutBridge.showMessage[1]==-30){
           return i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other")
         }else{
-          return i18nd("lliurex-shutdowner","Changes saved successfully")
+        	if (shutBridge.showMessage[1]==-40){
+          		return i18nd("lliurex-shutdowner","Invalid user")
+          	}else{
+          		return i18nd("lliurex-shutdowner","Changes saved successfully")
+          	}
         }
       }
     }

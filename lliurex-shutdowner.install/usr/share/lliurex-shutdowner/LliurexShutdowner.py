@@ -86,6 +86,7 @@ class Bridge(QObject):
 	@Slot('QVariantList')
 	def validate(self,value):
 
+		self.showMessage=[False,""]
 		self.user=value[0]
 		self.password=value[1]
 		server=value[2]
@@ -105,6 +106,7 @@ class Bridge(QObject):
 
 	def _validate(self):
 
+		LOGIN_FAILED=-40
 		ret=self.n4d_man.validate_user(self.user,self.password)
 
 		if ret:
@@ -118,9 +120,11 @@ class Bridge(QObject):
 				self._loadInfo()
 				#self._getState()
 			else:
+				self.showMessage=[True,LOGIN_FAILED]
 				self.initFinish=False
 				self.running=False
 		else:
+			self.showMessage=[True,LOGIN_FAILED]
 			self.initFinish=False
 			self.running=False
 
@@ -474,7 +478,7 @@ class Bridge(QObject):
 					if self.customServerShut:
 						new_var=self.gather_values_server(new_var)	
 					else:
-						self.printd('SERVER CRON: FALSE')
+						self.printd('SERVER CUSTOM CRON: FALSE')
 						new_var["server_cron"]["custom_shutdown"]=False
 
 			else:
