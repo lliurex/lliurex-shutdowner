@@ -13,11 +13,11 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 class Bridge(QObject):
 
 
-	def __init__(self,ticket=None):
+	def __init__(self):
 
 		QObject.__init__(self)
 
-		self.n4d_man=N4dManager.N4dManager(ticket)
+		self.n4d_man=N4dManager.N4dManager()
 		self.initBridge()
 
 	def printd(self,message):
@@ -36,14 +36,14 @@ class Bridge(QObject):
 		self.custom_shutdown_bin="/usr/sbin/shutdown-lliurex-server"
 		self._initFinish=False
 		self._running=False
-		self._detectedClients="0"
+		self._detectedClients=0
 		self._showMessage=[False,""]
 		self.previousError=""
 		self._isStandAlone=self.n4d_man.is_standalone_mode()
 		#self._isCronEnabled=self.n4d_man.is_cron_enabled()
-		self._initClockClient=['0','0']
+		self._initClockClient=[0,0]
 		self._initWeekDaysClient=[True,True,True,True,True]
-		self._initClockServer=['0','0']
+		self._initClockServer=[0,0]
 		self._initWeekDaysServer=[True,True,True,True,True]
 		self._isCronEnabled=False
 
@@ -107,10 +107,10 @@ class Bridge(QObject):
 
 		ret=self.n4d_man.validate_user(self.user,self.password)
 
-		if ret[0]:
+		if ret:
 			group_found=False
 			for g in ["sudo","admins","teachers","admin"]:
-				if g in ret[1]:
+				if g in self.n4d_man.user_groups:
 					group_found=True
 					break
 					

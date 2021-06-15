@@ -11,7 +11,6 @@ class N4dManager:
 		self.debug=True
 		
 		self.client=None
-		self.user_validated=False
 		self.user_groups=[]
 		self.detected_clients=0
 		self.validation=None
@@ -30,69 +29,35 @@ class N4dManager:
 			
 	#def dprint
 
-
-	def is_standalone_mode(self):
-
-		try:
-			client=self.client.get_variable("SRV_IP")
-			return False
-			
-		except Exception as e:
-			return True	
-		
-	#def is_standalone_mode
-
-
-
-	def load_info(self):
-
-		pp=self.get_shutdowner_values()
 	
-		if not self.is_standalone_mode():
-			self.get_client_list()
-			t=threading.Thread(target=self.update_client_list_thread)
-			t.daemon=True
-			t.start()
 	
-	#def load_info
+	def set_server(self,server):
 
-		
-	
-	def set_server(self,server_ip):
-		
-		try:
-			context=ssl._create_unverified_context()
-			if server_ip in {'',None}:
-				server_ip="server"
-			if server_ip in {'localhost'}:
-				proxy="https://localhost:9779"
-				#print proxy
-				self.client=xmlrpc.client.ServerProxy(proxy,allow_none=True,context=context)
-			else:
-				proxy="https://%s:9779"%server_ip
-				#print proxy
-				self.client=xmlrpc.client.ServerProxy(proxy,allow_none=True,context=context)
-			
-			self.server=server_ip
+		context=ssl._create_unverified_context()	
+		self.client=xmlrpc.client.ServerProxy("https://%s:9779"%server,allow_none=True,context=context)
 
-		except Exception as e:
-			print(e)
-			return [False,str(e)]
 
 	#def set_server
 	
 	
 	def validate_user(self,user,password):
 			
+		user_validated=False
 		ret=self.client.validate_user(user,password)
 		user_validated,self.user_groups=ret
 			
 		
 		if user_validated:
 			self.validation=(user,password)
-			self.load_info()
+			self.get_shutdowner_values()
+			self.get_client_list()
+
+			t=threading.Thread(target=self.update_client_list_thread)
+			t.daemon=True
+			t.start()
+
 		
-		return ret
+		return user_validated
 
 	#def validate_user
 	
@@ -127,9 +92,9 @@ class N4dManager:
 		except Exception as e:
 			self.shutdowner_var["server_cron"]={}
 			self.shutdowner_var["server_cron"]["cron_server_values"]={}
-			self.shutdowner_var["server_cron"]["cron_server_values"]["minute"]=''
-			self.shutdowner_var["server_cron"]["cron_server_values"]["hour"]=''
-			self.shutdowner_var["server_cron"]["cron_server_values"]["weekdays"]=['','','','','']
+			self.shutdowner_var["server_cron"]["cron_server_values"]["minute"]=0
+			self.shutdowner_var["server_cron"]["cron_server_values"]["hour"]=0
+			self.shutdowner_var["server_cron"]["cron_server_values"]["weekdays"]=[True,True,True,True,True]
 			return self.shutdowner_var["server_cron"]["cron_server_values"]
 
 	#def get_server_cron_values
@@ -179,13 +144,35 @@ class N4dManager:
 		
 		try:
 			
-			if client.get_variable("","VariablesManager","SRV_IP") == None:
-				return True
-			else:
+			client.get_variable("","VariablesManager","SRV_IP")
+			
+			if client!=None:
 				return False
+			else:
+				
+				standAlone=False
+				cmd='lliurex-version -v'
+				p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+				result=p.communicate()[0]
+
+				if type(result) is bytes:
+					result=result.decode()
+
+				flavours = [ x.strip() for x in result.split(',') ]
+
+				for item in flavours:
+					if 'server' in item:
+						standAlone=False
+						break
+					elif 'client' in item:
+						standAlone=False
+						break
+					elif 'desktop' in item:
+						standAlone=True
+				
+				return standAlone
 			
-		except:
-			
+		except Exception as e:
 			return True
 		
 	#def is_standalone_mode
@@ -193,11 +180,13 @@ class N4dManager:
 
 	def is_server_shut(self):
 
+		
 		try:
 			ret=self.client.is_server_shutdown_enabled(self.validation,"ShutdownerManager")
 			return [ret['status'],ret['custom_shutdown']]
 		except Exception as e:
 			print('Exception: %s'%e)
+			return [False,False]
 
 	#def is_custom_server_shut
 	
