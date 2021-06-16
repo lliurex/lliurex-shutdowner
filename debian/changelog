@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.9.2) bionic-updates; urgency=medium
+
+  * Fixed app file
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 16 Jun 2021 14:08:57 +0200
+
 lliurex-shutdowner (1.9.1) bionic-updates; urgency=medium
 
   * Fixed error message in login panel
