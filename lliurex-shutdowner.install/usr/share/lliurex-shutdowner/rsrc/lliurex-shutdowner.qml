@@ -221,6 +221,7 @@ ApplicationWindow {
           }
         }  
         Layout.fillWidth: true
+        Layout.minimumHeight:40
       }
      
     }
