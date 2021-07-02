@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.9.5) focal; urgency=medium
+
+  * Added delay to show error
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Fri, 02 Jul 2021 10:56:22 +0200
+
 lliurex-shutdowner (2.9.4) focal; urgency=medium
 
   * Fixed again detection of standalone mode
