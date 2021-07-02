@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.9.3) bionic-updates; urgency=medium
+
+  * Added delay to show error
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Fri, 02 Jul 2021 11:21:44 +0200
+
 lliurex-shutdowner (1.9.2) bionic-updates; urgency=medium
 
   * Fixed app file
