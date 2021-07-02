@@ -72,6 +72,8 @@ class Bridge(QObject):
 		self.saveValues_timer = QTimer(None)
 		self.saveValues_timer.timeout.connect(self.saveValues)
 		self.saveValues_timer.start(5000)
+		self.countToShowError=0
+		self.waitTimeError=20
 
 	
 	#def _init	
@@ -503,17 +505,23 @@ class Bridge(QObject):
 					self.showMessage=[False,""]
 					self.previousError=""
 					self.n4d_man.shutdowner_var=new_var
+					self.countToShowError=0
 					self.printd("[LliurexShutdowner] Updating shutdowner variable...")
 					t=threading.Thread(target=self.n4d_man.set_shutdowner_values)
 					t.daemon=True
 					t.start()
 				else:
-					if self.previousError!=error[1]:
-						self.showMessage=error
-						self.previousError=error[1]
+					self.countToShowError+=5
+					if self.countToShowError>self.waitTimeError:
+						if self.previousError!=error[1]:
+							self.showMessage=error
+							self.previousError=error[1]
+							self.countToShowError=0
+
 			else:
 				self.showMessage=[False,""]	
 				self.previousError=""
+				self.countToShowError=0
 	
 			
 	#def saveValues
