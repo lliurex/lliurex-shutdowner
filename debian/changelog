@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.9.4) bionic-updates; urgency=medium
+
+  * Allows the server shutdown time as the same tha client
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 05 Jul 2021 10:02:03 +0200
+
 lliurex-shutdowner (1.9.3) bionic-updates; urgency=medium
 
   * Added delay to show error
