@@ -241,7 +241,7 @@ class Bridge(QObject):
 					if server_hour<new_var["cron_values"]["hour"]:
 						errorClock=True
 					elif server_hour==new_var["cron_values"]["hour"]:
-						if (server_minute-new_var["cron_values"]["minute"])<2:
+						if server_minute<new_var["cron_values"]["minute"]:
 							errorClock=True
 					
 					server_weekdays=new_var["server_cron"]["cron_server_values"]["weekdays"]
