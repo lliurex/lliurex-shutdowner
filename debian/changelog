@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.9.6) focal; urgency=medium
+
+  * Allows the server shutdown time as the same that client
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 05 Jul 2021 09:56:09 +0200
+
 lliurex-shutdowner (2.9.5) focal; urgency=medium
 
   * Added delay to show error
