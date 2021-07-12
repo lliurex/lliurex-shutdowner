@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-02 08:47+0100\n"
+"POT-Creation-Date: 2021-07-12 10:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,31 +43,43 @@ msgstr ""
 msgid "Changes saved successfully"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:111
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:113
 msgid "You can use the mouse wheel to change the hour"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:144
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:148
 msgid "You can use the mouse wheel to change the minutes"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:167
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:166
+msgid "Click to edit shutdown time with keyboard "
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:235
+msgid "Cancel"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:245
+msgid "Apply"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:282
 msgid "Monday"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:179
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:294
 msgid "Tuesday"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:190
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:305
 msgid "Wednesday"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:202
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:317
 msgid "Thursday"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:213
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:328
 msgid "Friday"
 msgstr ""
 
@@ -117,4 +129,8 @@ msgstr ""
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:108
 msgid "Custom:"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:156
+msgid "Click to return to client shutdown settings"
 msgstr ""
