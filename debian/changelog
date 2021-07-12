@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.10) focal; urgency=medium
+
+  * Added option to edit shutdown time with keyboard
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 12 Jul 2021 11:29:32 +0200
+
 lliurex-shutdowner (2.9.6) focal; urgency=medium
 
   * Allows the server shutdown time as the same that client
