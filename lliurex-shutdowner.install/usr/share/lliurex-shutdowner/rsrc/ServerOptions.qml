@@ -150,6 +150,11 @@ GridLayout {
           Layout.topMargin: 5
           Layout.bottomMargin: 5
           Layout.leftMargin:5
+          ToolTip.delay: 1000
+          ToolTip.timeout: 3000
+          ToolTip.visible: hovered
+          ToolTip.text:i18nd("lliurex-shutdowner","Click to return to client shutdown settings")
+         
           onClicked:{
             stackLayout.currentIndex=1;
           }
