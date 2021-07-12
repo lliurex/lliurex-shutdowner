@@ -1,3 +1,9 @@
+lliurex-shutdowner (1.10) bionic-updates; urgency=medium
+
+  * Added option to edit shutdown time with keyboard
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 12 Jul 2021 12:19:47 +0200
+
 lliurex-shutdowner (1.9.4) bionic-updates; urgency=medium
 
   * Allows the server shutdown time as the same tha client
