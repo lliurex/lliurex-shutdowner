@@ -27,13 +27,15 @@ GridLayout{
 		Layout.leftMargin: 5
 		Layout.rightMargin:5
 		Layout.bottomMargin: 10
-		Layout.fillWidth: true
 		Layout.alignment:Qt.AlignHCenter
 		spacing:10   	
 		Item {
 			Layout.fillWidth: true
 			width:200
 		}
+		/* Popup menu when right clicking items */
+		
+
 		Component {
 			id: delegateComponent
 			Label {
@@ -92,7 +94,7 @@ GridLayout{
 		Rectangle {
 			anchors.topMargin: 4
 			Layout.fillWidth: true
-	       	Layout.alignment:Qt.AlignVCenter
+	       	Layout.alignment:Qt.AlignCenter
 		    height: 100
 		    width: 80
 		    color:"transparent"
@@ -115,8 +117,10 @@ GridLayout{
 	        }       
 		}
 		Text{
+			id:clockSeparator
 			Layout.fillWidth: true
-			Layout.alignment:Qt.AlignVCenter
+	       	Layout.alignment:Qt.AlignCenter
+	       	Layout.leftMargin:10
 			font.pointSize:55
 			color: clockLayout.enabled? "#3daee9":"#87cefa"
 			text:":"
@@ -124,7 +128,7 @@ GridLayout{
 	    Rectangle {
 	    	anchors.topMargin: 4
 	    	Layout.fillWidth: true
-	    	Layout.alignment:Qt.AlignHCenter
+	       	Layout.alignment:Qt.AlignCenter
 	    	height: 100
 	    	width: 80
 	    	color:"transparent"
@@ -146,7 +150,118 @@ GridLayout{
 	    			updateClock(["M",minutesTumbler.currentIndex]);
 	    		}
 	    	}
-		}        
+		} 
+		Button {
+			id:editHourBtn
+			display:AbstractButton.IconOnly
+			icon.name:"edit-entry.svg"
+			Layout.preferredHeight: 40
+	       	Layout.alignment:Qt.AlignCenter
+			Layout.topMargin:20
+			Layout.leftMargin:10
+			hoverEnabled:true
+			ToolTip.delay: 1000
+			ToolTip.timeout: 3000
+			ToolTip.visible: hovered
+			ToolTip.text:i18nd("lliurex-shutdowner","Click to edit shutdown time with keyboard ")
+			onClicked:{
+				hourEntry.text=formatEditText(hoursTumbler.currentIndex),
+				minuteEntry.text=formatEditText(minutesTumbler.currentIndex),
+				popupEditHour.open();
+			}
+			Popup {
+				id: popupEditHour
+				x: Math.round(parent.width/ 2)
+       			y: Math.round(parent.height)
+				rightMargin:popupEditHour.width
+				width: 200
+				height: 170
+				modal: true
+				focus: true
+				closePolicy: Popup.NoAutoClose
+				enter: Transition {
+				        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+				}
+				exit: Transition {
+					NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
+    			}
+				GridLayout{
+					id:popupGrid
+					rows:3
+					flow: GridLayout.TopToBottom
+					RowLayout {
+						id: popupHourLayout
+					    Layout.alignment:Qt.AlignHCenter
+					    Layout.fillWidth: true
+					    Layout.bottomMargin: 10
+					    spacing:4
+				    	TextField{
+				    		id: hourEntry
+				    		validator: RegExpValidator { regExp: /([0-1][0-9]|2[0-3])/ }
+				    		implicitWidth: 70
+				    		horizontalAlignment: TextInput.AlignHCenter
+				    		color:"#3daee9"
+				    		font.pointSize: 40
+				    	}
+
+				    	Text{
+							font.pointSize:40
+							color:"#3daee9"
+							text:":"
+				    	}
+				    	
+				    	TextField{
+				    		id: minuteEntry
+				    		validator: RegExpValidator { regExp: /[0-5][0-9]/ }
+				    		implicitWidth: 70
+				    		horizontalAlignment: TextInput.AlignHCenter
+				    		color:"#3daee9"
+				    		font.pointSize: 40
+				    	}
+				    }
+
+			    	RowLayout {
+					   id: footPopup
+					   Layout.fillWidth: true
+					   Layout.bottomMargin: 10
+
+					   Layout.alignment:Qt.AlignHCenter
+					   spacing:8
+
+					   Button {
+					   		id:cancelEditBtn
+						   	display:AbstractButton.TextBesideIcon
+						   	icon.name:"dialog-cancel.svg"
+						   	text:i18nd("lliurex-shutdowner","Cancel")
+						   	Layout.preferredHeight: 40
+						   	onClicked:{
+						   		popupEditHour.close();
+					   		}
+					 	}
+					 	Button {
+							id:applyEditBtn
+						   	display:AbstractButton.TextBesideIcon
+						   	icon.name:"dialog-ok-apply.svg"
+						   	text:i18nd("lliurex-shutdowner","Apply")
+						   	Layout.preferredHeight: 40
+						   	onClicked:{
+						   		if (validateEntry(hourEntry.text,minuteEntry.text)){
+						   			hoursTumbler.currentIndex=hourEntry.text,
+						   			minutesTumbler.currentIndex=minuteEntry.text,
+									delay(1000, function() {
+										popupEditHour.close();
+							        })
+							    }else{
+							    	popupEditHour.close();
+							    }
+						   		
+					   		}
+					 	}
+					}      
+
+			    }
+			}
+		}       
 		Item {
 			Layout.fillWidth: true
 			width:200
@@ -219,9 +334,40 @@ GridLayout{
 		}
 	}
 
+	
 
 	function formatText(count, modelData) {
         var data = count === 12 ? modelData + 1 : modelData;
         return data.toString().length < 2 ? "0" + data : data;
     }	
+
+    function formatEditText(value){
+    	if (value<10){
+    		return "0"+value.toString();
+    	}else{
+    		return value.toString();
+    	}
+
+    }
+
+    function validateEntry(hour,minute){
+
+    	if ((hour =="") || (minute=="")){
+    		console.log("Vacio");
+    		return false;
+    	}else{
+    		return true;
+    	}
+
+    }
+    Timer {
+        id: timer
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
+    }
 }				
