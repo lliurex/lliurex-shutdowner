@@ -1,6 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.6
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
 import QtQuick.Window 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.6 as Kirigami
@@ -24,8 +24,7 @@ ApplicationWindow {
   onClosing: {
     if (shutBridge.closeShutdowner(true)){
       removeConnection(),
-      close.accepted=true,
-      console.log("Cleanup done, can close!");
+      close.accepted=true;
     }else{
       close.accepted=false;	
     }

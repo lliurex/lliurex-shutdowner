@@ -1,7 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.6
-import QtQuick.Layouts 1.3
-import QtQuick.Window 2.2
+import QtQuick.Layouts 1.15
+
 
 GridLayout{
 	id:calendar
@@ -33,7 +33,6 @@ GridLayout{
 			Layout.fillWidth: true
 			width:200
 		}
-		/* Popup menu when right clicking items */
 		
 
 		Component {
