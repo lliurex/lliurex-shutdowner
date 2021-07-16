@@ -1,7 +1,7 @@
 Name=lliurex-shutdowner
 Name[en]=LliureX Shutdowner
 Name[es]=LliureX Shutdowner
-Name[qcv]=LliureX 
+Name[qcv]=LliureX Shutdowner 
 Name[ca@valencia]=LliureX Shutdowner
 Comment=Configure automatic client and server shutdown. It also configures the shutdown in the Desktop version of LliureX 
 Comment[es]=Configura el apagado automático de clientes y servidor. También configura el apagado en la versión Escritorio de LliureX
