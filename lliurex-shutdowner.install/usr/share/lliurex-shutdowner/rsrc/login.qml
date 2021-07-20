@@ -4,8 +4,8 @@ import Edupals.N4D.Agent 1.0 as N4DAgent
 
 
 Rectangle {
-    width: 400
-    height: 250
+    width:  childrenRect.width
+    height:  childrenRect.height
     anchors.centerIn: parent
     color: "#e9e9e9"
 
@@ -17,7 +17,7 @@ Rectangle {
         showCancel: false
         inGroups:["sudo","admins","teachers"]
         
-        anchors.centerIn: parent
+        /*anchors.centerIn: parent*/
         
         onLogged: {
             tunnel.on_ticket(ticket),
