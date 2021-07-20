@@ -612,9 +612,9 @@ class Bridge(QObject):
 		lang=os.environ["LANG"]
 
 		if 'valencia' in lang:
-			self.help_cmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex+Shutdowner_V2.'
+			self.help_cmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex+Shutdowner.'
 		else:
-			self.help_cmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex-Shutdowner_V2'
+			self.help_cmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex-Shutdowner'
 		
 		self.open_help_t=threading.Thread(target=self._open_help)
 		self.open_help_t.daemon=True
