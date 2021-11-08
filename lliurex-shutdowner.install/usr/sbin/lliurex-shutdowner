@@ -65,5 +65,7 @@ view.rootContext().setContextProperty("tunnel", tunnel)
 url = QUrl("/usr/share/lliurex-shutdowner/rsrc/login.qml")
 view.setSource(url)
 view.show()
-
-sys.exit(app.exec_())
+ret=app.exec_()
+del view
+del app
+sys.exit(ret)
