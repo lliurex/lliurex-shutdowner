@@ -208,22 +208,6 @@ GridLayout {
       return false;
     }
   }
-
-  function removeConnection(){
-    clockBoxServer.visible=false,
-  	toggleswitchServer.checked=false,
-  	serverShutOp1.checked=false,
-  	serverShutOp2.checked=false,
-    cronServer.clockLayoutEnabled=false,
-    cronServer.currentHour=false,
-    cronServer.currentMinutes=false,
-    cronServer.daysLayoutEnabled=false,
-    cronServer.mondayChecked=false,
-    cronServer.tuesdayChecked=false,
-    cronServer.wednesdayChecked=false,
-    cronServer.thursdayChecked=false,
-    cronServer.fridayChecked=false;
-  }
 }		
 				
 

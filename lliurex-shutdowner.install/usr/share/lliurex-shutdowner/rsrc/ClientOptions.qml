@@ -218,24 +218,4 @@ GridLayout {
 		}
 					
 	}
-
-	function removeConnection(){
-		toggleswitch.checked=false,
-		serverOptionsLayout.visible=false,
-		serverOptionsLayout.enabled=false,
-		textMessageClient.text="",
-		serverConfiguredOpText.text="",
-		clientBox.visible=false,
-		clientBox.enabled=false,
-		cronClient.clockLayoutEnabled=false,
-		cronClient.currentHour=false,
-		cronClient.currentMinutes=false,
-		cronClient.daysLayoutEnabled=false,
-		cronClient.mondayChecked=false,
-		cronClient.tuesdayChecked=false,
-		cronClient.wednesdayChecked=false,
-		cronClient.thursdayChecked=false,
-		cronClient.fridayChecked=false,
-		numberclientTex.text="";
-	} 
 }

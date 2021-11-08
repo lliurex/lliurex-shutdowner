@@ -22,4 +22,7 @@ if not engine.rootObjects():
 
 engine.quit.connect(QApplication.quit)
 app.setWindowIcon(QIcon("/usr/share/icons/hicolor/scalable/apps/lliurex-shutdowner.svg"));
-sys.exit(app.exec_())
+ret=app.exec_()
+del engine
+del app
+sys.exit(ret)

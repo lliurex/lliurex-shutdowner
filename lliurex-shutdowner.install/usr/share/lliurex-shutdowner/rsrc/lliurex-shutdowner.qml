@@ -23,7 +23,6 @@ ApplicationWindow {
 
   onClosing: {
     if (shutBridge.closeShutdowner(true)){
-      removeConnection(),
       close.accepted=true,
       console.log("Cleanup done, can close!");
     }else{
@@ -246,18 +245,4 @@ ApplicationWindow {
       }
     }
   }
-
-  function removeConnection() {
-    timer.text="",
-    mainLayout.Layout.minimumHeight=570,
-    mainLayout.Layout.maximumHeight=570,
-    serverRow.visible=false,
-    helpBtn.visible=false,
-    messageLabel.visible=false,
-    messageLabel.text="",
-    messageLabel.type=Kirigami.MessageType.Error,
-    clientOptions.removeConnection(),
-    serverOptions.removeConnection();
-  }
-	
 }	    
