@@ -51,7 +51,7 @@ ApplicationWindow {
 
     StackLayout {
       id: stackLayout
-      currentIndex:1
+      currentIndex:shutBridge.currentStack
       implicitWidth: 600
       Layout.bottomMargin: 10
       Layout.alignment:Qt.AlignHCenter
@@ -61,7 +61,7 @@ ApplicationWindow {
 
       GridLayout{
         id: loadGrid
-        rows: 4
+        rows: 3
         flow: GridLayout.TopToBottom
         Layout.topMargin: 10
         Layout.bottomMargin: 10
@@ -97,22 +97,7 @@ ApplicationWindow {
            }
         }
 
-        RowLayout {
-          Layout.fillWidth: true
-          Layout.alignment:Qt.AlignHCenter
-          Text {
-            id:timer
-            text:shutBridge.initFinish
-            visible:false
-            Layout.alignment:Qt.AlignHCenter
-            font.family: "Quattrocento Sans Bold"
-            font.pointSize: 10
-            onTextChanged:{
-              stackLayout.currentIndex=shutBridge.initFinish? 1:0
-            } 
-          } 
-        }
-			}	
+      }	
 
       ClientOptions{
         id:clientOptions
@@ -133,7 +118,13 @@ ApplicationWindow {
       Layout.bottomMargin: 10
       Button {
         id:helpBtn
-        visible:shutBridge.initFinish?true:false
+        visible:{
+          if (shutBridge.currentStack!=0){
+            true
+          }else{
+            false
+          }
+        }
         display:AbstractButton.TextBesideIcon
         icon.name:"help-whatsthis.svg"
         text:i18nd("lliurex-shutdowner","Help")
