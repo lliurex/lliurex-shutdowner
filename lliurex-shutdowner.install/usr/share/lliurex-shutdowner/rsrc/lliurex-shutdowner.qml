@@ -52,7 +52,7 @@ ApplicationWindow {
 
     StackLayout {
       id: stackLayout
-      currentIndex:0
+      currentIndex:shutBridge.currentStack
       implicitWidth: 600
       Layout.bottomMargin: 10
       Layout.alignment:Qt.AlignHCenter
@@ -134,48 +134,34 @@ ApplicationWindow {
                   onClicked: {
                       loginLabel.text=i18nd("lliurex-shutdowner","Validating user...")
                       loginLabel.color="black"
+                      loginGrid.enabled=false
+                      delay(1000, function() {
+                          if (!shutBridge.running){
+                              loginGrid.enabled=true
+                              loginLabel.text=""
+                              timer.stop();
+                          }
+                      })
                     	shutBridge.validate([userEntry.text,passwordEntry.text,serverEntry.text])
-                    	loginGrid.enabled=false
 
                   }
            }
       
           }
         RowLayout{
-  		  Layout.fillWidth: true
+          Layout.fillWidth: true
           Layout.alignment:Qt.AlignHCenter
 
           Text {
-          	id:timer
-    		text:shutBridge.running?shutBridge.initFinish:""
-    		visible:false
-    		Layout.alignment:Qt.AlignHCenter
-      		onTextChanged:{
-        		if (!shutBridge.running)
-            		if (shutBridge.initFinish) 
-            			stackLayout.currentIndex=1;
-          			else
-            			if (!shutBridge.running)
-                    		loginLabel.text=""
-                    		/*loginLabel.color="red";*/
-                    		loginGrid.enabled=true
-          
-     		} 
-  		}   
-  		Text {
-    		id:loginLabel
-    		text: ""
-    		visible:true
-    		Layout.alignment:Qt.AlignHCenter
-    		font.family: "Quattrocento Sans Bold"
-      		font.pointSize: 10
-      		color:"black"
-
+            id:loginLabel
+            text: ""
+            visible:true
+            font.family: "Quattrocento Sans Bold"
+            font.pointSize: 10
+            color:"black"
+          }
         }
-        
-     }
 
-           
     }
 
       ClientOptions{
@@ -197,7 +183,13 @@ ApplicationWindow {
       Layout.bottomMargin: 10
       Button {
         id:helpBtn
-        visible:shutBridge.initFinish?true:false
+        visible:{
+          if (shutBridge.currentStack!=0){
+            true
+          }else{
+            false
+          }
+        }
         display:AbstractButton.TextBesideIcon
         icon.name:"help-whatsthis.svg"
         text:i18nd("lliurex-shutdowner","Help")
@@ -224,7 +216,19 @@ ApplicationWindow {
       }
      
     }
+
   }
+  Timer{
+    id:timer
+  }
+
+  function delay(delayTime,cb){
+    timer.interval=delayTime;
+    timer.repeat=true;
+    timer.triggered.connect(cb);
+    timer.start()
+  }
+
 
   function getMessageText(){
     if (shutBridge.showMessage[1]==-10){
