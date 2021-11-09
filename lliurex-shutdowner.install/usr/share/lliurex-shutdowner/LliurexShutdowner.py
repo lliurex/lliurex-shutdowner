@@ -25,7 +25,7 @@ class Bridge(QObject):
 		self.cron_content="%s %s * * %s root %s >> /var/log/syslog\n"
 		self.shutdown_bin="/usr/sbin/shutdown-lliurex"
 		self.custom_shutdown_bin="/usr/sbin/shutdown-lliurex-server"
-		self._initFinish=False
+		self._currentStack=1
 		self._detectedClients="0"
 		self._showMessage=[False,""]
 		self.previousError=""
@@ -56,6 +56,7 @@ class Bridge(QObject):
 	
 	def getShutInfo(self):
 
+		self._currentStack=0
 		t = threading.Thread(target=self._loadInfo)
 		t.daemon=True
 		t.start()
@@ -78,7 +79,7 @@ class Bridge(QObject):
 
 
 		time.sleep(3)
-		self.initFinish=True
+		self.currentStack=1
 
 	#def _loadInfo	
 
@@ -126,18 +127,18 @@ class Bridge(QObject):
 
 	#def _getInitWeekDaysServer
 
-	def _getInitFinish(self):
+	def _getCurrentStack(self):
 
-		return self._initFinish
+		return self._currentStack
 
-	#def _getInitFinish	
+	#def _getCurrentStack	
 
-	def _setInitFinish(self,initFinish):
+	def _setCurrentStack(self,currentStack):
 		
-		self._initFinish=initFinish
-		self.on_initFinish.emit()	
+		self._currentStack=currentStack
+		self.on_currentStack.emit()	
 
-	#def _setInitFinish
+	#def _setcurrentStack
 
 	def _getDetectedClients(self):
 
@@ -499,8 +500,8 @@ class Bridge(QObject):
 	initWeekDaysServer=Property('QVariantList',_getInitWeekDaysServer,constant=True)
 
 
-	on_initFinish=Signal()
-	initFinish=Property(bool,_getInitFinish,_setInitFinish, notify=on_initFinish)
+	on_currentStack=Signal()
+	currentStack=Property(int,_getCurrentStack,_setCurrentStack, notify=on_currentStack)
 
 	on_detectedClients=Signal()
 	detectedClients=Property(str,_getDetectedClients,_setDetectedClients, notify=on_detectedClients)

@@ -5,15 +5,69 @@ from PySide2.QtCore import QUrl, QObject, Slot, Signal, Property
 import os
 import sys
 import subprocess
+import shutil
 
 class Tunnel(QObject):
 
 	def __init__(self):
 
 		QObject.__init__(self)
+		self.clearCache()
 		self.isStandAlone()
 
 	#def __init	
+
+	def clearCache(self):
+
+		clear=False
+		user=os.environ["USER"]
+		versionFile="/home/%s/.config/lliurex-shutdowner.conf"%user
+		cachePath1="/home/%s/.cache/lliurex-shutdowner"%user
+		cachePath2="/home/%s/.cache/lliurex-shutdowner-gui.py"%user
+		installedVersion=self.getPackageVersion()
+
+		if not os.path.exists(versionFile):
+			with open(versionFile,'w') as fd:
+				fd.write(installedVersion)
+				fd.close()
+
+			clear=True
+
+		else:
+			with open(versionFile,'r') as fd:
+				fileVersion=fd.readline()
+				fd.close()
+
+			if fileVersion!=installedVersion:
+				with open(versionFile,'w') as fd:
+					fd.write(installedVersion)
+					fd.close()
+				clear=True
+		
+		if clear:
+			if os.path.exists(cachePath1):
+				shutil.rmtree(cachePath1)
+			if os.path.exists(cachePath2):
+				shutil.rmtree(cachePath2)
+
+	#def clearCache
+
+	def getPackageVersion(self):
+
+		command = "LANG=C LANGUAGE=en apt-cache policy lliurex-shutdowner"
+		p = subprocess.Popen(command,shell=True,stdout=subprocess.PIPE)
+		installed = None
+		for line in iter(p.stdout.readline,b""):
+			if type(line) is bytes:
+				line=line.decode()
+
+			stripedline = line.strip()
+			if stripedline.startswith("Installed"):
+				installed = stripedline.replace("Installed: ","")
+
+		return installed
+
+	#def getPackageVersion
 
 	def isStandAlone(self):
 
@@ -65,5 +119,7 @@ view.rootContext().setContextProperty("tunnel", tunnel)
 url = QUrl("/usr/share/lliurex-shutdowner/rsrc/login.qml")
 view.setSource(url)
 view.show()
-
-sys.exit(app.exec_())
+ret=app.exec_()
+del view
+del app
+sys.exit(ret)
