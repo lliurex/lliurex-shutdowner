@@ -22,7 +22,6 @@ ApplicationWindow {
 
     onClosing: {
      	if (bridge.closed(true))
-     		removePropertiesConnect(),
      		close.accepted=true;
         else
         	close.accepted=false;	
@@ -134,13 +133,5 @@ ApplicationWindow {
 		    }
 		}
 	
-	 }
-
-	 function removePropertiesConnect(){
-	 	warningText.text="",
-	 	countDown.text="",
-	 	countDown.color="#3daee9",
-	 	cancelBtn.text="",
-	 	btnBox.visible=false;
 	 }
 }  		
