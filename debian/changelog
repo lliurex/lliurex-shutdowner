@@ -1,3 +1,10 @@
+lliurex-shutdowner (1.10.2) bionic-updates; urgency=medium
+
+  * Refactorize some functions
+  * Added function to clear cache en app version change
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 09 Nov 2021 11:41:09 +0100
+
 lliurex-shutdowner (1.10.1) bionic-updates; urgency=medium
 
   * Updated link to help
