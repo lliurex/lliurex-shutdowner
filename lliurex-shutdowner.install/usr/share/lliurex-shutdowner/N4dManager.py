@@ -2,6 +2,9 @@ import xmlrpc.client
 import ssl
 import threading
 import time
+import os
+import subprocess
+import shutil
 
 
 class N4dManager:
@@ -19,6 +22,8 @@ class N4dManager:
 		if server!=None:
 			self.set_server(server)
 		
+		self.clearCache()
+
 	#def init
 	
 	
@@ -38,7 +43,55 @@ class N4dManager:
 
 
 	#def set_server
-	
+
+	def clearCache(self):
+
+		clear=False
+		user=os.environ["USER"]
+		versionFile="/home/%s/.config/lliurex-shutdowner.conf"%user
+		cachePath="/home/%s/.cache/lliurex-shutdowner-gui.py"%user
+		installedVersion=self.getPackageVersion()
+
+		if not os.path.exists(versionFile):
+			with open(versionFile,'w') as fd:
+				fd.write(installedVersion)
+				fd.close()
+
+			clear=True
+
+		else:
+			with open(versionFile,'r') as fd:
+				fileVersion=fd.readline()
+				fd.close()
+
+			if fileVersion!=installedVersion:
+				with open(versionFile,'w') as fd:
+					fd.write(installedVersion)
+					fd.close()
+				clear=True
+		
+		if clear:
+			if os.path.exists(cachePath):
+				shutil.rmtree(cachePath)
+
+	#def clearCache
+
+	def getPackageVersion(self):
+
+		command = "LANG=C LANGUAGE=en apt-cache policy lliurex-shutdowner"
+		p = subprocess.Popen(command,shell=True,stdout=subprocess.PIPE)
+		installed = None
+		for line in iter(p.stdout.readline,b""):
+			if type(line) is bytes:
+				line=line.decode()
+
+			stripedline = line.strip()
+			if stripedline.startswith("Installed"):
+				installed = stripedline.replace("Installed: ","")
+
+		return installed
+
+	#def getPackageVersion
 	
 	def validate_user(self,user,password,standAlone):
 			
