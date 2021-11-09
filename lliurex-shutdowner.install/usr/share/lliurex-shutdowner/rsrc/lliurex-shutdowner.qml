@@ -231,22 +231,24 @@ ApplicationWindow {
 
 
   function getMessageText(){
-    if (shutBridge.showMessage[1]==-10){
-      return i18nd("lliurex-shutdowner","The client and server shutdown time are not compatible with each other")
-    }else{
-      if (shutBridge.showMessage[1]==-20){
-        return i18nd("lliurex-shutdowner","The client and server shutdown days are not compatible with each other")
-      }else{
-        if (shutBridge.showMessage[1]==-30){
-          return i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other")
-        }else{
-        	if (shutBridge.showMessage[1]==-40){
-          		return i18nd("lliurex-shutdowner","Invalid user")
-          	}else{
-          		return i18nd("lliurex-shutdowner","Changes saved successfully")
-          	}
-        }
-      }
+
+    switch (shutBridge.showMessage[1]){
+      case -10:
+        var msg=i18nd("lliurex-shutdowner","The client and server shutdown time are not compatible with each other");
+        break;
+      case -20:
+        var msg=i18nd("lliurex-shutdowner","The client and server shutdown days are not compatible with each other");
+        break;
+      case -30:
+        var msg=i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other");
+        break; 
+      case -40:
+        var msg=i18nd("lliurex-shutdowner","Invalid user");
+        break;
+      default:
+        var msg=i18nd("lliurex-shutdowner","Changes saved successfully");
+        break;
     }
+    return msg
   }
 }	    
