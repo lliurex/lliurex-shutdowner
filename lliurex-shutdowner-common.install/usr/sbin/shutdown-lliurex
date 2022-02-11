@@ -18,6 +18,7 @@ class Shutdowner:
 	def __init__(self):
 		
 		self.init_var()
+		self.flavours=[]
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		
@@ -40,6 +41,7 @@ class Shutdowner:
 		self.lliurex_flavour["client"]=False
 		self.lliurex_flavour["thin"]=False
 		self.lliurex_flavour["semi"]=False
+		self.lliurex_flavour["desktop"]=False
 		
 		self.shutdown_function={}
 		self.shutdown_function["server"]=self.server_shutdown
@@ -79,7 +81,8 @@ class Shutdowner:
 		if self.lliurex_flavour["desktop"]:
 			return "desktop"
 			
-		return "unknown"
+		self.get_flavours()
+		return self.current_flavour()
 		
 	#def what_am_i
 		
@@ -197,6 +200,38 @@ class Shutdowner:
 		os.system(command)
 		
 	#def basic_shutdown
+	
+	def get_flavours(self):
+	
+		cmd="lliurex-version -v"
+		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+		result=p.communicate()[0]
+		
+		if type(result) is bytes:
+			result=result.decode()
+			
+		self.flavours= [ x.strip() for x in result.split(',') ]
+		
+	#def get_flavours
+	
+	def current_flavour(self):
+		
+		tmpFlavour=""
+		for item in self.flavours:
+			if 'server' in item:
+				tmpFlavour='server'
+				break
+			elif 'client' in item:
+				tmpFlavour='client'
+				break
+			elif 'desktop' in item:
+				tmpFlavour='desktop'
+			else:
+				tmpFlavour='unknown'
+				
+		return tmpFlavour
+		
+	#def current_flavour
 	
 	
 #class Shutdowner
