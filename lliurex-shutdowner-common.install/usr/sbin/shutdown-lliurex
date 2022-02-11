@@ -18,6 +18,7 @@ class Shutdowner:
 	def __init__(self):
 		
 		self.init_var()
+		self.flavours=[]
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		
@@ -40,6 +41,7 @@ class Shutdowner:
 		self.lliurex_flavour["client"]=False
 		self.lliurex_flavour["thin"]=False
 		self.lliurex_flavour["semi"]=False
+		self.lliurex_flavour["desktop"]=False
 		
 		self.shutdown_function={}
 		self.shutdown_function["server"]=self.server_shutdown
@@ -53,17 +55,31 @@ class Shutdowner:
 	#def init_var
 	
 	def what_am_i(self):
-		
+
+		self.get_flavours()
+
 		if os.system("lliurex-version -x server")==0:
 			self.lliurex_flavour["server"]=True
+		else:
+			ret=self.check_flavour()
+			if ret=="server":
+				self.lliurex_flavour["server"]=True
 		if os.system("lliurex-version -x client")==0:
 			self.lliurex_flavour["client"]=True
+		else:
+			ret=self.check_flavour()
+			if ret=="client":
+				self.lliurex_flavour["client"]=True
 		if os.system("lliurex-version -x thin")==0:
 			self.lliurex_flavour["thin"]=True
 		if os.system("lliurex-version -x semi")==0:
 			self.lliurex_flavour["semi"]=True
 		if os.system("lliurex-version -x desktop")==0:
 			self.lliurex_flavour["desktop"]=True
+		else:
+			ret=self.check_flavour()
+			if ret=="desktop":
+				self.lliurex_flavour["desktop"]=True
 			
 		# order is important here. Thin is also detected as server
 		# semi is also detected as client
@@ -197,6 +213,38 @@ class Shutdowner:
 		os.system(command)
 		
 	#def basic_shutdown
+
+	def get_flavours(self):
+	
+		cmd="lliurex-version -v"
+		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+		result=p.communicate()[0]
+		
+		if type(result) is bytes:
+			result=result.decode()
+			
+		self.flavours= [ x.strip() for x in result.split(',') ]
+		
+	#def get_flavours
+	
+	def check_flavour(self):
+		
+		tmpFlavour=""
+		for item in self.flavours:
+			if 'server' in item:
+				tmpFlavour='server'
+				break
+			elif 'client' in item:
+				tmpFlavour='client'
+				break
+			elif 'desktop' in item:
+				tmpFlavour='desktop'
+			else:
+				tmpFlavour='unknown'
+				
+		return tmpFlavour
+		
+	#def check_flavour
 	
 	
 #class Shutdowner
