@@ -55,17 +55,31 @@ class Shutdowner:
 	#def init_var
 	
 	def what_am_i(self):
-		
+
+		self.get_flavours()
+
 		if os.system("lliurex-version -x server")==0:
 			self.lliurex_flavour["server"]=True
+		else:
+			ret=self.check_flavour()
+			if ret=="server":
+				self.lliurex_flavour["server"]=True
 		if os.system("lliurex-version -x client")==0:
 			self.lliurex_flavour["client"]=True
+		else:
+			ret=self.check_flavour()
+			if ret=="client":
+				self.lliurex_flavour["client"]=True
 		if os.system("lliurex-version -x thin")==0:
 			self.lliurex_flavour["thin"]=True
 		if os.system("lliurex-version -x semi")==0:
 			self.lliurex_flavour["semi"]=True
 		if os.system("lliurex-version -x desktop")==0:
 			self.lliurex_flavour["desktop"]=True
+		else:
+			ret=self.check_flavour()
+			if ret=="desktop":
+				self.lliurex_flavour["desktop"]=True
 			
 		# order is important here. Thin is also detected as server
 		# semi is also detected as client
@@ -80,9 +94,8 @@ class Shutdowner:
 			return "client"
 		if self.lliurex_flavour["desktop"]:
 			return "desktop"
-			
-		self.get_flavours()
-		return self.current_flavour()
+
+		return "unknown"
 		
 	#def what_am_i
 		
@@ -214,7 +227,7 @@ class Shutdowner:
 		
 	#def get_flavours
 	
-	def current_flavour(self):
+	def check_flavour(self):
 		
 		tmpFlavour=""
 		for item in self.flavours:
@@ -231,7 +244,7 @@ class Shutdowner:
 				
 		return tmpFlavour
 		
-	#def current_flavour
+	#def check_flavour
 	
 	
 #class Shutdowner
