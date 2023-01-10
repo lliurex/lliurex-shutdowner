@@ -1,15 +1,17 @@
 import n4d.client
 import threading
+import subprocess
 import time
 
 
 class N4dManager:
 	
-	def __init__(self,ticket):
+	def __init__(self,ticket,passwd=None):
 
 		self.debug=True
 		ticket=ticket.replace('##U+0020##',' ')
 		self.detected_clients=0
+		self.local_passwd=passwd
 		self.set_server(ticket)
 		self.load_info()
 		
@@ -113,36 +115,35 @@ class N4dManager:
 	
 	def is_standalone_mode(self):
 
+		standAlone=False
+		isClient=False
+	
 		try:
-			client=self.client.get_variable("SRV_IP")
+			cmd='lliurex-version -v'
+			p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+			result=p.communicate()[0]
+
+			if type(result) is bytes:
+				result=result.decode()
+
+			flavours = [ x.strip() for x in result.split(',') ]
+
+			for item in flavours:
+				if 'server' in item:
+					standAlone=False
+					break
+				elif 'client' in item:
+					standAlone=False
+					isClient=True
+					break
+				elif 'desktop' in item:
+					standAlone=True
 			
-			if client!=None:
-				return False
-			else:
-				standAlone=False
-				cmd='lliurex-version -v'
-				p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-				result=p.communicate()[0]
-
-				if type(result) is bytes:
-					result=result.decode()
-
-				flavours = [ x.strip() for x in result.split(',') ]
-
-				for item in flavours:
-					if 'server' in item:
-						standAlone=False
-						break
-					elif 'client' in item:
-						standAlone=False
-						break
-					elif 'desktop' in item:
-						standAlone=True
-				
-				return standAlone
+			return standAlone,isClient
 			
 		except Exception as e:
-			return True
+			print(str(e))
+			return True,isClient
 	
 		
 	#def is_standalone_mode

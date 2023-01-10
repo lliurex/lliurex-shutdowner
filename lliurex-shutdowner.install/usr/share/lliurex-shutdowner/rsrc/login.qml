@@ -24,5 +24,11 @@ Rectangle {
             showAddress=true;
 
         }
+
+        onAuthenticated:{
+            if (tunnel.isClient){
+                tunnel.on_authenticated(passwd)
+            }
+        }
     }
 }

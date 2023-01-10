@@ -72,6 +72,7 @@ class Tunnel(QObject):
 	def isStandAlone(self):
 
 		self._standAlone=False
+		self._isClient=False
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
@@ -86,6 +87,7 @@ class Tunnel(QObject):
 				break
 			elif 'client' in item:
 				self._standAlone=False
+				self._isClient=True
 				break
 			elif 'desktop' in item:
 				self._standAlone=True
@@ -96,16 +98,33 @@ class Tunnel(QObject):
 
 		return self._standAlone
 
-	#def _getStandAlone	
+	#def _getStandAlone
+
+	def _getIsClient(self):
+		
+		return self._isClient
+
+	#def _getIsClient	
 
 		
 	standAlone=Property(bool,_getStandAlone,constant=True)
+	isClient=Property(bool,_getIsClient,constant=True)
+
+	@Slot(str)
+	def on_authenticated(self,passwd):
+		
+		self.passwd=passwd
+	
+	#def on_authenticated
 
 	@Slot(str)
 	def on_ticket(self,ticket):
 
 		ticket=ticket.replace(' ','##U+0020##')
-		os.system("python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py %s &"%ticket)
+		passwd=None
+		if self._isClient:
+			passwd="'"+self.passwd+"'"
+		os.system("python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py %s %s &"%(ticket,passwd))
 		app.quit()
 
 	#def on_ticket

@@ -10,7 +10,7 @@ app = QApplication()
 engine = QQmlApplicationEngine()
 engine.clearComponentCache()
 context=engine.rootContext()
-shutBridge=LliurexShutdowner.Bridge(sys.argv[1])
+shutBridge=LliurexShutdowner.Bridge(sys.argv[1],sys.argv[2])
 context.setContextProperty("shutBridge", shutBridge)
 
 url = QUrl("/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml")
