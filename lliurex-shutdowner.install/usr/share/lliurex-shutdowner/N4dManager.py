@@ -6,14 +6,11 @@ import time
 
 class N4dManager:
 	
-	def __init__(self,ticket,passwd=None):
+	def __init__(self):
 
 		self.debug=True
-		ticket=ticket.replace('##U+0020##',' ')
+	
 		self.detected_clients=0
-		self.local_passwd=passwd
-		self.set_server(ticket)
-		self.load_info()
 		
 	#def init
 	
@@ -25,8 +22,10 @@ class N4dManager:
 	#def dprint
 		
 	
-	def set_server(self,ticket):
-		
+	def set_server(self,ticket,passwd):
+
+		ticket=ticket.replace('##U+0020##',' ')
+		self.local_passwd=passwd
 		tk=n4d.client.Ticket(ticket)
 		self.client=n4d.client.Client(ticket=tk)
 		
@@ -37,7 +36,7 @@ class N4dManager:
 
 		self.get_shutdowner_values()
 	
-		if not self.is_standalone_mode():
+		if not self.is_standalone_mode()[0]:
 			self.get_client_list()
 			t=threading.Thread(target=self.update_client_list_thread)
 			t.daemon=True
@@ -142,7 +141,6 @@ class N4dManager:
 			return standAlone,isClient
 			
 		except Exception as e:
-			print(str(e))
 			return True,isClient
 	
 		
@@ -153,6 +151,7 @@ class N4dManager:
 		ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
 		
 		return [ret['status'],ret['custom_shutdown']]
+	
 	#def is_custom_server_shut
 	
 #class N4dManager

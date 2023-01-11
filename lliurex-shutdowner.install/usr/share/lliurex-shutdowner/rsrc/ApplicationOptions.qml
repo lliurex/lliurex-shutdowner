@@ -81,14 +81,14 @@ GridLayout{
             MenuOptionBtn{
                 id:settingsOption
                 optionText:{
-                    if (!shutBridge.isClient){
+                    if (shutBridge.isClient){
                         i18nd("lliurex-shutdowner","System settings")
                     }else{
                         i18nd("lliurex-shutdowner","Help")
                     }
                 }
                 optionIcon:{
-                    if (!shutBridge.isClient){
+                    if (shutBridge.isClient){
                         "/usr/share/icons/breeze/actions/16/configure.svg"
                     }else{
                         "/usr/share/icons/breeze/actions/16/help-contents.svg"
@@ -110,7 +110,7 @@ GridLayout{
                 }
                 Connections{
                     function onMenuOptionClicked(){
-                        if (!shutBridge.isClient){
+                        if (shutBridge.isClient){
                             shutBridge.manageTransitions(2)
                         }else{
                             shutBridge.openHelp()  
