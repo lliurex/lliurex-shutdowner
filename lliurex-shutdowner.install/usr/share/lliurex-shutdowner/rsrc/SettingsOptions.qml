@@ -30,7 +30,7 @@ Rectangle{
 
      		Text {
      			id:textMessageSettings
-     			text:i18nd("lliurex-shutdowner","Turn off automatic shutdown on this computer:")
+     			text:i18nd("lliurex-shutdowner","Disable automatic shutdown on this computer:")
 				font.family: "Quattrocento Sans Bold"
 				font.pointSize: 10
 				Layout.alignment:Qt.AlignRight
