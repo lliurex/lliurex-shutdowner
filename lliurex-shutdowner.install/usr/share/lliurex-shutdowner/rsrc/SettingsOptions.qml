@@ -38,7 +38,7 @@ Rectangle{
 
 			Switch {
 				id:toggleswitch
-				checked: shutBridge.isCronEnabled
+				checked: shutBridge.isClientShutDownOverride
 				Layout.alignment:Qt.AlignLeft
 				indicator: Rectangle {
 					implicitWidth: 40
@@ -59,7 +59,7 @@ Rectangle{
 				}	
 
 				onToggled: {
-					shutBridge.getCronSwitchValue(toggleswitch.checked);
+					shutBridge.overrrideShutdownSwitch(toggleswitch.checked);
 				}
 			}
 		}

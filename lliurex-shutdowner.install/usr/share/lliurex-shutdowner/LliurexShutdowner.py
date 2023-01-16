@@ -88,6 +88,8 @@ class Bridge(QObject):
 		self._initWeekDaysServer=[server_values["weekdays"][0],server_values["weekdays"][1],server_values["weekdays"][2],server_values["weekdays"][3],server_values["weekdays"][4]]
 		self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
 
+		self._isClientShutDownOverride=Bridge.n4d_man.is_client_shutdown_override()
+
 		if not self._isStandAlone:
 			self.client_timer = QTimer(None)
 			self.client_timer.timeout.connect(self.getClient)
@@ -274,6 +276,19 @@ class Bridge(QObject):
 
 	#def _setShowMessage
 
+	def _getIsClientShutDownOverride(self):
+
+		return self._isClientShutDownOverride
+
+	#def _getIsClientShutDownOverride
+
+	def _setIsClientShutDownOverride(self,isClientShutDownOverride):
+
+		if self._isClientShutDownOverride!=isClientShutDownOverride:
+			self._isClientShutDownOverride=isClientShutDownOverride
+			self.on_isClientShutDownOverride.emit()
+
+	#def _setIsClientShutDownOverride
 
 	def check_changes(self):
 
@@ -547,6 +562,14 @@ class Bridge(QObject):
 	
 	#def shutdownClientsNow
 
+	@Slot(bool)
+	def overrrideShutdownSwitch(self,state):
+
+		self.isClientShutDownOverride=state
+		Bridge.n4d_man.switch_override_shutdown(state)
+
+	#def overrrideShutdownSwitch
+
 	@Slot()
 	def openHelp(self):
 		lang=os.environ["LANG"]
@@ -625,6 +648,9 @@ class Bridge(QObject):
 	
 	on_showMessage=Signal()
 	showMessage=Property('QVariantList',_getShowMessage,_setShowMessage, notify=on_showMessage)
+
+	on_isClientShutDownOverride=Signal()
+	isClientShutDownOverride=Property(bool,_getIsClientShutDownOverride,_setIsClientShutDownOverride,notify=on_isClientShutDownOverride)
 
 
 if __name__=="__main__":

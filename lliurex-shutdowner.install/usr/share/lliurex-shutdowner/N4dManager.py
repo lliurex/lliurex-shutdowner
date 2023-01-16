@@ -25,9 +25,14 @@ class N4dManager:
 	def set_server(self,ticket,passwd):
 
 		ticket=ticket.replace('##U+0020##',' ')
-		self.local_passwd=passwd
 		tk=n4d.client.Ticket(ticket)
 		self.client=n4d.client.Client(ticket=tk)
+		
+		if self.is_standalone_mode()[1]:
+			local_user=ticket.split(' ')[2]
+			self.local_client=n4d.client.Client("https://localhost:9779",local_user,passwd)
+			local_t=self.local_client.get_ticket()
+			self.local_client=n4d.client.Client(ticket=local_t)
 		
 	#def set_server
 	
@@ -35,7 +40,7 @@ class N4dManager:
 	def load_info(self):
 
 		self.get_shutdowner_values()
-	
+
 		if not self.is_standalone_mode()[0]:
 			self.get_client_list()
 			t=threading.Thread(target=self.update_client_list_thread)
@@ -153,5 +158,27 @@ class N4dManager:
 		return [ret['status'],ret['custom_shutdown']]
 	
 	#def is_custom_server_shut
-	
+
+	def is_client_shutdown_override(self):
+
+		self.is_shutdown_override_enabled=False
+
+		if self.is_standalone_mode()[1]:
+			self.is_shutdown_override_enabled=self.local_client.ShutdownerClient.is_shutdown_override_enabled()
+
+		return self.is_shutdown_override_enabled
+
+	#def is_client_shutdown_override
+
+	def switch_override_shutdown(self,value):
+
+		if value!=self.is_shutdown_override_enabled:
+			if value:
+				ret=self.local_client.ShutdownerClient.enable_override_shutdown()
+
+			else:
+				ret=self.local_client.ShutdownerClient.disable_override_shutdown()
+
+	#def switch_override_shutdown
+
 #class N4dManager

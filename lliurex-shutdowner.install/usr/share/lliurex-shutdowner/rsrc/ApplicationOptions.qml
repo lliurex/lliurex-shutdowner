@@ -96,7 +96,11 @@ GridLayout{
                 }
                 optionEnabled:{
                     if (shutBridge.isClient){
-                        shutBridge.isCronEnabled
+                        if (!shutBridge.serverShut){
+                            true
+                        }else{
+                            false
+                        }
                     }else{
                         true
                     }
