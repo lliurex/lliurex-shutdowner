@@ -13,7 +13,7 @@ GridLayout{
     Rectangle{
         width:195
         Layout.minimumHeight:430
-        Layout.preferredHeight:shutBridge.isStandAlone? 440:580
+        Layout.preferredHeight:shutBridge.isStandAlone? 490:580
         Layout.fillHeight:true
         border.color: "#d3d3d3"
 
