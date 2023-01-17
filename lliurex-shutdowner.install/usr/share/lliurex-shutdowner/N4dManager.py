@@ -8,7 +8,7 @@ class N4dManager:
 	
 	def __init__(self):
 
-		self.debug=True
+		self.debug=False
 	
 		self.detected_clients=0
 		
@@ -21,7 +21,6 @@ class N4dManager:
 			
 	#def dprint
 		
-	
 	def set_server(self,ticket,passwd):
 
 		ticket=ticket.replace('##U+0020##',' ')
@@ -36,7 +35,6 @@ class N4dManager:
 		
 	#def set_server
 	
-	
 	def load_info(self):
 
 		self.get_shutdowner_values()
@@ -47,9 +45,7 @@ class N4dManager:
 			t.daemon=True
 			t.start()
 		
-	
 	#def load_info
-	
 	
 	def get_shutdowner_values(self):
 		
@@ -57,13 +53,11 @@ class N4dManager:
 	
 	#def get_shutdowner_values
 	
-	
 	def is_cron_enabled(self):
 		
 		return self.shutdowner_var["cron_enabled"]
 		
 	#def is_cron_enabled
-	
 	
 	def get_cron_values(self):
 		
@@ -79,7 +73,6 @@ class N4dManager:
 
 	#def get_server_cron_values	
 
-	
 	def get_client_list(self):
 		
 		self.client.ShutdownerManager.manual_client_list_check()
@@ -94,7 +87,6 @@ class N4dManager:
 		
 	#def get_client_list
 	
-	
 	def update_client_list_thread(self):
 		
 		while True:
@@ -102,7 +94,6 @@ class N4dManager:
 			self.get_client_list()
 			
 	#def update_client_list_thread
-	
 	
 	def set_shutdowner_values(self):
 		
@@ -115,7 +106,6 @@ class N4dManager:
 		self.client.ShutdownerManager.update_shutdown_signal()
 		
 	#def shutdown_clients
-	
 	
 	def is_standalone_mode(self):
 
@@ -148,7 +138,6 @@ class N4dManager:
 		except Exception as e:
 			return True,isClient
 	
-		
 	#def is_standalone_mode
 
 	def is_server_shut(self):
@@ -164,7 +153,10 @@ class N4dManager:
 		self.is_shutdown_override_enabled=False
 
 		if self.is_standalone_mode()[1]:
-			self.is_shutdown_override_enabled=self.local_client.ShutdownerClient.is_shutdown_override_enabled()
+			try:
+				self.is_shutdown_override_enabled=self.local_client.ShutdownerClient.is_shutdown_override_enabled()
+			except:
+				pass
 
 		return self.is_shutdown_override_enabled
 
@@ -172,13 +164,23 @@ class N4dManager:
 
 	def switch_override_shutdown(self,value):
 
-		if value!=self.is_shutdown_override_enabled:
-			if value:
-				ret=self.local_client.ShutdownerClient.enable_override_shutdown()
+		ret=False
+		action="Enable"
 
-			else:
-				ret=self.local_client.ShutdownerClient.disable_override_shutdown()
+		try:
+			if value!=self.is_shutdown_override_enabled:
+				if value:
+					action="Enable"
+					ret=self.local_client.ShutdownerClient.enable_override_shutdown()
 
+				else:
+					action="Disable"
+					ret=self.local_client.ShutdownerClient.disable_override_shutdown()
+		except:
+			pass
+
+		return [action,ret]
+			
 	#def switch_override_shutdown
 
 #class N4dManager

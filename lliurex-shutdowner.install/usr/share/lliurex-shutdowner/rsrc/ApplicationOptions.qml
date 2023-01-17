@@ -11,7 +11,7 @@ GridLayout{
     columnSpacing:10
 
     Rectangle{
-        width:170
+        width:195
         Layout.minimumHeight:430
         Layout.preferredHeight:shutBridge.isStandAlone? 440:580
         Layout.fillHeight:true
@@ -247,6 +247,9 @@ GridLayout{
                 break;
             case -30:
                 var msg=i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other");
+                break;
+            case -40:
+                var msg=i18nd("lliurex-shutdowner","Disabling automatic shutdown in this computer is only posible if automatic server shutdown is not enabled")
                 break;
             default:
                 var msg=i18nd("lliurex-shutdowner","Changes saved successfully");

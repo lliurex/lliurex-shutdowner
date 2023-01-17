@@ -59,7 +59,7 @@ Rectangle{
 				}	
 
 				onToggled: {
-					shutBridge.overrrideShutdownSwitch(toggleswitch.checked);
+					shutBridge.overrideShutdownSwitch(toggleswitch.checked);
 				}
 			}
 		}

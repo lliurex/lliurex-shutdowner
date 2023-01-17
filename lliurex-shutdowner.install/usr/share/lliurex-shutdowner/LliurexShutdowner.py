@@ -18,13 +18,30 @@ class GatherInfo(QThread):
 	
 	#def __init__
 		
-
 	def run(self,*args):
 		
 		time.sleep(1)
 		self.manager=Bridge.n4d_man.load_info()
 
 	#def run
+
+class SwitchOverrideShutdown(QThread):
+
+	def __init__(self,*args):
+
+		QThread.__init__(self)
+		self.state=args[0]
+		self.ret=[]
+
+	#def __init__
+
+	def run (self,*args):
+
+		self.ret=Bridge.n4d_man.switch_override_shutdown(self.state)
+	
+	#def run
+
+#class SwitchOverrideShutdown		
 
 class Bridge(QObject):
 
@@ -46,13 +63,12 @@ class Bridge(QObject):
 		self._showMessage=[False,""]
 		self.previousError=""
 		self._isStandAlone,self._isClient=Bridge.n4d_man.is_standalone_mode()
-
+		self.overrideError=False
 		Bridge.n4d_man.set_server(ticket,passwd)
 		self.gatherInfo=GatherInfo()
 		self.gatherInfo.start()
 		self.gatherInfo.finished.connect(self._loadInfo)
 
-	
 	#def _init	
 	
 	def getShutInfo(self):
@@ -225,7 +241,6 @@ class Bridge(QObject):
 
 	#def _getDetectedClients	
 
-
 	def _setDetectedClients(self,detectedClients):
 
 		if self._detectedClients!=detectedClients:
@@ -359,7 +374,7 @@ class Bridge(QObject):
 		else:
 			return [False,""]
 	
-
+	#def check_compat_client_server
 
 	def gather_values_server(self,new_var):
 
@@ -391,7 +406,6 @@ class Bridge(QObject):
 		return new_var
 	
 	#def gather_values_server		
-
 
 	def gather_values(self):
 
@@ -449,7 +463,8 @@ class Bridge(QObject):
 		if new_var!=Bridge.n4d_man.shutdowner_var:
 			error=self.check_compat_client_server(new_var)
 			if not error[0]:
-				self.showMessage=[False,""]
+				if not self.overrideError:
+					self.showMessage=[False,""]
 				self.previousError=""
 				Bridge.n4d_man.shutdowner_var=new_var
 				self.countToShowError=0
@@ -465,11 +480,11 @@ class Bridge(QObject):
 						self.previousError=error[1]
 						self.countToShowError=0
 		else:
-			self.showMessage=[False,""]	
-			self.previousError=""
-			self.countToShowError=0
+			if not self.overrideError:
+				self.showMessage=[False,""]	
+				self.previousError=""
+				self.countToShowError=0
 	
-			
 	#def saveValues
 
 	@Slot(bool)
@@ -553,7 +568,7 @@ class Bridge(QObject):
 		
 		self.customServerShut=value
 
-	#def getServerShut
+	#def getCustomServerShut
 
 	@Slot()
 	def shutdownClientsNow(self):
@@ -563,12 +578,27 @@ class Bridge(QObject):
 	#def shutdownClientsNow
 
 	@Slot(bool)
-	def overrrideShutdownSwitch(self,state):
+	def overrideShutdownSwitch(self,state):
 
 		self.isClientShutDownOverride=state
-		Bridge.n4d_man.switch_override_shutdown(state)
+		self.overrideShutDown=SwitchOverrideShutdown(self.isClientShutDownOverride)
+		self.overrideShutDown.start()
+		self.overrideShutDown.finished.connect(self._overrideShutdownSwitch)
 
 	#def overrrideShutdownSwitch
+
+	def _overrideShutdownSwitch(self):
+
+		INCOMPATIBILITY_OVERRIDE_OPTION=-40
+
+		if not self.overrideShutDown.ret[1]:
+			if self.overrideShutDown.ret[0]=='Enable':
+				self.overrideError=True
+				self.showMessage=[True,INCOMPATIBILITY_OVERRIDE_OPTION]	
+		else:
+			self.overrideError=False
+
+	#def _overrrideShutdownSwitch
 
 	@Slot()
 	def openHelp(self):
@@ -596,6 +626,7 @@ class Bridge(QObject):
 
 		if self.currentOptionStack!=stack:
 			self.currentOptionStack=stack
+			self.overrideError=False
 
 	#def manageTransitions
 
@@ -611,7 +642,7 @@ class Bridge(QObject):
 		else:
 			return False
 
-	#def closed	
+	#def closeShutdowner	
 
 	isStandAlone=Property(bool,_getIsStandAlone,constant=True)
 	isClient=Property(bool,_getIsClient,constant=True)
@@ -652,6 +683,7 @@ class Bridge(QObject):
 	on_isClientShutDownOverride=Signal()
 	isClientShutDownOverride=Property(bool,_getIsClientShutDownOverride,_setIsClientShutDownOverride,notify=on_isClientShutDownOverride)
 
+#class Bridge
 
 if __name__=="__main__":
 

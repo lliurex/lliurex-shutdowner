@@ -33,8 +33,8 @@ ApplicationWindow {
         id: mainLayout
         anchors.fill: parent
         anchors.margins: margin
-        Layout.minimumWidth:770 
-        Layout.maximumWidth:770
+        Layout.minimumWidth:795 
+        Layout.maximumWidth:795
         Layout.minimumHeight:shutBridge.isStandAlone? 440:580
         Layout.maximumHeight:shutBridge.isStandAlone? 440:580
 
@@ -52,7 +52,7 @@ ApplicationWindow {
         StackView {
             id: mainWiew
             property int currentIndex:shutBridge.currentStack
-            implicitWidth: 770
+            implicitWidth: 795
             Layout.alignment:Qt.AlignVCenter
             Layout.leftMargin:0
             Layout.fillHeight: true
