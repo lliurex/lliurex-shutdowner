@@ -13,7 +13,7 @@ GridLayout{
     Rectangle{
         width:195
         Layout.minimumHeight:430
-        Layout.preferredHeight:shutBridge.isStandAlone? 490:580
+        Layout.preferredHeight:shutBridge.isStandAlone? 440:580
         Layout.fillHeight:true
         border.color: "#d3d3d3"
 
@@ -32,7 +32,7 @@ GridLayout{
                         i18nd("lliurex-shutdowner","Desktop configuration")
                     }
                 }
-                optionIcon:"/usr/share/icons/breeze/devices/16/computer.svg"
+                optionIcon:"/usr/share/icons/breeze/devices/22/computer.svg"
                 optionEnabled:true
                 optionVisible:true
                 Connections{
@@ -53,9 +53,9 @@ GridLayout{
                 }
                 optionIcon:{
                     if (!shutBridge.isStandAlone){
-                        "/usr/share/icons/breeze/places/16/network-workgroup.svg"
+                        "/usr/share/icons/breeze/places/22/network-workgroup.svg"
                     }else{
-                        "/usr/share/icons/breeze/actions/16/help-contents.svg"
+                        "/usr/share/icons/breeze/actions/22/help-contents.svg"
                     }
                 }
                   
@@ -89,9 +89,9 @@ GridLayout{
                 }
                 optionIcon:{
                     if (shutBridge.isClient){
-                        "/usr/share/icons/breeze/actions/16/configure.svg"
+                        "/usr/share/icons/breeze/actions/22/configure.svg"
                     }else{
-                        "/usr/share/icons/breeze/actions/16/help-contents.svg"
+                        "/usr/share/icons/breeze/actions/22/help-contents.svg"
                     }
                 }
                 optionEnabled:{
@@ -126,7 +126,7 @@ GridLayout{
             MenuOptionBtn {
                 id:helpOption
                 optionText:i18nd("lliurex-shutdowner","Help")
-                optionIcon:"/usr/share/icons/breeze/actions/16/help-contents.svg"
+                optionIcon:"/usr/share/icons/breeze/actions/22/help-contents.svg"
                 optionEnabled:true
                 optionVisible:{
                     if (!shutBridge.isStandAlone){
