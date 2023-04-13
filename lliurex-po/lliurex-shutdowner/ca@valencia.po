@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-17 10:36+0100\n"
-"PO-Revision-Date: 2023-01-17 10:52+0100\n"
+"POT-Creation-Date: 2023-04-13 10:55+0200\n"
+"PO-Revision-Date: 2023-04-13 10:57+0200\n"
 "Last-Translator: Angels <gimenez_angcam@gva.es>\n"
 "Language-Team: Valencian <http://weblate.lliurex.net/projects/lliurex-"
 "shutdowner/lliurex-shutdowner/ca@valencia/>\n"
@@ -145,8 +145,7 @@ msgstr "Preferències de l'equip"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:243
 msgid "The client and server shutdown time are not compatible with each other"
-msgstr ""
-"L’hora de parada del client i del servidor no són compatibles entre si"
+msgstr "L’hora de parada del client i del servidor no són compatibles entre si"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:246
 msgid "The client and server shutdown days are not compatible with each other"
@@ -176,3 +175,7 @@ msgstr "Els canvis s'han guardat correctament"
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:33
 msgid "Disable automatic shutdown on this computer:"
 msgstr "Desactiva l'apagat automàtic en aquest equip:"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:37
+msgid "Loading. Wait a moment..."
+msgstr "S'està carregant. Espereu un moment..."

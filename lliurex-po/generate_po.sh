@@ -5,5 +5,6 @@ xgettext --join-existing -kde -ki18nd:2 ../lliurex-shutdowner.install/usr/share/
 xgettext --join-existing -kde -ki18nd:2 ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml -o lliurex-shutdowner/lliurex-shutdowner.pot
 xgettext --join-existing -kde -ki18nd:2 ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml -o lliurex-shutdowner/lliurex-shutdowner.pot
 xgettext --join-existing -kde -ki18nd:2 ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml -o lliurex-shutdowner/lliurex-shutdowner.pot
+xgettext --join-existing -kde -ki18nd:2 ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml -o lliurex-shutdowner/lliurex-shutdowner.pot
 xgettext ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py -o lliurex-shutdowner-common/lliurex-shutdowner-common.pot
 

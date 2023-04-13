@@ -33,10 +33,10 @@ ApplicationWindow {
         id: mainLayout
         anchors.fill: parent
         anchors.margins: margin
-        Layout.minimumWidth:795 
-        Layout.maximumWidth:795
-        Layout.minimumHeight:shutBridge.isStandAlone? 490:580
-        Layout.maximumHeight:shutBridge.isStandAlone? 490:580
+        Layout.minimumWidth:800 
+        Layout.maximumWidth:800
+        Layout.minimumHeight:shutBridge.isStandAlone? 440:580
+        Layout.maximumHeight:shutBridge.isStandAlone? 440:580
 
         RowLayout {
             id: bannerBox
@@ -52,7 +52,7 @@ ApplicationWindow {
         StackView {
             id: mainWiew
             property int currentIndex:shutBridge.currentStack
-            implicitWidth: 795
+            implicitWidth: 800
             Layout.alignment:Qt.AlignVCenter
             Layout.leftMargin:0
             Layout.fillHeight: true

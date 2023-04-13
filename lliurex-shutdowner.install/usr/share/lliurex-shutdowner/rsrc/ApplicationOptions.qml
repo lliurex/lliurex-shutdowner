@@ -11,7 +11,7 @@ GridLayout{
     columnSpacing:10
 
     Rectangle{
-        width:195
+        width:200
         Layout.minimumHeight:430
         Layout.preferredHeight:shutBridge.isStandAlone? 440:580
         Layout.fillHeight:true
