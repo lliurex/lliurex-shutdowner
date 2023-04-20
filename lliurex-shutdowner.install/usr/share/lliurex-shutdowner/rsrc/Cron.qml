@@ -173,7 +173,7 @@ GridLayout{
 				x: Math.round(parent.width/ 2)
        			y: Math.round(parent.height)
 				rightMargin:popupEditHour.width
-				width: 200
+				width: 205
 				height: 170
 				modal: true
 				focus: true

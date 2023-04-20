@@ -35,8 +35,8 @@ ApplicationWindow {
         anchors.margins: margin
         Layout.minimumWidth:800 
         Layout.maximumWidth:800
-        Layout.minimumHeight:shutBridge.isStandAlone? 440:580
-        Layout.maximumHeight:shutBridge.isStandAlone? 440:580
+        Layout.minimumHeight:shutBridge.isStandAlone? 500:580
+        Layout.maximumHeight:shutBridge.isStandAlone? 500:580
 
         RowLayout {
             id: bannerBox

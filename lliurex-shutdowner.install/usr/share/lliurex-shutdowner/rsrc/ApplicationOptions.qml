@@ -13,7 +13,7 @@ GridLayout{
     Rectangle{
         width:200
         Layout.minimumHeight:430
-        Layout.preferredHeight:shutBridge.isStandAlone? 440:580
+        Layout.preferredHeight:shutBridge.isStandAlone? 500:580
         Layout.fillHeight:true
         border.color: "#d3d3d3"
 
@@ -34,7 +34,6 @@ GridLayout{
                 }
                 optionIcon:"/usr/share/icons/breeze/devices/22/computer.svg"
                 optionEnabled:true
-                optionVisible:true
                 Connections{
                     function onMenuOptionClicked(){
                         shutBridge.manageTransitions(0)
@@ -44,81 +43,32 @@ GridLayout{
 
             MenuOptionBtn {
                 id:serverOption
-                optionText:{
-                    if (!shutBridge.isStandAlone){
-                        i18nd("lliurex-shutdowner","Server configuration")
-                    }else{
-                        i18nd("lliurex-shutdowner","Help")
-                    }
-                }
-                optionIcon:{
-                    if (!shutBridge.isStandAlone){
-                        "/usr/share/icons/breeze/places/22/network-workgroup.svg"
-                    }else{
-                        "/usr/share/icons/breeze/actions/22/help-contents.svg"
-                    }
-                }
-                  
-                optionEnabled:{
-                    if (!shutBridge.isStandAlone){
-                        shutBridge.isCronEnabled
-                    }else{
-                        true
-                    }
-                }
-                optionVisible:true
+                optionText:i18nd("lliurex-shutdowner","Server configuration")
+                optionIcon:"/usr/share/icons/breeze/places/22/network-workgroup.svg"                  
+                optionEnabled:shutBridge.isCronEnabled
+                visible:!shutBridge.isStandAlone
                 Connections{
                     function onMenuOptionClicked(){
-                        if (!shutBridge.isStandAlon){
-                            shutBridge.manageTransitions(1)
-                        }else{
-                            shutBridge.openHelp()  
-                        }
+                        shutBridge.manageTransitions(1)
                     }
                 }
             }
 
             MenuOptionBtn{
                 id:settingsOption
-                optionText:{
-                    if (shutBridge.isClient){
-                        i18nd("lliurex-shutdowner","System settings")
-                    }else{
-                        i18nd("lliurex-shutdowner","Help")
-                    }
-                }
-                optionIcon:{
-                    if (shutBridge.isClient){
-                        "/usr/share/icons/breeze/actions/22/configure.svg"
-                    }else{
-                        "/usr/share/icons/breeze/actions/22/help-contents.svg"
-                    }
-                }
+                optionText:i18nd("lliurex-shutdowner","System settings")
+                optionIcon:"/usr/share/icons/breeze/actions/22/configure.svg"
                 optionEnabled:{
-                    if (shutBridge.isClient){
-                        if (!shutBridge.serverShut){
-                            true
-                        }else{
-                            false
-                        }
-                    }else{
+                    if (!shutBridge.serverShut){
                         true
+                    }else{
+                        false
                     }
                 }
-                optionVisible:{
-                    if (!shutBridge.isStandAlone){
-                          true
-                     }else{
-                         false
-                     }
-                }
+                visible:shutBridge.isClient
                 Connections{
                     function onMenuOptionClicked(){
-                        if (shutBridge.isClient){
-                            shutBridge.manageTransitions(2)
-                        }else{
-                            shutBridge.openHelp()  
-                        }
+                        shutBridge.manageTransitions(2)
                     }
                 }
             }
@@ -128,18 +78,7 @@ GridLayout{
                 optionText:i18nd("lliurex-shutdowner","Help")
                 optionIcon:"/usr/share/icons/breeze/actions/22/help-contents.svg"
                 optionEnabled:true
-                optionVisible:{
-                    if (!shutBridge.isStandAlone){
-                        if (shutBridge.isClient){
-                            true
-                        }else{
-                            false
-                        }
-                    }else{
-                        false
-                    }
-
-                }
+                visible:true
                 Connections{
                     function onMenuOptionClicked(){
                         shutBridge.openHelp();
