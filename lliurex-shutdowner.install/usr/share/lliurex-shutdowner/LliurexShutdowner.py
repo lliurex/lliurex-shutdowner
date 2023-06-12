@@ -598,6 +598,8 @@ class Bridge(QObject):
 		else:
 			self.overrideError=False
 
+		self.isClientShutDownOverride=Bridge.n4d_man.is_client_shutdown_override()
+
 	#def _overrrideShutdownSwitch
 
 	@Slot()
