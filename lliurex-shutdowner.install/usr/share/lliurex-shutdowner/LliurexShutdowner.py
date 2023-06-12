@@ -10,48 +10,65 @@ import copy
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+class GatherInfo(QThread):
+
+	def __init__(self,*args):
+
+		QThread.__init__(self)
+	
+	#def __init__
+		
+	def run(self,*args):
+		
+		time.sleep(1)
+		self.manager=Bridge.n4d_man.load_info()
+
+	#def run
+
+class SwitchOverrideShutdown(QThread):
+
+	def __init__(self,*args):
+
+		QThread.__init__(self)
+		self.state=args[0]
+		self.ret=[]
+
+	#def __init__
+
+	def run (self,*args):
+
+		self.ret=Bridge.n4d_man.switch_override_shutdown(self.state)
+	
+	#def run
+
+#class SwitchOverrideShutdown		
+
 class Bridge(QObject):
 
+	n4d_man=N4dManager.N4dManager()
 
-	def __init__(self,ticket=None):
+	def __init__(self,ticket=None,passwd=None):
 
 		QObject.__init__(self)
+		self.initBridge(ticket,passwd)
 
-		self.n4d_man=N4dManager.N4dManager(ticket)
-		self.initBridge()
-
-	def initBridge(self):
+	def initBridge(self,ticket,passwd):
 
 		self.cron_content="%s %s * * %s root %s >> /var/log/syslog\n"
 		self.shutdown_bin="/usr/sbin/shutdown-lliurex"
 		self.custom_shutdown_bin="/usr/sbin/shutdown-lliurex-server"
-		self._currentStack=1
+		self._currentStack=0
+		self._currentOptionStack=0
 		self._detectedClients="0"
 		self._showMessage=[False,""]
 		self.previousError=""
-		self._isStandAlone=self.n4d_man.is_standalone_mode()
-		self._isCronEnabled=self.n4d_man.is_cron_enabled()
-		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
-		
-		server_info=self.n4d_man.is_server_shut()
-		self._serverShut=server_info[0]
-		self.serverShut=copy.deepcopy(self._serverShut)
-		self._customServerShut=server_info[1]
-		self.customServerShut=copy.deepcopy(self._customServerShut)
-		
-		self.getShutInfo()
+		self._isStandAlone,self._isClient=Bridge.n4d_man.is_standalone_mode()
+		self.overrideError=False
+		Bridge.n4d_man.set_server(ticket,passwd)
+		self.gatherInfo=GatherInfo()
+		self.gatherInfo.start()
+		self.gatherInfo.finished.connect(self._loadInfo)
 
-		if not self._isStandAlone:
-			self.client_timer = QTimer(None)
-			self.client_timer.timeout.connect(self.getClient)
-			self.client_timer.start(2000)
-		self.saveValues_timer = QTimer(None)
-		self.saveValues_timer.timeout.connect(self.saveValues)
-		self.saveValues_timer.start(5000)
-		self.countToShowError=0
-		self.waitTimeError=20
-
-	
 	#def _init	
 	
 	def getShutInfo(self):
@@ -60,13 +77,23 @@ class Bridge(QObject):
 		t = threading.Thread(target=self._loadInfo)
 		t.daemon=True
 		t.start()
+	
 	#def getShutInfo		
 	
 	def _loadInfo(self):
 
-		client_values=self.n4d_man.get_cron_values()	
-		server_values=self.n4d_man.get_server_cron_values()
-		
+		client_values=Bridge.n4d_man.get_cron_values()	
+		server_values=Bridge.n4d_man.get_server_cron_values()
+		server_info=Bridge.n4d_man.is_server_shut()
+
+		self._isCronEnabled=Bridge.n4d_man.is_cron_enabled()
+		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
+	
+		self._serverShut=server_info[0]
+		self.serverShut=copy.deepcopy(self._serverShut)
+		self._customServerShut=server_info[1]
+		self.customServerShut=copy.deepcopy(self._customServerShut)
+
 		self._initClockClient=[client_values["hour"],client_values["minute"]]
 		self.clockClientValues=copy.deepcopy(self._initClockClient)
 		self._initWeekDaysClient=[client_values["weekdays"][0],client_values["weekdays"][1],client_values["weekdays"][2],client_values["weekdays"][3],client_values["weekdays"][4]]
@@ -77,16 +104,24 @@ class Bridge(QObject):
 		self._initWeekDaysServer=[server_values["weekdays"][0],server_values["weekdays"][1],server_values["weekdays"][2],server_values["weekdays"][3],server_values["weekdays"][4]]
 		self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
 
+		self._isClientShutDownOverride=Bridge.n4d_man.is_client_shutdown_override()
 
-		time.sleep(3)
+		if not self._isStandAlone:
+			self.client_timer = QTimer(None)
+			self.client_timer.timeout.connect(self.getClient)
+			self.client_timer.start(2000)
+		self.saveValues_timer = QTimer(None)
+		self.saveValues_timer.timeout.connect(self.saveValues)
+		self.saveValues_timer.start(5000)
+		self.countToShowError=0
+		self.waitTimeError=20
 		self.currentStack=1
 
 	#def _loadInfo	
 
-	@Slot(str)
 	def getClient(self):
 
-		self.detectedClients=str(self.n4d_man.detected_clients)
+		self.detectedClients=str(Bridge.n4d_man.detected_clients)
 
 	#def getClient
 
@@ -94,38 +129,83 @@ class Bridge(QObject):
 
 		return self._isStandAlone
 
-	#def _getIsStandAlone	
+	#def _getIsStandAlone
+
+	def _getIsClient(self):
+		
+		return self._isClient
+
+	#def _getIsClient	
 
 	def _getIsCronEnabled(self):
 
 		return self._isCronEnabled
 
-	#def _getIsCronEnabled	
+	#def _getIsCronEnabled
+
+	def _setIsCronEnabled(self,isCronEnabled):
+
+		if self._isCronEnabled!=isCronEnabled:
+			self._isCronEnabled=isCronEnabled
+			self.on_isCronEnabled.emit()
+
+	#def _setIsCronEnabled
 
 	def _getInitClockClient(self):
 
 		return self._initClockClient
 
-	#def _getinitClockClient	
+	#def _getinitClockClient
+
+	def _setInitClockClient(self,initClockClient):
+
+		if self._initClockClient!=initClockClient:
+			self._initClockClient=initClockClient
+			self.on_initClockClient.emit()
+
+	#def _setInitClockClient	
 
 	def _getInitWeekDaysClient(self):
 
 		return self._initWeekDaysClient
 
-	#def _getInitWeekDaysClient	
+	#def _getInitWeekDaysClient
 
+	def _setInitWeekDaysClient(self,initWeekDaysClient):
+
+		if self._initWeekDaysClient!=initWeekDaysClient:
+			self._initWeekDaysClient=initWeekDaysClient
+			self.on_initWeekDaysClient.emit()
+
+	#def _setInitWeekDaysClient	
 
 	def _getInitClockServer(self):
 
 		return self._initClockServer
 
-	#def _getinitClockServer	
+	#def _getInitClockServer
+
+	def _setInitClockServer(self,initClockServer):
+
+		if self._initClockServer!=initClockServer:
+			self._initClockServer=initClockServer
+			self.on_initClockServer.emit()
+
+	#def _setInitClockServer	
 
 	def _getInitWeekDaysServer(self):
 
 		return self._initWeekDaysServer
 
 	#def _getInitWeekDaysServer
+
+	def _setInitWeekDaysServer(self,initWeekDaysServer):
+
+		if self._initWeekDaysServer!=initWeekDaysServer:
+			self._initWeekDaysServer=initWeekDaysServer
+			self.on_initWeekDaysServer.emit()
+
+	#def _setInitWeekDaysServer
 
 	def _getCurrentStack(self):
 
@@ -135,10 +215,25 @@ class Bridge(QObject):
 
 	def _setCurrentStack(self,currentStack):
 		
-		self._currentStack=currentStack
-		self.on_currentStack.emit()	
+		if self._currentStack!=currentStack:
+			self._currentStack=currentStack
+			self.on_currentStack.emit()	
 
 	#def _setcurrentStack
+
+	def _getCurrentOptionStack(self):
+
+		return self._currentOptionStack
+
+	#def _getCurrentOptionStack	
+
+	def _setCurrentOptionStack(self,currentOptionStack):
+		
+		if self._currentOptionStack!=currentOptionStack:
+			self._currentOptionStack=currentOptionStack
+			self.on_currentOptionStack.emit()	
+
+	#def _setcurrentOptionStack
 
 	def _getDetectedClients(self):
 
@@ -146,11 +241,11 @@ class Bridge(QObject):
 
 	#def _getDetectedClients	
 
-
 	def _setDetectedClients(self,detectedClients):
 
-		self._detectedClients=detectedClients
-		self.on_detectedClients.emit()	
+		if self._detectedClients!=detectedClients:
+			self._detectedClients=detectedClients
+			self.on_detectedClients.emit()	
 
 	#def _setDetectedClients
 
@@ -162,8 +257,9 @@ class Bridge(QObject):
 	
 	def _setDetectedServerShut(self,serverShut):
 
-		self._serverShut=serverShut
-		self.on_serverShut.emit()
+		if self._serverShut!=serverShut:
+			self._serverShut=serverShut
+			self.on_serverShut.emit()
 
 	#def _setServerShut
 
@@ -175,8 +271,9 @@ class Bridge(QObject):
 	
 	def _setDetectedCustomServerShut(self,customServerShut):
 
-		self._customServerShut=customServerShut
-		self.on_customServerShut.emit()
+		if self._customServerShut!=customServerShut:
+			self._customServerShut=customServerShut
+			self.on_customServerShut.emit()
 
 	#def _setCustomServerShut
 
@@ -188,23 +285,37 @@ class Bridge(QObject):
 	
 	def _setShowMessage(self,showMessage):
 
-		self._showMessage=showMessage
-		self.on_showMessage.emit()
+		if self._showMessage!=showMessage:
+			self._showMessage=showMessage
+			self.on_showMessage.emit()
 
 	#def _setShowMessage
 
+	def _getIsClientShutDownOverride(self):
+
+		return self._isClientShutDownOverride
+
+	#def _getIsClientShutDownOverride
+
+	def _setIsClientShutDownOverride(self,isClientShutDownOverride):
+
+		if self._isClientShutDownOverride!=isClientShutDownOverride:
+			self._isClientShutDownOverride=isClientShutDownOverride
+			self.on_isClientShutDownOverride.emit()
+
+	#def _setIsClientShutDownOverride
 
 	def check_changes(self):
 
 		new_var=self.gather_values()
-		if new_var!=self.n4d_man.shutdowner_var:
+		if new_var!=Bridge.n4d_man.shutdowner_var:
 			error=self.check_compat_client_server(new_var)
 			if not error[0]:
 				self.countToShowError=0
-				self.n4d_man.shutdowner_var=new_var
+				Bridge.n4d_man.shutdowner_var=new_var
 				self.previousError=""
 				print("[LliurexShutdowner] Updating value on close signal...")
-				self.n4d_man.set_shutdowner_values()
+				Bridge.n4d_man.set_shutdowner_values()
 				day_configured=False
 				for item in self.weekClientValues:
 					if item:
@@ -263,7 +374,7 @@ class Bridge(QObject):
 		else:
 			return [False,""]
 	
-
+	#def check_compat_client_server
 
 	def gather_values_server(self,new_var):
 
@@ -296,11 +407,10 @@ class Bridge(QObject):
 	
 	#def gather_values_server		
 
-
 	def gather_values(self):
 
 		getServerValues=False
-		new_var=copy.deepcopy(self.n4d_man.shutdowner_var)
+		new_var=copy.deepcopy(Bridge.n4d_man.shutdowner_var)
 		new_var["cron_enabled"]=self.cronSwitch
 
 
@@ -350,15 +460,16 @@ class Bridge(QObject):
 
 		new_var=self.gather_values()
 
-		if new_var!=self.n4d_man.shutdowner_var:
+		if new_var!=Bridge.n4d_man.shutdowner_var:
 			error=self.check_compat_client_server(new_var)
 			if not error[0]:
-				self.showMessage=[False,""]
+				if not self.overrideError:
+					self.showMessage=[False,""]
 				self.previousError=""
-				self.n4d_man.shutdowner_var=new_var
+				Bridge.n4d_man.shutdowner_var=new_var
 				self.countToShowError=0
 				print("[LliurexShutdowner] Updating shutdowner variable...")
-				t=threading.Thread(target=self.n4d_man.set_shutdowner_values)
+				t=threading.Thread(target=Bridge.n4d_man.set_shutdowner_values)
 				t.daemon=True
 				t.start()
 			else:
@@ -369,17 +480,18 @@ class Bridge(QObject):
 						self.previousError=error[1]
 						self.countToShowError=0
 		else:
-			self.showMessage=[False,""]	
-			self.previousError=""
-			self.countToShowError=0
+			if not self.overrideError:
+				self.showMessage=[False,""]	
+				self.previousError=""
+				self.countToShowError=0
 	
-			
 	#def saveValues
 
-	
 	@Slot(bool)
 	def getCronSwitchValue(self,state):
+		
 		self.cronSwitch=state
+		self.isCronEnabled=state
 
 	#getCronSwitchValue
 	
@@ -388,9 +500,10 @@ class Bridge(QObject):
 
 		if values[0]=="H":
 			self.clockClientValues[0]=values[1]
-		
 		else:
 			self.clockClientValues[1]=values[1]
+		
+		self.initClockClient=self.clockClientValues
 
 	#def getClokClientValues
 	
@@ -408,8 +521,9 @@ class Bridge(QObject):
 		elif values[0]=="FR":
 			self.weekClientValues[4]=values[1]	
 
-
-	#def getWeekServerValues
+		self.initWeekDaysClient=self.weekClientValues
+	
+	#def getWeekClientValues
 
 	@Slot('QVariantList')
 	def getClockServerValues(self,values):
@@ -419,8 +533,10 @@ class Bridge(QObject):
 		
 		else:
 			self.clockServerValues[1]=values[1]
+
+		self.initClockServer=self.clockServerValues
 								
-	#def getClokClientValues
+	#def getClockServerValues
 	
 	@Slot('QVariantList')
 	def getWeekServerValues(self,values):
@@ -434,28 +550,55 @@ class Bridge(QObject):
 		elif values[0]=="TH":
 			self.weekServerValues[3]=values[1]
 		elif values[0]=="FR":
-			self.weekServerValues[4]=values[1]	
+			self.weekServerValues[4]=values[1]
+
+		self.initWeekDaysServer=self.weekServerValues	
 
 	#def getWeekServerValues
 
 	@Slot(bool)
 	def getServerShut(self,value):
+		
 		self.serverShut=value
 
 	#def getServerShut
 
 	@Slot(bool)
 	def getCustomServerShut(self,value):
+		
 		self.customServerShut=value
 
-	#def getServerShut
-
+	#def getCustomServerShut
 
 	@Slot()
 	def shutdownClientsNow(self):
-		self.n4d_man.shutdown_clients()
+		
+		Bridge.n4d_man.shutdown_clients()
 	
 	#def shutdownClientsNow
+
+	@Slot(bool)
+	def overrideShutdownSwitch(self,state):
+
+		self.isClientShutDownOverride=state
+		self.overrideShutDown=SwitchOverrideShutdown(self.isClientShutDownOverride)
+		self.overrideShutDown.start()
+		self.overrideShutDown.finished.connect(self._overrideShutdownSwitch)
+
+	#def overrrideShutdownSwitch
+
+	def _overrideShutdownSwitch(self):
+
+		INCOMPATIBILITY_OVERRIDE_OPTION=-40
+
+		if not self.overrideShutDown.ret[1]:
+			if self.overrideShutDown.ret[0]=='Enable':
+				self.overrideError=True
+				self.showMessage=[True,INCOMPATIBILITY_OVERRIDE_OPTION]	
+		else:
+			self.overrideError=False
+
+	#def _overrrideShutdownSwitch
 
 	@Slot()
 	def openHelp(self):
@@ -478,6 +621,15 @@ class Bridge(QObject):
 
 	#def _open_help
 
+	@Slot(int)
+	def manageTransitions(self,stack):
+
+		if self.currentOptionStack!=stack:
+			self.currentOptionStack=stack
+			self.overrideError=False
+
+	#def manageTransitions
+
 	@Slot(bool,result=bool)
 	def closeShutdowner(self,state):
 		
@@ -490,18 +642,31 @@ class Bridge(QObject):
 		else:
 			return False
 
-	#def closed	
+	#def closeShutdowner	
 
 	isStandAlone=Property(bool,_getIsStandAlone,constant=True)
-	isCronEnabled=Property(bool,_getIsCronEnabled,constant=True)
-	initClockClient=Property('QVariantList',_getInitClockClient,constant=True)
-	initWeekDaysClient=Property('QVariantList',_getInitWeekDaysClient,constant=True)
-	initClockServer=Property('QVariantList',_getInitClockServer,constant=True)
-	initWeekDaysServer=Property('QVariantList',_getInitWeekDaysServer,constant=True)
+	isClient=Property(bool,_getIsClient,constant=True)
 
+	on_isCronEnabled=Signal()
+	isCronEnabled=Property(bool,_getIsCronEnabled,_setIsCronEnabled,notify=on_isCronEnabled)
+	
+	on_initClockClient=Signal()
+	initClockClient=Property('QVariantList',_getInitClockClient,_setInitClockClient,notify=on_initClockClient)
+	
+	on_initWeekDaysClient=Signal()
+	initWeekDaysClient=Property('QVariantList',_getInitWeekDaysClient,_setInitWeekDaysClient,notify=on_initWeekDaysClient)
+	
+	on_initClockServer=Signal()
+	initClockServer=Property('QVariantList',_getInitClockServer,_setInitClockServer,notify=on_initClockServer)
+	
+	on_initWeekDaysServer=Signal()
+	initWeekDaysServer=Property('QVariantList',_getInitWeekDaysServer,_setInitWeekDaysServer,notify=on_initWeekDaysServer)
 
 	on_currentStack=Signal()
 	currentStack=Property(int,_getCurrentStack,_setCurrentStack, notify=on_currentStack)
+
+	on_currentOptionStack=Signal()
+	currentOptionStack=Property(int,_getCurrentOptionStack,_setCurrentOptionStack, notify=on_currentOptionStack)
 
 	on_detectedClients=Signal()
 	detectedClients=Property(str,_getDetectedClients,_setDetectedClients, notify=on_detectedClients)
@@ -515,6 +680,10 @@ class Bridge(QObject):
 	on_showMessage=Signal()
 	showMessage=Property('QVariantList',_getShowMessage,_setShowMessage, notify=on_showMessage)
 
+	on_isClientShutDownOverride=Signal()
+	isClientShutDownOverride=Property(bool,_getIsClientShutDownOverride,_setIsClientShutDownOverride,notify=on_isClientShutDownOverride)
+
+#class Bridge
 
 if __name__=="__main__":
 
