@@ -1,3 +1,10 @@
+lliurex-shutdowner (2.11) focal; urgency=medium
+
+  * New style for GUI
+  * Added option to override shutdown in client
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 14 Jun 2023 17:16:24 +0200
+
 lliurex-shutdowner (2.10.5) focal-updates; urgency=medium
 
   * Fixed shutdown message in desktops with meta client
