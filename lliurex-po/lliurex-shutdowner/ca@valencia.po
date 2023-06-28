@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 10:55+0200\n"
-"PO-Revision-Date: 2023-04-13 10:57+0200\n"
+"PO-Revision-Date: 2023-06-28 09:38+0200\n"
 "Last-Translator: Angels <gimenez_angcam@gva.es>\n"
 "Language-Team: Valencian <http://weblate.lliurex.net/projects/lliurex-"
 "shutdowner/lliurex-shutdowner/ca@valencia/>\n"
@@ -106,7 +106,7 @@ msgstr "Sense configurar"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:10
 msgid "Server shutdown configuration"
-msgstr "Configuración del apagado del servidor"
+msgstr "Configuració de l'apagat del servidor"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:48
 msgid "Automatic server shutdown"
