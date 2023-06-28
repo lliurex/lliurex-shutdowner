@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.11.2) focal; urgency=medium
+
+  * Fixed valencian translations
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 28 Jun 2023 09:40:03 +0200
+
 lliurex-shutdowner (2.11.1) focal; urgency=medium
 
   * Fixed window position in screen
