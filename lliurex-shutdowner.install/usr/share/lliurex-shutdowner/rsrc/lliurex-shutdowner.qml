@@ -22,7 +22,7 @@ ApplicationWindow {
     }
 
     onClosing: {
-        if (shutBridge.closeShutdowner(true)){
+        if (mainStackBridge.closeShutdowner(true)){
             close.accepted=true;
         }else{
             close.accepted=false;   
@@ -35,8 +35,8 @@ ApplicationWindow {
         anchors.margins: margin
         Layout.minimumWidth:800 
         Layout.maximumWidth:800
-        Layout.minimumHeight:shutBridge.isStandAlone? 500:580
-        Layout.maximumHeight:shutBridge.isStandAlone? 500:580
+        Layout.minimumHeight:clientStackBridge.isStandAlone? 500:580
+        Layout.maximumHeight:clientStackBridge.isStandAlone? 500:580
 
         RowLayout {
             id: bannerBox
@@ -51,7 +51,7 @@ ApplicationWindow {
 
         StackView {
             id: mainWiew
-            property int currentIndex:shutBridge.currentStack
+            property int currentIndex:mainStackBridge.currentStack
             implicitWidth: 800
             Layout.alignment:Qt.AlignVCenter
             Layout.leftMargin:0

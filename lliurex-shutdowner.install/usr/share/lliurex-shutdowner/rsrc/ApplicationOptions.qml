@@ -13,7 +13,7 @@ GridLayout{
     Rectangle{
         width:200
         Layout.minimumHeight:430
-        Layout.preferredHeight:shutBridge.isStandAlone? 500:580
+        Layout.preferredHeight:clientStackBridge.isStandAlone? 500:580
         Layout.fillHeight:true
         border.color: "#d3d3d3"
 
@@ -26,7 +26,7 @@ GridLayout{
             MenuOptionBtn {
                 id:clientOption
                 optionText:{
-                    if (!shutBridge.isStandAlone){
+                    if (!clientStackBridge.isStandAlone){
                         i18nd("lliurex-shutdowner","Client configuration")
                     }else{
                         i18nd("lliurex-shutdowner","Desktop configuration")
@@ -36,7 +36,7 @@ GridLayout{
                 optionEnabled:true
                 Connections{
                     function onMenuOptionClicked(){
-                        shutBridge.manageTransitions(0)
+                        mainStackBridge.manageTransitions(0)
                     }
                 }
             }
@@ -45,11 +45,11 @@ GridLayout{
                 id:serverOption
                 optionText:i18nd("lliurex-shutdowner","Server configuration")
                 optionIcon:"/usr/share/icons/breeze/places/22/network-workgroup.svg"                  
-                optionEnabled:shutBridge.isCronEnabled
-                visible:!shutBridge.isStandAlone
+                optionEnabled:clientStackBridge.isCronEnabled
+                visible:!clientStackBridge.isStandAlone
                 Connections{
                     function onMenuOptionClicked(){
-                        shutBridge.manageTransitions(1)
+                        mainStackBridge.manageTransitions(1)
                     }
                 }
             }
@@ -59,16 +59,16 @@ GridLayout{
                 optionText:i18nd("lliurex-shutdowner","System settings")
                 optionIcon:"/usr/share/icons/breeze/actions/22/configure.svg"
                 optionEnabled:{
-                    if (!shutBridge.serverShut){
+                    if (!serverStackBridge.serverShut){
                         true
                     }else{
                         false
                     }
                 }
-                visible:shutBridge.isClient
+                visible:clientStackBridge.isClient
                 Connections{
                     function onMenuOptionClicked(){
-                        shutBridge.manageTransitions(2)
+                        mainStackBridge.manageTransitions(2)
                     }
                 }
             }
@@ -81,7 +81,7 @@ GridLayout{
                 visible:true
                 Connections{
                     function onMenuOptionClicked(){
-                        shutBridge.openHelp();
+                        mainStackBridge.openHelp();
                     }
                 }
             }
@@ -95,7 +95,7 @@ GridLayout{
 
         StackView {
             id: optionsLayout
-            property int currentIndex:shutBridge.currentOptionStack
+            property int currentIndex:mainStackBridge.currentOptionStack
             Layout.fillHeight:true
             Layout.fillWidth:true
             Layout.alignment:Qt.AlignHCenter
@@ -159,10 +159,10 @@ GridLayout{
 
         Kirigami.InlineMessage {
             id: messageLabel
-            visible:shutBridge.showMessage[0]
+            visible:mainStackBridge.showMessage[0]
             text:getMessageText()
             type: {
-                if (shutBridge.showMessage[1]==""){
+                if (mainStackBridge.showMessage[1]==""){
                     Kirigami.MessageType.Positive;
                 }else{
                     Kirigami.MessageType.Error;
@@ -177,7 +177,7 @@ GridLayout{
 
     function getMessageText(){
 
-        switch(shutBridge.showMessage[1]){
+        switch(mainStackBridge.showMessage[1]){
             case -10:
                 var msg=i18nd("lliurex-shutdowner","The client and server shutdown time are not compatible with each other");
                 break;
