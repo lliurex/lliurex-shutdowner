@@ -115,7 +115,7 @@ class Bridge(QObject):
 				self.previousError=""
 				Bridge.n4dManager.setShutdownerValues()
 				dayConfigured=False
-				for item in self.core.clientServer.weekClientValues:
+				for item in self.core.clientStack.weekClientValues:
 					if item:
 						dayConfigured=True
 						break

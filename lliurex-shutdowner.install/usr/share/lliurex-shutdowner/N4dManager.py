@@ -2,7 +2,8 @@ import n4d.client
 import threading
 import subprocess
 import time
-
+import xmlrpc.client as n4dclient
+import ssl
 
 class N4dManager:
 	
@@ -111,6 +112,7 @@ class N4dManager:
 
 		standAlone=False
 		isClient=False
+		isDesktop=False
 	
 		try:
 			cmd='lliurex-version -v'
@@ -127,11 +129,17 @@ class N4dManager:
 					standAlone=False
 					break
 				elif 'client' in item:
-					standAlone=False
 					isClient=True
-					break
 				elif 'desktop' in item:
+					isDesktop=True
 					standAlone=True
+			
+			if isClient:
+				if isDesktop:
+					if not self._checkConnectionWithServer():
+						isClient=False
+					else:
+						standAlone=False
 			
 			return standAlone,isClient
 			
@@ -182,5 +190,18 @@ class N4dManager:
 		return [action,ret]
 			
 	#def switchOverrideShutdown
+	
+	def _checkConnectionWithServer(self):
+
+		try:
+			context=ssl._create_unverified_context()
+			client=n4dclient.ServerProxy('https://server:9779',context=context,allow_none=True)
+			test=client.is_cron_enabled('','ShutdownerManager')
+			return True
+		except Exception as e:
+			return False
+
+	#def _checkConnectionWithServer
+	
 
 #class N4dManager
