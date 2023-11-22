@@ -2,7 +2,8 @@ import n4d.client
 import threading
 import subprocess
 import time
-
+import xmlrpc.client as n4dclient
+import ssl
 
 class N4dManager:
 	
@@ -10,7 +11,7 @@ class N4dManager:
 
 		self.debug=False
 	
-		self.detected_clients=0
+		self.detectedClients=0
 		
 	#def init
 	
@@ -21,59 +22,59 @@ class N4dManager:
 			
 	#def dprint
 		
-	def set_server(self,ticket,passwd):
+	def setServer(self,ticket,passwd):
 
 		ticket=ticket.replace('##U+0020##',' ')
 		tk=n4d.client.Ticket(ticket)
 		self.client=n4d.client.Client(ticket=tk)
 		
-		if self.is_standalone_mode()[1]:
-			local_user=ticket.split(' ')[2]
-			self.local_client=n4d.client.Client("https://localhost:9779",local_user,passwd)
-			local_t=self.local_client.get_ticket()
-			self.local_client=n4d.client.Client(ticket=local_t)
+		if self.isStandaloneMode()[1]:
+			localUser=ticket.split(' ')[2]
+			self.localClient=n4d.client.Client("https://localhost:9779",localUser,passwd)
+			local_t=self.localClient.get_ticket()
+			self.localClient=n4d.client.Client(ticket=local_t)
 		
-	#def set_server
+	#def setServer
 	
-	def load_info(self):
+	def loadInfo(self):
 
-		self.get_shutdowner_values()
+		self.getShutdownerValues()
 
-		if not self.is_standalone_mode()[0]:
-			self.get_client_list()
-			t=threading.Thread(target=self.update_client_list_thread)
+		if not self.isStandaloneMode()[0]:
+			self.getClientList()
+			t=threading.Thread(target=self.updateClientListThread)
 			t.daemon=True
 			t.start()
 		
-	#def load_info
+	#def loadInfo
 	
-	def get_shutdowner_values(self):
+	def getShutdownerValues(self):
 		
-		self.shutdowner_var=self.client.get_variable("SHUTDOWNER")
+		self.shutdownerVar=self.client.get_variable("SHUTDOWNER")
 	
-	#def get_shutdowner_values
+	#def getShutdownerValues
 	
-	def is_cron_enabled(self):
+	def isCronEnabled(self):
 		
-		return self.shutdowner_var["cron_enabled"]
+		return self.shutdownerVar["cron_enabled"]
 		
-	#def is_cron_enabled
+	#def isCronEnabled
 	
-	def get_cron_values(self):
+	def getCronValues(self):
 		
-		if self.shutdowner_var["cron_content"]!=None:
-			return self.shutdowner_var["cron_values"]
+		if self.shutdownerVar["cron_content"]!=None:
+			return self.shutdownerVar["cron_values"]
 		return None
 		
-	#def get_cron_values
+	#def getCronValues
 
-	def get_server_cron_values(self):
+	def getServerCronValues(self):
 
-		return self.shutdowner_var["server_cron"]["cron_server_values"]
+		return self.shutdownerVar["server_cron"]["cron_server_values"]
 
-	#def get_server_cron_values	
+	#def getServerCronValues	
 
-	def get_client_list(self):
+	def getClientList(self):
 		
 		self.client.ShutdownerManager.manual_client_list_check()
 		ret=self.client.get_client_list()
@@ -83,34 +84,35 @@ class N4dManager:
 			if ret[item]["missed_pings"]<1:
 				count+=1
 				
-		self.detected_clients=count
+		self.detectedClients=count
 		
-	#def get_client_list
+	#def getClientList
 	
-	def update_client_list_thread(self):
+	def updateClientListThread(self):
 		
 		while True:
 			time.sleep(20)
-			self.get_client_list()
+			self.getClientList()
 			
-	#def update_client_list_thread
+	#def updateClientListThread
 	
-	def set_shutdowner_values(self):
+	def setShutdownerValues(self):
 		
-		self.client.ShutdownerManager.save_variable(self.shutdowner_var)
+		self.client.ShutdownerManager.save_variable(self.shutdownerVar)
 		
-	#def set_shutdowner_values
+	#def setShutdownerValues
 	
-	def shutdown_clients(self):
+	def shutdownClients(self):
 		
 		self.client.ShutdownerManager.update_shutdown_signal()
 		
-	#def shutdown_clients
+	#def shutdownClients
 	
-	def is_standalone_mode(self):
+	def isStandaloneMode(self):
 
 		standAlone=False
 		isClient=False
+		isDesktop=False
 	
 		try:
 			cmd='lliurex-version -v'
@@ -127,60 +129,79 @@ class N4dManager:
 					standAlone=False
 					break
 				elif 'client' in item:
-					standAlone=False
 					isClient=True
-					break
 				elif 'desktop' in item:
+					isDesktop=True
 					standAlone=True
+			
+			if isClient:
+				if isDesktop:
+					if not self._checkConnectionWithServer():
+						isClient=False
+					else:
+						standAlone=False
 			
 			return standAlone,isClient
 			
 		except Exception as e:
 			return True,isClient
 	
-	#def is_standalone_mode
+	#def isStandaloneMode
 
-	def is_server_shut(self):
+	def isServerShut(self):
 
 		ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
 		
 		return [ret['status'],ret['custom_shutdown']]
 	
-	#def is_custom_server_shut
+	#def isServerShut
 
-	def is_client_shutdown_override(self):
+	def isClientShutdownOverride(self):
 
-		self.is_shutdown_override_enabled=False
+		self.isShutdownOverrideEnabled=False
 
-		if self.is_standalone_mode()[1]:
+		if self.isStandaloneMode()[1]:
 			try:
-				self.is_shutdown_override_enabled=self.local_client.ShutdownerClient.is_shutdown_override_enabled()
+				self.isShutdownOverrideEnabled=self.localClient.ShutdownerClient.is_shutdown_override_enabled()
 			except:
 				pass
 
-		return self.is_shutdown_override_enabled
+		return self.isShutdownOverrideEnabled
 
-	#def is_client_shutdown_override
+	#def isClientShutdownOverride
 
-	def switch_override_shutdown(self,value):
+	def switchOverrideShutdown(self,value):
 
 		ret=False
 		action="Enable"
 
 		try:
-			if value!=self.is_shutdown_override_enabled:
+			if value!=self.isShutdownOverrideEnabled:
 				if value:
 					action="Enable"
-					ret=self.local_client.ShutdownerClient.enable_override_shutdown()
+					ret=self.localClient.ShutdownerClient.enable_override_shutdown()
 
 				else:
 					action="Disable"
-					ret=self.local_client.ShutdownerClient.disable_override_shutdown()
+					ret=self.localClient.ShutdownerClient.disable_override_shutdown()
 		except:
 			pass
 
 		return [action,ret]
 			
-	#def switch_override_shutdown
+	#def switchOverrideShutdown
+	
+	def _checkConnectionWithServer(self):
+
+		try:
+			context=ssl._create_unverified_context()
+			client=n4dclient.ServerProxy('https://server:9779',context=context,allow_none=True)
+			test=client.is_cron_enabled('','ShutdownerManager')
+			return True
+		except Exception as e:
+			return False
+
+	#def _checkConnectionWithServer
+	
 
 #class N4dManager

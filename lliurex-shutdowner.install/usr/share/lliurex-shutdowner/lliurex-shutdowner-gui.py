@@ -4,14 +4,21 @@ from PySide2.QtGui import QIcon
 from PySide2.QtQml import QQmlApplicationEngine
 
 import sys
-import LliurexShutdowner
+import Core
+c=Core.Core.get_core()
 
 app = QApplication()
 engine = QQmlApplicationEngine()
 engine.clearComponentCache()
 context=engine.rootContext()
-shutBridge=LliurexShutdowner.Bridge(sys.argv[1],sys.argv[2])
-context.setContextProperty("shutBridge", shutBridge)
+mainStackBridge=c.mainStack
+clientStackBridge=c.clientStack
+serverStackBridge=c.serverStack
+settingsStackBridge=c.settingsStack
+context.setContextProperty("mainStackBridge", mainStackBridge)
+context.setContextProperty("clientStackBridge", clientStackBridge)
+context.setContextProperty("serverStackBridge", serverStackBridge)
+context.setContextProperty("settingsStackBridge", settingsStackBridge)
 
 url = QUrl("/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml")
 

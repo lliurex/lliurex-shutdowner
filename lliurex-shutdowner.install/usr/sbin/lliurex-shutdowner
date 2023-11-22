@@ -6,6 +6,8 @@ import os
 import sys
 import subprocess
 import shutil
+import xmlrpc.client as n4dclient
+import ssl
 
 class Tunnel(QObject):
 
@@ -70,6 +72,7 @@ class Tunnel(QObject):
 
 		self._standAlone=False
 		self._isClient=False
+		isDesktop=False
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
@@ -83,14 +86,32 @@ class Tunnel(QObject):
 				self._standAlone=False
 				break
 			elif 'client' in item:
-				self._standAlone=False
 				self._isClient=True
-				break
 			elif 'desktop' in item:
+				isDesktop=True
 				self._standAlone=True
+				
+		if self._isClient:
+			if isDesktop:
+				if not self._checkConnectionWithServer():
+					self._isClient=False
+				else:
+					self._standAlone=False
 
 	#def is_StandAlone
+	
+	def _checkConnectionWithServer(self):
 
+		try:
+			context=ssl._create_unverified_context()
+			client=n4dclient.ServerProxy('https://server:9779',context=context,allow_none=True)
+			test=client.is_cron_enabled('','ShutdownerManager')
+			return True
+		except Exception as e:
+			return False
+
+	#def _checkConnectionWithServer
+	
 	def _getStandAlone(self):
 
 		return self._standAlone

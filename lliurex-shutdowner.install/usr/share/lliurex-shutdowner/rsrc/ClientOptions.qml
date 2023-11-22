@@ -7,7 +7,7 @@ import org.kde.kirigami 2.16 as Kirigami
 Rectangle{
     color:"transparent"
     Text{ 
-       text:!shutBridge.isStandAlone?i18nd("lliurex-shutdowner","Client shutdown configuration"):i18nd("lliurex-shutdowner","Desktop shutdown configuration")
+       text:!clientStackBridge.isStandAlone?i18nd("lliurex-shutdowner","Client shutdown configuration"):i18nd("lliurex-shutdowner","Desktop shutdown configuration")
         font.family: "Quattrocento Sans Bold"
         font.pointSize: 16
     }
@@ -24,10 +24,10 @@ Rectangle{
 			id: clockBoxClient
 			Layout.fillWidth: true
 			Layout.topMargin: {
-				if (shutBridge.showMessage[0]){
+				if (mainStackBridge.showMessage[0]){
 					35
 				}else{
-					if (!shutBridge.isStandAlone){
+					if (!clientStackBridge.isStandAlone){
 						45
 					}
 				}
@@ -52,7 +52,7 @@ Rectangle{
         			Layout.topMargin: 5
         			Text {
         				id:textMessageClient
-        				text:!shutBridge.isStandAlone? i18nd("lliurex-shutdowner","Automatic client shutdown"):i18nd("lliurex-shutdowner","Automatic shutdown")
+        				text:!clientStackBridge.isStandAlone? i18nd("lliurex-shutdowner","Automatic client shutdown"):i18nd("lliurex-shutdowner","Automatic shutdown")
 						font.family: "Quattrocento Sans Bold"
 						font.pointSize: 10
 						Layout.alignment:Qt.AlignVCenter
@@ -61,7 +61,7 @@ Rectangle{
 
 					Switch {
 						id:toggleswitch
-						checked: shutBridge.isCronEnabled
+						checked: clientStackBridge.isCronEnabled
 						Layout.alignment:Qt.AlignVCenter
 						Layout.fillWidth: true
 						Layout.rightMargin:5
@@ -84,7 +84,7 @@ Rectangle{
 						}	
 
 						onToggled: {
-							shutBridge.getCronSwitchValue(toggleswitch.checked);
+							clientStackBridge.getCronSwitchValue(toggleswitch.checked);
 							cronClient.clockLayoutEnabled=toggleswitch.checked,
 							cronClient.daysLayoutEnabled=toggleswitch.checked,
 							serverOptionsLayout.enabled=toggleswitch.checked;
@@ -106,22 +106,22 @@ Rectangle{
 				RowLayout{
 					Cron{
 						id:cronClient
-						clockLayoutEnabled:shutBridge.isCronEnabled
-						currentHour:shutBridge.initClockClient[0]
-						currentMinutes:shutBridge.initClockClient[1]
-						daysLayoutEnabled:shutBridge.isCronEnabled
-						mondayChecked:shutBridge.initWeekDaysClient[0]
-						tuesdayChecked:shutBridge.initWeekDaysClient[1]
-						wednesdayChecked:shutBridge.initWeekDaysClient[2]
-						thursdayChecked:shutBridge.initWeekDaysClient[3]
-						fridayChecked:shutBridge.initWeekDaysClient[4]
+						clockLayoutEnabled:clientStackBridge.isCronEnabled
+						currentHour:clientStackBridge.initClockClient[0]
+						currentMinutes:clientStackBridge.initClockClient[1]
+						daysLayoutEnabled:clientStackBridge.isCronEnabled
+						mondayChecked:clientStackBridge.initWeekDaysClient[0]
+						tuesdayChecked:clientStackBridge.initWeekDaysClient[1]
+						wednesdayChecked:clientStackBridge.initWeekDaysClient[2]
+						thursdayChecked:clientStackBridge.initWeekDaysClient[3]
+						fridayChecked:clientStackBridge.initWeekDaysClient[4]
 
 						Connections{
 							function onUpdateClock(value){
-								shutBridge.getClockClientValues(value);
+								clientStackBridge.getClockClientValues(value);
 							}
 							function onUpdateWeekDays(value){
-								shutBridge.getWeekClientValues(value);	
+								clientStackBridge.getWeekClientValues(value);	
 							}
 						}
 					}
@@ -132,8 +132,8 @@ Rectangle{
 					Layout.alignment:Qt.AlignHCenter
 					Layout.fillWidth: true
 					Layout.bottomMargin: 10
-					enabled:shutBridge.isCronEnabled
-					visible:!shutBridge.isStandAlone
+					enabled:clientStackBridge.isCronEnabled
+					visible:!clientStackBridge.isStandAlone
 					spacing:15
 					Text{
 						id:serverOptionsText
@@ -166,7 +166,7 @@ Rectangle{
 						ToolTip.text:i18nd("lliurex-shutdowner","Click to change server shutdown settings")
 						
 						onClicked:{
-							shutBridge.manageTransitions(1)
+							mainStackBridge.manageTransitions(1)
 						}
 					}
 				} 
@@ -178,7 +178,7 @@ Rectangle{
 			Layout.fillWidth: true
 			Layout.maximumHeight:80
 			Layout.alignment:Qt.AlignHCenter
-			visible:!shutBridge.isStandAlone
+			visible:!clientStackBridge.isStandAlone
 			background: Rectangle {
 				color:"#ffffff"
 				border.color: "#d3d3d3"
@@ -202,7 +202,7 @@ Rectangle{
 
 				Text {
 					id:numberclientTex
-					text:shutBridge.detectedClients
+					text:clientStackBridge.detectedClients
 					font.family: "Quattrocento Sans Bold"
 					font.pointSize: 10
 					Layout.maximumWidth:240
@@ -219,16 +219,16 @@ Rectangle{
 					Layout.bottomMargin: 5
 					Layout.rightMargin:5
 					onClicked:{
-						shutBridge.shutdownClientsNow()
+						clientStackBridge.shutdownClientsNow()
 					}
-		        }
+		      }
 	    	}      	
 	
 	    }
 	}
 	function getTextOption(){
-		if (shutBridge.serverShut){
-			if (shutBridge.customServerShut){
+		if (serverStackBridge.serverShut){
+			if (serverStackBridge.customServerShut){
 				return i18nd("lliurex-shutdowner","Custom shutdown");
 			}else{
 				return i18nd("lliurex-shutdowner","2 minutes after clients");
