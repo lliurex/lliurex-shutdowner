@@ -38,7 +38,7 @@ Rectangle{
 
 			Switch {
 				id:toggleswitch
-				checked: shutBridge.isClientShutDownOverride
+				checked: settingsStackBridge.isClientShutDownOverride
 				Layout.alignment:Qt.AlignLeft
 				indicator: Rectangle {
 					implicitWidth: 40
@@ -59,7 +59,7 @@ Rectangle{
 				}	
 
 				onToggled: {
-					shutBridge.overrideShutdownSwitch(toggleswitch.checked);
+					settingsStackBridge.overrideShutdownSwitch(toggleswitch.checked);
 				}
 			}
 		}

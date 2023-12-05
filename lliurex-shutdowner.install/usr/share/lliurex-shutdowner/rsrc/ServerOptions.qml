@@ -23,13 +23,13 @@ Rectangle{
         GroupBox {
             id: clockBoxServer
             Layout.fillWidth: true
-            Layout.topMargin: shutBridge.showMessage[0]?35:33
+            Layout.topMargin: mainStackBridge.showMessage[0]?35:33
 
             background: Rectangle {
                 color:"#ffffff"
                 border.color: "#d3d3d3"
             }
-            visible:!shutBridge.isStandAlone
+            visible:!clientStackBridge.isStandAlone
 
             GridLayout {
                 id: shutGridServer
@@ -53,7 +53,7 @@ Rectangle{
                     }   
                     Switch {
                         id:toggleswitchServer
-                        checked: shutBridge.serverShut
+                        checked: serverStackBridge.serverShut
                         Layout.alignment:Qt.AlignVCenter
                         Layout.fillWidth: true
                         Layout.rightMargin:5
@@ -97,7 +97,7 @@ Rectangle{
                     CheckBox {
                         id:serverShutOp1
                         text:i18nd("lliurex-shutdowner","Shutdown server 2 minutes after clients)")
-                        checked:!shutBridge.customServerShut
+                        checked:!serverStackBridge.customServerShut
                         font.pointSize: 10
                         focusPolicy: Qt.NoFocus
                         onToggled:enableServerOptions(1)
@@ -116,7 +116,7 @@ Rectangle{
                         text:i18nd("lliurex-shutdowner","Custom:")
                         font.pointSize: 10
                         focusPolicy: Qt.NoFocus
-                        checked:shutBridge.customServerShut
+                        checked:serverStackBridge.customServerShut
                         onToggled:enableServerOptions(2)
                     }
                 } 
@@ -125,21 +125,21 @@ Rectangle{
                     Cron{
                         id:cronServer
                         clockLayoutEnabled:enableClock()
-                        currentHour:shutBridge.initClockServer[0]				
-                        currentMinutes:shutBridge.initClockServer[1]
+                        currentHour:serverStackBridge.initClockServer[0]				
+                        currentMinutes:serverStackBridge.initClockServer[1]
                         daysLayoutEnabled:clockLayoutEnabled
-                        mondayChecked:shutBridge.initWeekDaysServer[0]
-                        tuesdayChecked:shutBridge.initWeekDaysServer[1]
-                        wednesdayChecked:shutBridge.initWeekDaysServer[2]
-                        thursdayChecked:shutBridge.initWeekDaysServer[3]
-                        fridayChecked:shutBridge.initWeekDaysServer[4]
+                        mondayChecked:serverStackBridge.initWeekDaysServer[0]
+                        tuesdayChecked:serverStackBridge.initWeekDaysServer[1]
+                        wednesdayChecked:serverStackBridge.initWeekDaysServer[2]
+                        thursdayChecked:serverStackBridge.initWeekDaysServer[3]
+                        fridayChecked:serverStackBridge.initWeekDaysServer[4]
 
                         Connections{
                             function onUpdateClock(value){
-                                shutBridge.getClockServerValues(value);
+                                serverStackBridge.getClockServerValues(value);
             		    	}
                             function onUpdateWeekDays(value){
-                                shutBridge.getWeekServerValues(value);	
+                                serverStackBridge.getWeekServerValues(value);	
             		    	}
           		    	}
                     }
@@ -151,7 +151,7 @@ Rectangle{
 
     function enableLayouts(){
 
-        shutBridge.getServerShut(toggleswitchServer.checked)
+        serverStackBridge.getServerShut(toggleswitchServer.checked)
         if (toggleswitchServer.checked){
             if (serverShutOp2.checked){
                 cronServer.clockLayoutEnabled=true,
@@ -170,12 +170,12 @@ Rectangle{
     function enableServerOptions(option){
 
         if (option==1){
-            shutBridge.getCustomServerShut(!serverShutOp1.checked)
+            serverStackBridge.getCustomServerShut(!serverShutOp1.checked)
             serverShutOp2.checked=!serverShutOp1.checked,
             cronServer.clockLayoutEnabled=!serverShutOp1.checked,
             cronServer.daysLayoutEnabled=!serverShutOp1.checked;
         }else{
-            shutBridge.getCustomServerShut(serverShutOp2.checked),
+            serverStackBridge.getCustomServerShut(serverShutOp2.checked),
             serverShutOp1.checked=!serverShutOp2.checked,
             cronServer.clockLayoutEnabled=serverShutOp2.checked,
             cronServer.daysLayoutEnabled=serverShutOp2.checked;
@@ -185,7 +185,7 @@ Rectangle{
     function enableClock(){
 
         if (toggleswitchServer.checked){
-            if (shutBridge.customServerShut){
+            if (serverStackBridge.customServerShut){
                 return true;
             }else{
                 return false;

@@ -8,15 +8,15 @@ import os
 import sys
 import subprocess
 import gettext
+import xmlrpc.client as n4dclient
+import ssl
 gettext.textdomain("lliurex-shutdowner-common")
 _=gettext.gettext
 
 
 class Bridge(QObject):
 
-
 	def __init__(self,wait_time):
-
 
 		QObject.__init__(self)
 
@@ -34,27 +34,11 @@ class Bridge(QObject):
 
 		self.initValues()
 
-
 	#def __init__
 	
 	def initValues(self):
 		
-		visibleBtn=True
-		server=os.system("lliurex-version -t server 2>/dev/null")
-		server_lite=os.system("lliurex-version -t server-lite 2>/dev/null")
-
-		if server==0 or server_lite==0:
-			ret=0
-		else:
-			ret=1
-
-		is_thin=os.system("lliurex-version -x thin")
-		is_desktop=os.system("lliurex-version -x desktop")
-
-		if ret!=0 or is_thin==0:
-			if is_desktop!=0:
-				visibleBtn=False
-
+		visibleBtn=self._showCancelBtn()
 		warning_msg=_("System will shutdown in a few seconds. Please, save your files")
 		cancelBtn_msg=_("Cancel shutdown")
 
@@ -63,6 +47,50 @@ class Bridge(QObject):
 		self.countdown_timer.start(1000)
 	
 	#def init_values
+
+	def _showCancelBtn(self):
+
+		visibleBtn=False
+		isClient=False
+		isDesktop=False
+		cmd='lliurex-version -v'
+		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+		result=p.communicate()[0]
+
+		if type(result) is bytes:
+			result=result.decode()
+		flavours = [ x.strip() for x in result.split(',') ]
+
+		for item in flavours:
+			if 'server' in item:
+				visibleBtn=True
+				break
+			elif 'client' in item:
+				isClient=True
+			elif 'desktop' in item:
+				isDesktop=True
+				visibleBtn=True
+				
+		if isClient:
+			if isDesktop:
+				if self._checkConnectionWithServer():
+					visibleBtn=False
+
+		return visibleBtn
+
+	#def _showCancelBtn
+	
+	def _checkConnectionWithServer(self):
+
+		try:
+			context=ssl._create_unverified_context()
+			client=n4dclient.ServerProxy('https://server:9779',context=context,allow_none=True)
+			test=client.is_cron_enabled('','ShutdownerManager')
+			return True
+		except Exception as e:
+			return False
+
+	#def _checkConnectionWithServer
 
 
 	def updateCountDown(self):
