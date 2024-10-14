@@ -1,5 +1,5 @@
-from PySide2.QtCore import QObject,Signal,Slot,QThread,Property,QTimer
-from PySide2.QtGui import QCloseEvent
+from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer
+from PySide6.QtGui import QCloseEvent
 import os 
 import sys
 import threading

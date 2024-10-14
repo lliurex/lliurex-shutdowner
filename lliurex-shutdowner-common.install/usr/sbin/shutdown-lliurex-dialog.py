@@ -1,8 +1,8 @@
 #! /usr/bin/python3
-from PySide2.QtWidgets import QApplication
-from PySide2.QtCore import QUrl, QObject, Slot, Signal, Property,QTimer
-from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtGui import QIcon
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QUrl, QObject, Slot, Signal, Property,QTimer
+from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtGui import QIcon
 
 import os
 import sys
@@ -188,7 +188,7 @@ if __name__=="__main__":
 
 	engine.quit.connect(QApplication.quit)
 	app.setWindowIcon(QIcon("/usr/share/icons/hicolor/scalable/apps/lliurex-shutdowner.svg"));
-	ret=app.exec_()
+	ret=app.exec()
 	del engine
 	del app
 	sys.exit(ret)

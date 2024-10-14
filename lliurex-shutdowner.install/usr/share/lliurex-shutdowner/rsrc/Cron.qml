@@ -1,6 +1,7 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.6
-import QtQuick.Layouts 1.15
+import QtQml
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 
 GridLayout{
@@ -196,7 +197,7 @@ GridLayout{
 					    spacing:4
 				    	TextField{
 				    		id: hourEntry
-				    		validator: RegExpValidator { regExp: /([0-1][0-9]|2[0-3])/ }
+				    		validator: RegularExpressionValidator { regularExpression: /([0-1][0-9]|2[0-3])/ }
 				    		implicitWidth: 70
 				    		horizontalAlignment: TextInput.AlignHCenter
 				    		color:"#3daee9"
@@ -211,7 +212,7 @@ GridLayout{
 				    	
 				    	TextField{
 				    		id: minuteEntry
-				    		validator: RegExpValidator { regExp: /[0-5][0-9]/ }
+				    		validator: RegularExpressionValidator { regularExpression: /[0-5][0-9]/ }
 				    		implicitWidth: 70
 				    		horizontalAlignment: TextInput.AlignHCenter
 				    		color:"#3daee9"
