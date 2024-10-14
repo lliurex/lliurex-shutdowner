@@ -54,7 +54,7 @@ GridLayout{
 					onExited: {
 						parent.color="#3daee9"
 					}
-					onWheel:{
+					onWheel:(wheel)=>{
 						var index=modelData
 						wheel.accepted=false
 						if (wheel.angleDelta.y>0){

@@ -75,6 +75,9 @@ class Bridge(QObject):
 			if isDesktop:
 				if self._checkConnectionWithServer():
 					visibleBtn=False
+		else:
+			context=ssl._create_unverified_context()
+			self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
 
 		return visibleBtn
 
@@ -88,6 +91,8 @@ class Bridge(QObject):
 			test=client.is_cron_enabled('','ShutdownerManager')
 			return True
 		except Exception as e:
+			context=ssl._create_unverified_context()
+			self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
 			return False
 
 	#def _checkConnectionWithServer
@@ -151,8 +156,10 @@ class Bridge(QObject):
 	@Slot()
 	def cancelClicked(self):
 		self.countdown_timer.stop()
-		command="shutdown -c"
-		os.system(command)
+		try:
+			ret=self.client.cancel_shutdown('','ShutdownerManager')
+		except:
+			pass
 		app.quit()
 
 	#def cancelClicked
