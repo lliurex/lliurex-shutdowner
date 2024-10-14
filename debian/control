@@ -8,7 +8,7 @@ Standards-Version: 4.1.2
 
 Package: lliurex-shutdowner
 Architecture: all
-Depends: ${misc:Depends}, python3, n4d-qt-agent, python3-n4d-client, python3-pyside2.qtqml, python3-pyside2.qtquick, python3-pyside2.qtgui, python3-pyside2.qtwidgets, python3-pyside2.qtquickwidgets, python3-pyside2.qtnetwork
+Depends: ${misc:Depends}, python3, n4d-qt-agent, python3-n4d-client, pyside6-tools, python3-pyside6.qtqml, python3-pyside6.qtquick, python3-pyside6.qtgui, python3-pyside6.qtwidgets, python3-pyside6.qtquickwidgets, python3-pyside6.qtnetwork
 Description: LliureX Shutdowner
  Manage automatic clients shutdown using n4d calls.
  Server should have n4d-shutdowner-server installed, clients n4d-shutdown-client
@@ -16,7 +16,7 @@ Description: LliureX Shutdowner
 
 Package: lliurex-shutdowner-common
 Architecture: all
-Depends: ${misc:Depends}, python3, python3-pyside2.qtqml, python3-pyside2.qtquick, python3-pyside2.qtgui, python3-pyside2.qtwidgets, python3-pyside2.qtquickwidgets, python3-pyside2.qtnetwork
+Depends: ${misc:Depends}, python3, pyside6-tools, python3-pyside6.qtqml, python3-pyside6.qtquick, python3-pyside6.qtgui, python3-pyside6.qtwidgets, python3-pyside6.qtquickwidgets, python3-pyside6.qtnetwork
 Description: LliureX Shutdowner common files
  Lliurex Shutdowner common support files.
 
