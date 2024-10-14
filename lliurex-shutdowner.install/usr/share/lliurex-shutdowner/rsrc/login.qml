@@ -1,4 +1,4 @@
-import QtQuick 2.6
+import QtQuick
 
 import Edupals.N4D.Agent 1.0 as N4DAgent
 
@@ -19,7 +19,7 @@ Rectangle {
         
         /*anchors.centerIn: parent*/
         
-        onLogged: {
+        onLogged:(ticket)=> {
             tunnel.on_ticket(ticket),
             showAddress=true;
 

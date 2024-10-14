@@ -1,9 +1,9 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.6
-import QtQuick.Layouts 1.15
-import QtQuick.Window 2.2
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.6 as Kirigami
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
 
 
 ApplicationWindow {
@@ -21,7 +21,7 @@ ApplicationWindow {
         y = Screen.height / 2 - height / 0.5
     }
 
-    onClosing: {
+    onClosing:(close)=> {
         if (mainStackBridge.closeShutdowner(true)){
             close.accepted=true;
         }else{
