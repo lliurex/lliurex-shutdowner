@@ -76,8 +76,11 @@ class Bridge(QObject):
 				if self._checkConnectionWithServer():
 					visibleBtn=False
 		else:
-			context=ssl._create_unverified_context()
-			self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
+			try:
+				context=ssl._create_unverified_context()
+				self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
+			except:
+				pass
 
 		return visibleBtn
 
