@@ -1,3 +1,4 @@
+from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QIcon,QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
@@ -6,7 +7,7 @@ import sys
 import Core
 c=Core.Core.get_core()
 
-app = QGuiApplication()
+app = QApplication()
 engine = QQmlApplicationEngine()
 engine.clearComponentCache()
 context=engine.rootContext()
@@ -26,7 +27,7 @@ engine.load(url)
 if not engine.rootObjects():
 	sys.exit(-1)
 
-engine.quit.connect(QQuiApplication.quit)
+engine.quit.connect(QApplication.quit)
 app.setWindowIcon(QIcon("/usr/share/icons/hicolor/scalable/apps/lliurex-shutdowner.svg"));
 ret=app.exec()
 del engine
