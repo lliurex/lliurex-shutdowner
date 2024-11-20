@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QUrl
-from PySide6.QtGui import QIcon,QGuiApplication
+from PySide6.QtGui import QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
 import sys

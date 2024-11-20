@@ -11,7 +11,7 @@ THINCLIENT_CRON="/etc/cron.d/lliurex-shutdowner-thinclients"
 SERVER_WAIT_TIME=2
 CLIENT_WAIT_TIME=1
 
-DEBUG=True
+DEBUG=False
 
 class Shutdowner:
 	
@@ -179,10 +179,11 @@ class Shutdowner:
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Standalone shutdown")
-		
+		waylandCommand='"wayland;xcb"'
 		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
 		standalone=standalone.decode("utf-8")
 		displays=set()
+		
 		for item in standalone.strip("\n").split("\n"):
 			
 			display=None		
@@ -191,12 +192,11 @@ class Shutdowner:
 			display=x[-1]
 			
 			if "(" not in display or ")" not in display or ":" not in display:
-				continue
-				
-			display=display.lstrip("(").rstrip(")")
-
+				command="su -c 'QT_QPA_PLATFORM=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(waylandCommand, wait_time,user)
+			else:
+				display=display.lstrip("(").rstrip(")")
+				command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 			
-			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 			self.dprint("\t%s"%command)
 			os.system(command)
 	
