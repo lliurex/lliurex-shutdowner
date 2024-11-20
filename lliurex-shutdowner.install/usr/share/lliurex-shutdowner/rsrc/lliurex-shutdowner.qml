@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Window
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 
@@ -32,10 +33,8 @@ ApplicationWindow {
         id: mainLayout
         anchors.fill: parent
         anchors.margins: margin
-        Layout.minimumWidth:800 
-        Layout.maximumWidth:800
-        Layout.minimumHeight:clientStackBridge.isStandAlone? 500:580
-        Layout.maximumHeight:clientStackBridge.isStandAlone? 500:580
+        Layout.minimumWidth:795
+        Layout.maximumWidth:795
 
         RowLayout {
             id: bannerBox
@@ -51,10 +50,11 @@ ApplicationWindow {
         StackView {
             id: mainWiew
             property int currentIndex:mainStackBridge.currentStack
-            implicitWidth: 800
+            implicitWidth: 795
             Layout.alignment:Qt.AlignVCenter
             Layout.leftMargin:0
-            Layout.fillHeight: true
+	    Layout.minimumHeight:clientStackBridge.isStandAlone? 430:480
+	    Layout.maximumHeight:clientStackBridge.isStandAlone? 430:480
 
             initialItem:loadingView
 

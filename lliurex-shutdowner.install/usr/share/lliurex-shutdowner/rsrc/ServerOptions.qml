@@ -23,7 +23,7 @@ Rectangle{
         GroupBox {
             id: clockBoxServer
             Layout.fillWidth: true
-            Layout.topMargin: mainStackBridge.showMessage[0]?35:33
+            Layout.topMargin: mainStackBridge.showMessage[0]?35:10
 
             background: Rectangle {
                 color:"#ffffff"

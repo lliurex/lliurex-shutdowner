@@ -13,7 +13,6 @@ GridLayout{
     Rectangle{
         width:200
         Layout.minimumHeight:430
-        Layout.preferredHeight:clientStackBridge.isStandAlone? 500:580
         Layout.fillHeight:true
         border.color: "#d3d3d3"
 
