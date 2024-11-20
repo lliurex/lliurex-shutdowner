@@ -51,8 +51,7 @@ class Bridge(QObject):
 	def _showCancelBtn(self):
 
 		visibleBtn=False
-		isClient=False
-		isDesktop=False
+		isDesktop=True
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
@@ -62,25 +61,16 @@ class Bridge(QObject):
 		flavours = [ x.strip() for x in result.split(',') ]
 
 		for item in flavours:
-			if 'server' in item:
+			if 'adi' in item:
 				visibleBtn=True
+				isDesktop=False
 				break
-			elif 'client' in item:
-				isClient=True
-			elif 'desktop' in item:
-				isDesktop=True
-				visibleBtn=True
 				
-		if isClient:
-			if isDesktop:
-				if self._checkConnectionWithServer():
-					visibleBtn=False
-		else:
-			try:
-				context=ssl._create_unverified_context()
-				self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
-			except:
-				pass
+		if isDesktop:
+			if self._checkConnectionWithServer():
+				visibleBtn=False
+			else:
+				visibleBtn=True
 
 		return visibleBtn
 

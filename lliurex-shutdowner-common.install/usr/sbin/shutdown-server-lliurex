@@ -35,19 +35,19 @@ class Shutdowner:
 	def init_var(self):
 		
 		self.lliurex_flavour={}
-		self.lliurex_flavour["server"]=False
+		self.lliurex_flavour["adi"]=False
 	
 		self.shutdown_function={}
-		self.shutdown_function["server"]=self.server_shutdown
+		self.shutdown_function["adi"]=self.adi_shutdown
 		
 	#def init_var
 	
 	def what_am_i(self):
 		
-		if os.system("lliurex-version -x server")==0:
-			self.lliurex_flavour["server"]=True
-		if self.lliurex_flavour["server"]:
-			return "server"
+		if os.system("lliurex-version -x adi")==0:
+			self.lliurex_flavour["adi"]=True
+		if self.lliurex_flavour["adi"]:
+			return "adi"
 			
 		return "unknown"
 		
@@ -60,14 +60,14 @@ class Shutdowner:
 	#def shutdown
 	
 	
-	def server_shutdown(self):
+	def adi_shutdown(self):
 		
-		self.dprint("Server shutdown")
+		self.dprint("ADI shutdown")
 		
 		# server always handles shutdown dialogs for thin clients
 		self.standalone_shutdown(SERVER_WAIT_TIME)
 		
-	#def server_shutdown
+	#def adi_shutdown
 	
 	def unknown_shutdown(self):
 		

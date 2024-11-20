@@ -5,8 +5,6 @@ import time
 import subprocess
 import syslog
 
-THINCLIENT_CRON="/etc/cron.d/lliurex-shutdowner-thinclients"
-
 #in minutes
 SERVER_WAIT_TIME=2
 CLIENT_WAIT_TIME=1
@@ -37,17 +35,11 @@ class Shutdowner:
 	def init_var(self):
 		
 		self.lliurex_flavour={}
-		self.lliurex_flavour["server"]=False
-		self.lliurex_flavour["client"]=False
-		self.lliurex_flavour["thin"]=False
-		self.lliurex_flavour["semi"]=False
+		self.lliurex_flavour["adi"]=False
 		self.lliurex_flavour["desktop"]=False
 		
 		self.shutdown_function={}
-		self.shutdown_function["server"]=self.server_shutdown
-		self.shutdown_function["thin"]=self.thin_shutdown
-		self.shutdown_function["semi"]=self.semi_shutdown
-		self.shutdown_function["client"]=self.client_shutdown
+		self.shutdown_function["adi"]=self.adi_shutdown
 		self.shutdown_function["desktop"]=self.standalone_shutdown
 		self.shutdown_function["unknown"]=self.basic_shutdown
 		
@@ -58,22 +50,13 @@ class Shutdowner:
 
 		self.get_flavours()
 
-		if os.system("lliurex-version -x server")==0:
-			self.lliurex_flavour["server"]=True
+		if os.system("lliurex-version -x adi")==0:
+			self.lliurex_flavour["adi"]=True
 		else:
 			ret=self.check_flavour()
-			if ret=="server":
-				self.lliurex_flavour["server"]=True
-		if os.system("lliurex-version -x client")==0:
-			self.lliurex_flavour["client"]=True
-		else:
-			ret=self.check_flavour()
-			if ret=="client":
-				self.lliurex_flavour["client"]=True
-		if os.system("lliurex-version -x thin")==0:
-			self.lliurex_flavour["thin"]=True
-		if os.system("lliurex-version -x semi")==0:
-			self.lliurex_flavour["semi"]=True
+			if ret=="adi":
+				self.lliurex_flavour["adi"]=True
+
 		if os.system("lliurex-version -x desktop")==0:
 			self.lliurex_flavour["desktop"]=True
 		else:
@@ -81,17 +64,8 @@ class Shutdowner:
 			if ret=="desktop":
 				self.lliurex_flavour["desktop"]=True
 			
-		# order is important here. Thin is also detected as server
-		# semi is also detected as client
-		
-		if self.lliurex_flavour["thin"]:
-			return "thin"			
-		if self.lliurex_flavour["server"]:
-			return "server"
-		if self.lliurex_flavour["semi"]:
-			return "semi"
-		if self.lliurex_flavour["client"]:
-			return "client"
+		if self.lliurex_flavour["adi"]:
+			return "adi"
 		if self.lliurex_flavour["desktop"]:
 			return "desktop"
 			
@@ -106,66 +80,13 @@ class Shutdowner:
 	#def shutdown
 	
 	
-	def server_shutdown(self):
+	def adi_shutdown(self):
 		
-		self.dprint("Server shutdown")
-		
-		# server always handles shutdown dialogs for thin clients
-		self.dprint("Handling thin client dialogs...")
-		thinclients=subprocess.Popen(["ps aux| grep LTSP_CLIENT | grep DISPLAY"],shell=True,stdout=subprocess.PIPE).communicate()[0]
-		thinclients=thinclients.decode("utf-8")
-		thinclients=thinclients.strip("\n").split("\n")
-				
-		for tc in thinclients:
-			if "DISPLAY=" in tc:
-				tmp=tc.split(" ")
-				user=tmp[0]
-				for item in tmp:
-					if "DISPLAY=" in item:
-						display=item.split("=")[1]
-						command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,CLIENT_WAIT_TIME,user)
-						self.dprint(command)
-						os.system(command)
-		
-		# if THINCLIENT_CRON file does not exist. server shutsdow itself as well
-		if not os.path.exists(THINCLIENT_CRON):			
-			self.dprint("Calling standalone_shutdown...")
-			self.standalone_shutdown(SERVER_WAIT_TIME)
-		
-	#def server_shutdown
-	
-	def thin_shutdown(self):
-		
-		self.dprint("Thin shutdown")
-		
-		# Making sure we don't shutdown server by mistake. Tbin clients are also detected as servers
-		if not os.path.exists(THINCLIENT_CRON):
-			
-			# if we are a thin client AND THINCLIENT_CRON file does NOT exist, 
-			# this is executed inside client itself
-			
-			time.sleep(60*CLIENT_WAIT_TIME)
-			command="n4d-client -r -m shutdown -c ShutdownerClient"
-			os.system(command)
-
-		
-	#def  thin_shutdown
-	
-	def semi_shutdown(self):
-		
-		self.dprint("Semi shutdown")
+		self.dprint("ADI shutdown")
 		self.dprint("Calling standalone_shutdown...")
-		self.standalone_shutdown(CLIENT_WAIT_TIME)
+		self.standalone_shutdown(SERVER_WAIT_TIME)
 		
-	#def semi_shutdown
-	
-	def client_shutdown(self):
-		
-		self.dprint("Client shutdown")
-		self.dprint("Calling standalone_shutdown...")
-		self.standalone_shutdown(CLIENT_WAIT_TIME)
-		
-	#def client_shutdown
+	#def adi_shutdown
 	
 	def unknown_shutdown(self):
 		
@@ -231,11 +152,8 @@ class Shutdowner:
 		
 		tmpFlavour=""
 		for item in self.flavours:
-			if 'server' in item:
-				tmpFlavour='server'
-				break
-			elif 'client' in item:
-				tmpFlavour='client'
+			if 'adi' in item:
+				tmpFlavour='adi'
 				break
 			elif 'desktop' in item:
 				tmpFlavour='desktop'

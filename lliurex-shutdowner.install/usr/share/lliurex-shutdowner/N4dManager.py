@@ -112,7 +112,7 @@ class N4dManager:
 
 		standAlone=False
 		isClient=False
-		isDesktop=False
+		isDesktop=True
 	
 		try:
 			cmd='lliurex-version -v'
@@ -125,21 +125,17 @@ class N4dManager:
 			flavours = [ x.strip() for x in result.split(',') ]
 
 			for item in flavours:
-				if 'server' in item:
+				if 'adi' in item:
+					isDesktop=False
 					standAlone=False
 					break
-				elif 'client' in item:
-					isClient=True
-				elif 'desktop' in item:
-					isDesktop=True
-					standAlone=True
 			
-			if isClient:
-				if isDesktop:
-					if not self._checkConnectionWithServer():
-						isClient=False
-					else:
-						standAlone=False
+			if isDesktop:
+				if not self._checkConnectionWithServer():
+					standAlone=True
+				else:
+					standAlone=False
+					isClient=True
 			
 			return standAlone,isClient
 			
