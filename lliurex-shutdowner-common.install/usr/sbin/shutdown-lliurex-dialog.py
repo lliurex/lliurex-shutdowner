@@ -67,7 +67,7 @@ class Bridge(QObject):
 				break
 				
 		if isDesktop:
-			if self._checkConnectionWithServer():
+			if self._checkConnectionWithADI():
 				visibleBtn=False
 			else:
 				visibleBtn=True
@@ -76,7 +76,7 @@ class Bridge(QObject):
 
 	#def _showCancelBtn
 	
-	def _checkConnectionWithServer(self):
+	def _checkConnectionWithADI(self):
 
 		try:
 			context=ssl._create_unverified_context()
@@ -88,7 +88,7 @@ class Bridge(QObject):
 			self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
 			return False
 
-	#def _checkConnectionWithServer
+	#def _checkConnectionWithADI
 
 
 	def updateCountDown(self):

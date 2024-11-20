@@ -131,7 +131,7 @@ class N4dManager:
 					break
 			
 			if isDesktop:
-				if not self._checkConnectionWithServer():
+				if not self._checkConnectionWithADI():
 					standAlone=True
 				else:
 					standAlone=False
@@ -187,7 +187,7 @@ class N4dManager:
 			
 	#def switchOverrideShutdown
 	
-	def _checkConnectionWithServer(self):
+	def _checkConnectionWithADI(self):
 
 		try:
 			context=ssl._create_unverified_context()
@@ -197,7 +197,7 @@ class N4dManager:
 		except Exception as e:
 			return False
 
-	#def _checkConnectionWithServer
+	#def _checkConnectionWithADI
 	
 
 #class N4dManager
