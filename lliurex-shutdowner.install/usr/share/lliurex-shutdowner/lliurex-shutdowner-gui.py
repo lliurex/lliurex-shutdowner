@@ -8,6 +8,7 @@ import Core
 c=Core.Core.get_core()
 
 app = QApplication()
+app.setDesktopFileName("lliurex-shutdowner")
 engine = QQmlApplicationEngine()
 engine.clearComponentCache()
 context=engine.rootContext()
@@ -28,7 +29,6 @@ if not engine.rootObjects():
 	sys.exit(-1)
 
 engine.quit.connect(QApplication.quit)
-app.setWindowIcon(QIcon("/usr/share/icons/hicolor/scalable/apps/lliurex-shutdowner.svg"));
 ret=app.exec()
 del engine
 del app
