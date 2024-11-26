@@ -173,6 +173,7 @@ class Bridge(QObject):
 if __name__=="__main__":
 
 	app = QApplication()
+	app.setDesktopFileName("lliurex-shutdowner")
 	engine = QQmlApplicationEngine()
 	engine.clearComponentCache()
 	context=engine.rootContext()
