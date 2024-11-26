@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.31.8) noble; urgency=medium
+
+  * Fixed day button style performance
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 26 Nov 2024 11:03:58 +0100
+
 lliurex-shutdowner (2.31.7) noble; urgency=medium
 
   * Fixed launchers to show app icon in Wayland
