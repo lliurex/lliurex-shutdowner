@@ -17,7 +17,8 @@ class Bridge(QObject):
 		self.core=Core.Core.get_core()
 		Bridge.n4dManager=self.core.n4dManager
 		self.shutdownBin="/usr/sbin/shutdown-lliurex"
-		self._isStandAlone,self._isClient=Bridge.n4dManager.isStandaloneMode()
+		self._isStandAlone=Bridge.n4dManager.standAlone
+		self._isClient=Bridge.n4dManager.isClient
 		self._detectedClients="0"
 
 	#def __init__
@@ -26,18 +27,19 @@ class Bridge(QObject):
 
 		clientValues=Bridge.n4dManager.getCronValues()	
 
-		self._isCronEnabled=Bridge.n4dManager.isCronEnabled()
-		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
+		if clientValues!=None:
+			self._isCronEnabled=Bridge.n4dManager.isCronEnabled()
+			self.cronSwitch=copy.deepcopy(self._isCronEnabled)
 
-		self._initClockClient=[clientValues["hour"],clientValues["minute"]]
-		self.clockClientValues=copy.deepcopy(self._initClockClient)
-		self._initWeekDaysClient=[clientValues["weekdays"][0],clientValues["weekdays"][1],clientValues["weekdays"][2],clientValues["weekdays"][3],clientValues["weekdays"][4]]
-		self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
+			self._initClockClient=[clientValues["hour"],clientValues["minute"]]
+			self.clockClientValues=copy.deepcopy(self._initClockClient)
+			self._initWeekDaysClient=[clientValues["weekdays"][0],clientValues["weekdays"][1],clientValues["weekdays"][2],clientValues["weekdays"][3],clientValues["weekdays"][4]]
+			self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
 
-		if not self._isStandAlone:
-			self.clientTimer = QTimer(None)
-			self.clientTimer.timeout.connect(self.getClient)
-			self.clientTimer.start(2000)
+			if not self._isStandAlone:
+				self.clientTimer = QTimer(None)
+				self.clientTimer.timeout.connect(self.getClient)
+				self.clientTimer.start(2000)
 		
 	#def loadConfig	
 
@@ -154,7 +156,9 @@ class Bridge(QObject):
 						newVar=self.core.serverStack.gatherValuesServer(newVar)	
 					else:
 						newVar["server_cron"]["custom_shutdown"]=False
-
+				else:
+					if self._isStandAlone:
+						newVar["cron_values"]["server_shutdown"]=False
 			else:
 				newVar["cron_enabled"]=False
 		

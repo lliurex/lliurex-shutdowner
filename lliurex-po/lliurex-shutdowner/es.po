@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 10:55+0200\n"
-"PO-Revision-Date: 2023-04-13 10:56+0200\n"
+"POT-Creation-Date: 2025-03-11 14:25+0100\n"
+"PO-Revision-Date: 2025-03-11 14:26+0100\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:112
 msgid "You can use the mouse wheel to change the hour"
@@ -127,37 +127,35 @@ msgstr "Configuración de clientes"
 msgid "Desktop configuration"
 msgstr "Configuración del equipo"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:49
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:46
 msgid "Server configuration"
 msgstr "Configuración del servidor"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:51
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:87
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:128
-msgid "Help"
-msgstr "Ayuda"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:85
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:59
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:10
 msgid "System settings"
 msgstr "Preferencias del equipo"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:243
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:78
+msgid "Help"
+msgstr "Ayuda"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:182
 msgid "The client and server shutdown time are not compatible with each other"
 msgstr "La hora de apagado del cliente y servidor no son compatibles entre si"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:246
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:185
 msgid "The client and server shutdown days are not compatible with each other"
 msgstr "Los días de apagado del cliente y servidor no son compatibles entre si"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:249
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:188
 msgid ""
 "The client and server shutdown time and days are not compatible with each "
 "other"
 msgstr ""
 "La hora y días de apagado del cliente y servidor no son compatibles entre si"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:252
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:191
 msgid ""
 "Disabling automatic shutdown in this computer is only posible if automatic "
 "server shutdown is not enabled"
@@ -165,7 +163,7 @@ msgstr ""
 "La desactivación del apagado automático en este equipo sólo es posible si el "
 "apagado automático del servidor esta desactivado"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:255
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:194
 msgid "Changes saved successfully"
 msgstr "Cambios guardados correctamente"
 
@@ -173,6 +171,13 @@ msgstr "Cambios guardados correctamente"
 msgid "Disable automatic shutdown on this computer:"
 msgstr "Desactivar el apagado automático en este equipo:"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:37
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:40
 msgid "Loading. Wait a moment..."
 msgstr "Cargando. Espere un momento..."
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:50
+msgid ""
+"An error ocurred while loading data. Restart your computer and try again"
+msgstr ""
+"Se ha producido un error al cargar los datos. Reinicie el equipo y pruebe "
+"otra vez"

@@ -19,6 +19,7 @@ class Shutdowner:
 		
 		self.init_var()
 		self.flavours=[]
+		self.adiServer="/usr/bin/natfree-server"
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		
@@ -131,7 +132,10 @@ class Shutdowner:
 		if not os.path.exists(THINCLIENT_CRON):			
 			self.dprint("Calling standalone_shutdown...")
 			self.standalone_shutdown(SERVER_WAIT_TIME)
-		
+		else:
+			if os.path.exists(self.adiServer):
+				self.standalone_shutdown(SERVER_WAIT_TIME)
+	
 	#def server_shutdown
 	
 	def thin_shutdown(self):

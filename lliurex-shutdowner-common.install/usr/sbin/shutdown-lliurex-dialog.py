@@ -20,6 +20,7 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 
+		self.adiClient="/usr/bin/natfree-client"
 		self.indicatorColor="#3daee9"
 		self.countdown=int(wait_time)*60
 		self.current_counter=0
@@ -70,12 +71,16 @@ class Bridge(QObject):
 			elif 'desktop' in item:
 				isDesktop=True
 				visibleBtn=True
-				
+				if os.path.exists(self.adiClient):
+					isClient=True
+					
 		if isClient:
 			if isDesktop:
 				if self._checkConnectionWithServer():
 					visibleBtn=False
-
+				else:
+					visibleBtn=True
+	
 		return visibleBtn
 
 	#def _showCancelBtn

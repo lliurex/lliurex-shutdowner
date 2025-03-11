@@ -14,6 +14,8 @@ class Tunnel(QObject):
 	def __init__(self):
 
 		QObject.__init__(self)
+		self.adiServer="/usr/bin/natfree-server"
+		self.adiClient="/usr/bin/natfree-client"
 		self.clearCache()
 		self.isStandAlone()
 
@@ -73,6 +75,7 @@ class Tunnel(QObject):
 		self._standAlone=False
 		self._isClient=False
 		isDesktop=False
+
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
@@ -89,14 +92,19 @@ class Tunnel(QObject):
 				self._isClient=True
 			elif 'desktop' in item:
 				isDesktop=True
-				self._standAlone=True
+				if os.path.exists(self.adiClient):
+					self._isClient=True
+				else:
+					if not os.path.exists(self.adiServer):
+						self._standAlone=True
 				
 		if self._isClient:
 			if isDesktop:
-				if not self._checkConnectionWithServer():
-					self._isClient=False
-				else:
+				if self._checkConnectionWithServer():
 					self._standAlone=False
+				else:
+					self._isClient=False
+					self._standAlone=True
 
 	#def is_StandAlone
 	
