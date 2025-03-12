@@ -132,9 +132,6 @@ class Shutdowner:
 		if not os.path.exists(THINCLIENT_CRON):			
 			self.dprint("Calling standalone_shutdown...")
 			self.standalone_shutdown(SERVER_WAIT_TIME)
-		else:
-			if os.path.exists(self.adiServer):
-				self.standalone_shutdown(SERVER_WAIT_TIME)
 	
 	#def server_shutdown
 	
@@ -183,7 +180,10 @@ class Shutdowner:
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Standalone shutdown")
-		
+
+		if os.path.exists(self.adiServer):
+			wait_time=SERVER_WAIT_TIME
+
 		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
 		standalone=standalone.decode("utf-8")
 		displays=set()
