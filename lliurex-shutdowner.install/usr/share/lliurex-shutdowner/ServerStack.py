@@ -17,21 +17,28 @@ class Bridge(QObject):
 		self.core=Core.Core.get_core()
 		Bridge.n4dManager=self.core.n4dManager
 		self.customShutdownBin="/usr/sbin/shutdown-lliurex-server"
-		
+		self.loadError=False
+
 	def loadConfig(self):
 
 		serverValues=Bridge.n4dManager.getServerCronValues()
-		serverInfo=Bridge.n4dManager.isServerShut()
+		
+		if serverValues!=None:
+			if len(serverValues)>0:
+				serverInfo=Bridge.n4dManager.isServerShut()
 
-		self._serverShut=serverInfo[0]
-		self.serverShut=copy.deepcopy(self._serverShut)
-		self._customServerShut=serverInfo[1]
-		self.customServerShut=copy.deepcopy(self._customServerShut)
-		self._initClockServer=[serverValues["hour"],serverValues["minute"]]
-		self.clockServerValues=copy.deepcopy(self._initClockServer)
-		self._initWeekDaysServer=[serverValues["weekdays"][0],serverValues["weekdays"][1],serverValues["weekdays"][2],serverValues["weekdays"][3],serverValues["weekdays"][4]]
-		self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
-
+				self._serverShut=serverInfo[0]
+				self.serverShut=copy.deepcopy(self._serverShut)
+				self._customServerShut=serverInfo[1]
+				self.customServerShut=copy.deepcopy(self._customServerShut)
+				self._initClockServer=[serverValues["hour"],serverValues["minute"]]
+				self.clockServerValues=copy.deepcopy(self._initClockServer)
+				self._initWeekDaysServer=[serverValues["weekdays"][0],serverValues["weekdays"][1],serverValues["weekdays"][2],serverValues["weekdays"][3],serverValues["weekdays"][4]]
+				self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
+			else:
+				self.loadError=True
+		else:
+			self.loadError=True
 
 	#def load Config
 

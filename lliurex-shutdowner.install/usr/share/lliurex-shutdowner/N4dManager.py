@@ -89,7 +89,13 @@ class N4dManager:
 
 	def getServerCronValues(self):
 
-		return self.shutdownerVar["server_cron"]["cron_server_values"]
+		try:
+			if self.shutdownerVar["server_cron"]["cron_server_values"]!=None:
+				return self.shutdownerVar["server_cron"]["cron_server_values"]
+		except:
+			pass
+
+		return None
 
 	#def getServerCronValues	
 

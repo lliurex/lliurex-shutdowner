@@ -55,13 +55,15 @@ class Bridge(QObject):
 			self.core.clientStack.loadConfig()
 			self.core.serverStack.loadConfig()
 			self.core.settingsStack.loadConfig()
-			
-			self.saveValuesTimer = QTimer(None)
-			self.saveValuesTimer.timeout.connect(self.saveValues)
-			self.saveValuesTimer.start(5000)
-			self.countToShowError=0
-			self.waitTimeError=20
-			self.currentStack=1
+			if not self.core.clientStack.loadError and not self.core.serverStack.loadError:
+				self.saveValuesTimer = QTimer(None)
+				self.saveValuesTimer.timeout.connect(self.saveValues)
+				self.saveValuesTimer.start(5000)
+				self.countToShowError=0
+				self.waitTimeError=20
+				self.currentStack=1
+			else:
+				self.isThereAreError=True
 		else:
 			self.isThereAreError=True
 
