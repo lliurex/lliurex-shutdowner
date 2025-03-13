@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.32) noble; urgency=medium
+
+  * Changed to support new classroom model
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Thu, 13 Mar 2025 13:43:13 +0100
+
 lliurex-shutdowner (2.31.8) noble; urgency=medium
 
   * Fixed day button style performance
