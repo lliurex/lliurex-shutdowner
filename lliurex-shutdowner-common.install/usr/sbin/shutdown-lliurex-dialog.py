@@ -20,10 +20,12 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 
+		self.adiClient="/usr/bin/natfree-client"
 		self.indicatorColor="#3daee9"
 		self.countdown=int(wait_time)*60
 		self.current_counter=0
 		self.block_destroy=True
+		self.versionReference=["adi","desktop"]
 		self.countdown_timer = QTimer(None)
 		self.countdown_timer.timeout.connect(self.updateCountDown)
 
@@ -39,6 +41,14 @@ class Bridge(QObject):
 	def initValues(self):
 		
 		visibleBtn=self._showCancelBtn()
+
+		if visibleBtn:
+			try:
+				context=ssl._create_unverified_context()
+				self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
+			except:
+				pass
+
 		warning_msg=_("System will shutdown in a few seconds. Please, save your files")
 		cancelBtn_msg=_("Cancel shutdown")
 
@@ -53,35 +63,31 @@ class Bridge(QObject):
 		visibleBtn=False
 		isClient=False
 		isDesktop=False
+		flavours=[]
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
 
 		if type(result) is bytes:
 			result=result.decode()
-		flavours = [ x.strip() for x in result.split(',') ]
+
+		for x in result.split(","):
+			if x.strip() in self.versionReference:
+				flavours.append(x.strip())
 
 		for item in flavours:
-			if 'server' in item:
+			if 'adi' in item:
 				visibleBtn=True
 				break
-			elif 'client' in item:
-				isClient=True
 			elif 'desktop' in item:
 				isDesktop=True
 				visibleBtn=True
 				
-		if isClient:
-			if isDesktop:
+		if isDesktop:
+			if os.path.exists(self.adiClient):
 				if self._checkConnectionWithServer():
 					visibleBtn=False
-		else:
-			try:
-				context=ssl._create_unverified_context()
-				self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
-			except:
-				pass
-
+	
 		return visibleBtn
 
 	#def _showCancelBtn
@@ -94,12 +100,9 @@ class Bridge(QObject):
 			test=client.is_cron_enabled('','ShutdownerManager')
 			return True
 		except Exception as e:
-			context=ssl._create_unverified_context()
-			self.client=n4dclient.ServerProxy('https://localhost:9779',context=context,allow_none=True)
-			return False
+				return False
 
 	#def _checkConnectionWithServer
-
 
 	def updateCountDown(self):
 

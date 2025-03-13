@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 10:55+0200\n"
-"PO-Revision-Date: 2023-06-28 09:38+0200\n"
+"POT-Creation-Date: 2025-03-13 13:36+0100\n"
+"PO-Revision-Date: 2025-03-13 13:39+0100\n"
 "Last-Translator: Angels <gimenez_angcam@gva.es>\n"
 "Language-Team: Valencian <http://weblate.lliurex.net/projects/lliurex-"
 "shutdowner/lliurex-shutdowner/ca@valencia/>\n"
@@ -18,45 +18,45 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.4.2\n"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:112
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:121
 msgid "You can use the mouse wheel to change the hour"
 msgstr "Podeu utilitzar la roda del ratolí per a canviar l’hora"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:147
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:156
 msgid "You can use the mouse wheel to change the minutes"
 msgstr "Podeu utilitzar la roda del ratolí per a canviar els minuts"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:165
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:174
 msgid "Click to edit shutdown time with keyboard "
 msgstr "Feu clic per a canviar l'hora d'apagat amb el teclat "
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:234
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:243
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:244
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:253
 msgid "Apply"
 msgstr "Aplica"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:281
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:290
 msgid "Monday"
 msgstr "Dilluns"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:293
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:302
 msgid "Tuesday"
 msgstr "Dimarts"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:304
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:313
 msgid "Wednesday"
 msgstr "Dimecres"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:316
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:325
 msgid "Thursday"
 msgstr "Dijous"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:327
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:336
 msgid "Friday"
 msgstr "Divendres"
 
@@ -120,39 +120,37 @@ msgstr "Para el servidor 2 minuts després dels clients)"
 msgid "Custom:"
 msgstr "Personalitzada:"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:30
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:29
 msgid "Client configuration"
 msgstr "Configuració dels clients"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:32
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:31
 msgid "Desktop configuration"
 msgstr "Configuració de l'equip"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:49
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:45
 msgid "Server configuration"
 msgstr "Configuració del servidor"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:51
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:87
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:128
-msgid "Help"
-msgstr "Ajuda"
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:85
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:58
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:10
 msgid "System settings"
 msgstr "Preferències de l'equip"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:243
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:77
+msgid "Help"
+msgstr "Ajuda"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:181
 msgid "The client and server shutdown time are not compatible with each other"
 msgstr "L’hora de parada del client i del servidor no són compatibles entre si"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:246
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:184
 msgid "The client and server shutdown days are not compatible with each other"
 msgstr ""
 "Els dies de parada del client i del servidor no són compatibles entre si"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:249
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:187
 msgid ""
 "The client and server shutdown time and days are not compatible with each "
 "other"
@@ -160,7 +158,7 @@ msgstr ""
 "El temps i els dies de parada del client i del servidor no són compatibles "
 "entre si"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:252
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:190
 msgid ""
 "Disabling automatic shutdown in this computer is only posible if automatic "
 "server shutdown is not enabled"
@@ -168,7 +166,7 @@ msgstr ""
 "La desactivació de l'apagat automàtic en aquest equip només és possible si "
 "l'apagat automàtic del servidor està desactivat"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:255
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:193
 msgid "Changes saved successfully"
 msgstr "Els canvis s'han guardat correctament"
 
@@ -176,6 +174,13 @@ msgstr "Els canvis s'han guardat correctament"
 msgid "Disable automatic shutdown on this computer:"
 msgstr "Desactiva l'apagat automàtic en aquest equip:"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:37
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:40
 msgid "Loading. Wait a moment..."
 msgstr "S'està carregant. Espereu un moment..."
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:50
+msgid ""
+"An error ocurred while loading data. Restart your computer and try again"
+msgstr ""
+"S'ha produït un error en carregar les dades. Reinicieu l'equip i proveu una "
+"altra vegada"
