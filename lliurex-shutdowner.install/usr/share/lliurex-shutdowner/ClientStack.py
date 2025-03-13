@@ -17,8 +17,10 @@ class Bridge(QObject):
 		self.core=Core.Core.get_core()
 		Bridge.n4dManager=self.core.n4dManager
 		self.shutdownBin="/usr/sbin/shutdown-lliurex"
-		self._isStandAlone,self._isClient=Bridge.n4dManager.isStandaloneMode()
+		self._isStandAlone=Bridge.n4dManager.standAlone
+		self._isClient=Bridge.n4dManager.isClient
 		self._detectedClients="0"
+		self.loadError=False
 
 	#def __init__
 
@@ -26,19 +28,25 @@ class Bridge(QObject):
 
 		clientValues=Bridge.n4dManager.getCronValues()	
 
-		self._isCronEnabled=Bridge.n4dManager.isCronEnabled()
-		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
+		if clientValues!=None:
+			if len(clientValues)>0:
+				self._isCronEnabled=Bridge.n4dManager.isCronEnabled()
+				self.cronSwitch=copy.deepcopy(self._isCronEnabled)
 
-		self._initClockClient=[clientValues["hour"],clientValues["minute"]]
-		self.clockClientValues=copy.deepcopy(self._initClockClient)
-		self._initWeekDaysClient=[clientValues["weekdays"][0],clientValues["weekdays"][1],clientValues["weekdays"][2],clientValues["weekdays"][3],clientValues["weekdays"][4]]
-		self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
+				self._initClockClient=[clientValues["hour"],clientValues["minute"]]
+				self.clockClientValues=copy.deepcopy(self._initClockClient)
+				self._initWeekDaysClient=[clientValues["weekdays"][0],clientValues["weekdays"][1],clientValues["weekdays"][2],clientValues["weekdays"][3],clientValues["weekdays"][4]]
+				self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
 
-		if not self._isStandAlone:
-			self.clientTimer = QTimer(None)
-			self.clientTimer.timeout.connect(self.getClient)
-			self.clientTimer.start(2000)
-		
+				if not self._isStandAlone:
+					self.clientTimer = QTimer(None)
+					self.clientTimer.timeout.connect(self.getClient)
+					self.clientTimer.start(2000)
+			else:
+				self.loadError=True
+		else:
+			self.loadError=True
+
 	#def loadConfig	
 
 	def getClient(self):

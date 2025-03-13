@@ -14,6 +14,7 @@ class Tunnel(QObject):
 	def __init__(self):
 
 		QObject.__init__(self)
+		self.adiClient="/usr/bin/natfree-client"
 		self.clearCache()
 		self.isStandAlone()
 
@@ -70,37 +71,39 @@ class Tunnel(QObject):
 
 	def isStandAlone(self):
 
+		versionReference=["adi","desktop"]
 		self._standAlone=False
 		self._isClient=False
 		isDesktop=False
+		flavours=[]
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
 		result=p.communicate()[0]
 
 		if type(result) is bytes:
 			result=result.decode()
-		flavours = [ x.strip() for x in result.split(',') ]
+
+		for x in result.split(","):
+			if x.strip() in versionReference:
+				flavours.append(x.strip())
 
 		for item in flavours:
-			if 'server' in item:
+			if 'adi' in item:
 				self._standAlone=False
 				break
-			elif 'client' in item:
-				self._isClient=True
 			elif 'desktop' in item:
 				isDesktop=True
 				self._standAlone=True
 				
-		if self._isClient:
-			if isDesktop:
-				if not self._checkConnectionWithServer():
-					self._isClient=False
-				else:
+		if isDesktop:
+			if os.path.exists(self.adiClient):
+				if self._checkConnectionWithADI():
+					self._isClient=True
 					self._standAlone=False
 
 	#def is_StandAlone
 	
-	def _checkConnectionWithServer(self):
+	def _checkConnectionWithADI(self):
 
 		try:
 			context=ssl._create_unverified_context()
@@ -110,7 +113,7 @@ class Tunnel(QObject):
 		except Exception as e:
 			return False
 
-	#def _checkConnectionWithServer
+	#def _checkConnectionWithADI
 	
 	def _getStandAlone(self):
 

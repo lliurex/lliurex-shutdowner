@@ -17,6 +17,7 @@ class Shutdowner:
 	def __init__(self):
 		
 		self.init_var()
+		self.version_reference=["adi","desktop"]
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		
@@ -35,19 +36,19 @@ class Shutdowner:
 	def init_var(self):
 		
 		self.lliurex_flavour={}
-		self.lliurex_flavour["server"]=False
+		self.lliurex_flavour["adi"]=False
 	
 		self.shutdown_function={}
-		self.shutdown_function["server"]=self.server_shutdown
+		self.shutdown_function["adi"]=self.server_shutdown
 		
 	#def init_var
 	
 	def what_am_i(self):
 		
-		if os.system("lliurex-version -x server")==0:
-			self.lliurex_flavour["server"]=True
-		if self.lliurex_flavour["server"]:
-			return "server"
+		if os.system("lliurex-version -x adi")==0:
+			self.lliurex_flavour["adi"]=True
+		if self.lliurex_flavour["adi"]:
+			return "adi"
 			
 		return "unknown"
 		
@@ -58,7 +59,6 @@ class Shutdowner:
 		return self.shutdown_function[flavour]()
 		
 	#def shutdown
-	
 	
 	def server_shutdown(self):
 		

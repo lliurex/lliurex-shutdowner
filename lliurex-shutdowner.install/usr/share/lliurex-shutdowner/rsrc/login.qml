@@ -25,7 +25,7 @@ Rectangle {
 
         }
 
-        onAuthenticated:{
+        onAuthenticated:(passwd)=>{
             if (tunnel.isClient){
                 tunnel.on_authenticated(passwd)
             }
