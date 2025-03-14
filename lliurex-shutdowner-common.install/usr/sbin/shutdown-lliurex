@@ -78,7 +78,6 @@ class Shutdowner:
 		
 	#def shutdown
 	
-	
 	def adi_shutdown(self):
 		
 		self.dprint("Server shutdown")
@@ -94,7 +93,6 @@ class Shutdowner:
 		self.basic_shutdown()
 		
 	#def unknown_shutdown
-	
 	
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
@@ -147,22 +145,21 @@ class Shutdowner:
 			if x.strip() in self.version_reference:
 				self.flavours.append(x.strip())
 			
-		
 	#def get_flavours
 	
 	def check_flavour(self):
 		
-		tmpFlavour=""
+		tmp_flavour=""
 		for item in self.flavours:
 			if 'adi' in item:
-				tmpFlavour='server'
+				tmp_flavour='server'
 				break
 			elif 'desktop' in item:
-				tmpFlavour='desktop'
+				tmp_flavour='desktop'
 			else:
-				tmpFlavour='unknown'
+				tmp_flavour='unknown'
 				
-		return tmpFlavour
+		return tmp_flavour
 		
 	#def check_flavour
 	
