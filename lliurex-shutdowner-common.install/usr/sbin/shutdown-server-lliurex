@@ -77,7 +77,6 @@ class Shutdowner:
 		
 	#def unknown_shutdown
 	
-	
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Standalone shutdown")
@@ -98,7 +97,6 @@ class Shutdowner:
 				display=display.lstrip("(").rstrip(")")
 				command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 
-			
 			self.dprint("\t%s"%command)
 			os.system(command)
 	
@@ -115,7 +113,6 @@ class Shutdowner:
 		os.system(command)
 		
 	#def basic_shutdown
-	
 	
 #class Shutdowner
 
