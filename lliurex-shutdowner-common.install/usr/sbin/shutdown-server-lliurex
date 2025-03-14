@@ -17,7 +17,7 @@ class Shutdowner:
 	def __init__(self):
 		
 		self.init_var()
-		self.adiServer="/usr/bin/natfree-server"
+		self.adi_server="/usr/bin/natfree-server"
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		
@@ -51,7 +51,7 @@ class Shutdowner:
 		if self.lliurex_flavour["server"]:
 			return "server"
 		elif os.system("lliurex-version -x desktop")==0:
-			if os.path.exists(self.adiServer):
+			if os.path.exists(self.adi_server):
 				return "server"
 				
 		return "unknown"
@@ -63,7 +63,6 @@ class Shutdowner:
 		return self.shutdown_function[flavour]()
 		
 	#def shutdown
-	
 	
 	def server_shutdown(self):
 		
@@ -81,7 +80,6 @@ class Shutdowner:
 		self.basic_shutdown()
 		
 	#def unknown_shutdown
-	
 	
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
@@ -101,7 +99,6 @@ class Shutdowner:
 				continue
 				
 			display=display.lstrip("(").rstrip(")")
-
 			
 			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 			self.dprint("\t%s"%command)
@@ -120,7 +117,6 @@ class Shutdowner:
 		os.system(command)
 		
 	#def basic_shutdown
-	
 	
 #class Shutdowner
 

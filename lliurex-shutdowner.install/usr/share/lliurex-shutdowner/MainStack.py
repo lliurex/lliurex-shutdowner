@@ -34,7 +34,6 @@ class Bridge(QObject):
 		self.cronContent="%s %s * * %s root %s >> /var/log/syslog\n"
 		self._isThereAreError=False
 
-
 	def initBridge(self):
 
 		self._currentStack=0

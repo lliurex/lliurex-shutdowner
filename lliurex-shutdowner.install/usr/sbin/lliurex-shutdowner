@@ -132,7 +132,6 @@ class Tunnel(QObject):
 
 	#def _getIsClient	
 
-		
 	standAlone=Property(bool,_getStandAlone,constant=True)
 	isClient=Property(bool,_getIsClient,constant=True)
 

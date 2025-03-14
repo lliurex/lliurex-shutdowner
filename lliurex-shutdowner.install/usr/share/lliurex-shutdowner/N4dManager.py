@@ -234,5 +234,4 @@ class N4dManager:
 
 	#def _checkConnectionWithServer
 	
-
 #class N4dManager

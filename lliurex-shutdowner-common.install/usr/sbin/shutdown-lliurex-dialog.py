@@ -16,19 +16,19 @@ _=gettext.gettext
 
 class Bridge(QObject):
 
-	def __init__(self,wait_time):
+	def __init__(self,waitTime):
 
 		QObject.__init__(self)
 
 		self.adiClient="/usr/bin/natfree-client"
 		self.indicatorColor="#3daee9"
-		self.countdown=int(wait_time)*60
-		self.current_counter=0
-		self.block_destroy=True
-		self.countdown_timer = QTimer(None)
-		self.countdown_timer.timeout.connect(self.updateCountDown)
+		self.countdown=int(waitTime)*60
+		self.currentCounter=0
+		self.blockDestroy=True
+		self.countdownTimer = QTimer(None)
+		self.countdownTimer.timeout.connect(self.updateCountDown)
 
-		if wait_time=="2":
+		if waitTime=="2":
 			self._timeRemaining=["02:00",self.indicatorColor]
 		else:
 			self._timeRemaining=["01:00",self.indicatorColor]
@@ -40,12 +40,12 @@ class Bridge(QObject):
 	def initValues(self):
 		
 		visibleBtn=self._showCancelBtn()
-		warning_msg=_("System will shutdown in a few seconds. Please, save your files")
-		cancelBtn_msg=_("Cancel shutdown")
+		warningMsg=_("System will shutdown in a few seconds. Please, save your files")
+		cancelBtnMsg=_("Cancel shutdown")
 
-		self._translateMsg=[warning_msg,cancelBtn_msg]
+		self._translateMsg=[warningMsg,cancelBtnMsg]
 		self._visibleCancelBtn=visibleBtn
-		self.countdown_timer.start(1000)
+		self.countdownTimer.start(1000)
 	
 	#def init_values
 
@@ -97,13 +97,12 @@ class Bridge(QObject):
 
 	#def _checkConnectionWithServer
 
-
 	def updateCountDown(self):
 
-		self.current_counter+=1
+		self.currentCounter+=1
 
-		if self.countdown-self.current_counter >=0:
-			count=self.countdown-self.current_counter
+		if self.countdown-self.currentCounter >=0:
+			count=self.countdown-self.currentCounter
 			
 			if count==120:
 				self.timeRemaining=["02:00",self.indicatorColor]
@@ -120,12 +119,11 @@ class Bridge(QObject):
 				if count==10:
 					self.indicatorColor="#ff0000"
 				self.timeRemaining=["00:"+str(count),self.indicatorColor]
-			self.block_destroy=False		
+			self.blockDestroy=False		
 		else:
-			self.countdown_timer.stop()
-			self.block_destroy=True
+			self.countdownTimer.stop()
+			self.blockDestroy=True
 
-		
 	#def updateCountDown
 
 	def _getTranslateMsg(self):
@@ -155,7 +153,7 @@ class Bridge(QObject):
 
 	@Slot()
 	def cancelClicked(self):
-		self.countdown_timer.stop()
+		self.countdownTimer.stop()
 		command="shutdown -c"
 		os.system(command)
 		app.quit()
@@ -165,7 +163,7 @@ class Bridge(QObject):
 	@Slot(bool,result=bool)
 	def closed(self,state):
 		
-		return self.block_destroy	
+		return self.blockDestroy	
 
 	#def closed	
 		
@@ -174,7 +172,8 @@ class Bridge(QObject):
 	translateMsg=Property('QVariantList',_getTranslateMsg,constant=True)
 	visibleCancelBtn=Property(bool,_getVisibleCancelBtn,constant=True)
 
-	
+#class Bridge
+
 if __name__=="__main__":
 
 	app = QApplication()
@@ -185,7 +184,6 @@ if __name__=="__main__":
 	context.setContextProperty("bridge", bridge)
 
 	url = QUrl("/usr/share/lliurex-shutdowner/rsrc/shutdowner-lliurex-dialog.qml")
-
 
 	engine.load(url)
 	if not engine.rootObjects():
