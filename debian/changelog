@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.21.6) jammy-testing; urgency=medium
+
+  * Improved stability
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Thu, 20 Mar 2025 13:26:25 +0100
+
 lliurex-shutdowner (2.21.5) jammy-testing; urgency=medium
 
   * Clean code
