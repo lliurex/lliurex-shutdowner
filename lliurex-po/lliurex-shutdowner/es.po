@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-11 14:25+0100\n"
-"PO-Revision-Date: 2025-03-11 14:26+0100\n"
+"POT-Creation-Date: 2025-03-20 13:20+0100\n"
+"PO-Revision-Date: 2025-03-20 13:22+0100\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -175,7 +175,11 @@ msgstr "Desactivar el apagado automático en este equipo:"
 msgid "Loading. Wait a moment..."
 msgstr "Cargando. Espere un momento..."
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:50
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:64
+msgid "Unable to connect with localhost"
+msgstr "No es posible conectar con localhost"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:67
 msgid ""
 "An error ocurred while loading data. Restart your computer and try again"
 msgstr ""

@@ -34,14 +34,20 @@ class N4dManager:
 		self.client=n4d.client.Client(ticket=tk)
 		
 		if self.isClient:
-			localUser=ticket.split(' ')[2]
-			self.localClient=n4d.client.Client("https://localhost:9779",localUser,passwd)
-			try:
-				local_t=self.localClient.get_ticket()
-				self.localClient=n4d.client.Client(ticket=local_t)
-			except:
-				pass
-		
+			if 'https://localhost' in ticket:
+				print("SI")
+				return False
+			else:
+				localUser=ticket.split(' ')[2]
+				self.localClient=n4d.client.Client("https://localhost:9779",localUser,passwd)
+				try:
+					local_t=self.localClient.get_ticket()
+					self.localClient=n4d.client.Client(ticket=local_t)
+				except:
+					pass
+
+		return True
+
 	#def setServer
 	
 	def loadInfo(self):
@@ -101,14 +107,17 @@ class N4dManager:
 
 	def getClientList(self):
 		
-		self.client.ShutdownerManager.manual_client_list_check()
-		ret=self.client.get_client_list()
-		
 		count=0
-		for item in ret:
-			if ret[item]["missed_pings"]<1:
-				count+=1
-				
+		try:
+			self.client.ShutdownerManager.manual_client_list_check()
+			ret=self.client.get_client_list()
+			
+			for item in ret:
+				if ret[item]["missed_pings"]<1:
+					count+=1
+		except:
+			pass
+			
 		self.detectedClients=count
 		
 	#def getClientList
@@ -181,9 +190,12 @@ class N4dManager:
 
 	def isServerShut(self):
 
-		ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
+		try:
+			ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
 		
-		return [ret['status'],ret['custom_shutdown']]
+			return [ret['status'],ret['custom_shutdown']]
+		except:
+			return [False]
 	
 	#def isServerShut
 
