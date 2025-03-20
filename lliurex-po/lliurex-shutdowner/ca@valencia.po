@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-13 13:36+0100\n"
-"PO-Revision-Date: 2025-03-13 13:39+0100\n"
+"POT-Creation-Date: 2025-03-20 13:53+0100\n"
+"PO-Revision-Date: 2025-03-20 13:55+0100\n"
 "Last-Translator: Angels <gimenez_angcam@gva.es>\n"
 "Language-Team: Valencian <http://weblate.lliurex.net/projects/lliurex-"
 "shutdowner/lliurex-shutdowner/ca@valencia/>\n"
@@ -178,7 +178,11 @@ msgstr "Desactiva l'apagat automàtic en aquest equip:"
 msgid "Loading. Wait a moment..."
 msgstr "S'està carregant. Espereu un moment..."
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:50
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:63
+msgid "Unable to connect with localhost"
+msgstr "No és possible conectar amb localhost"
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:66
 msgid ""
 "An error ocurred while loading data. Restart your computer and try again"
 msgstr ""

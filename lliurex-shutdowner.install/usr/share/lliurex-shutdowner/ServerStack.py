@@ -28,18 +28,21 @@ class Bridge(QObject):
 				serverInfo=Bridge.n4dManager.isServerShut()
 
 				self._serverShut=serverInfo[0]
-				self.serverShut=copy.deepcopy(self._serverShut)
-				self._customServerShut=serverInfo[1]
-				self.customServerShut=copy.deepcopy(self._customServerShut)
-				self._initClockServer=[serverValues["hour"],serverValues["minute"]]
-				self.clockServerValues=copy.deepcopy(self._initClockServer)
-				self._initWeekDaysServer=[serverValues["weekdays"][0],serverValues["weekdays"][1],serverValues["weekdays"][2],serverValues["weekdays"][3],serverValues["weekdays"][4]]
-				self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
+				if self._serverShut:
+					self.serverShut=copy.deepcopy(self._serverShut)
+					self._customServerShut=serverInfo[1]
+					self.customServerShut=copy.deepcopy(self._customServerShut)
+					self._initClockServer=[serverValues["hour"],serverValues["minute"]]
+					self.clockServerValues=copy.deepcopy(self._initClockServer)
+					self._initWeekDaysServer=[serverValues["weekdays"][0],serverValues["weekdays"][1],serverValues["weekdays"][2],serverValues["weekdays"][3],serverValues["weekdays"][4]]
+					self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
+				else:
+					if len(serverInfo)==1:
+						self.loadError=True
 			else:
 				self.loadError=True
 		else:
-			self.loadError=True			
-
+			self.loadError=True
 
 	#def load Config
 

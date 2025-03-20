@@ -16,7 +16,7 @@ Rectangle{
         RowLayout{
             Layout.fillWidth: true
             Layout.alignment:Qt.AlignHCenter
-            visible:!mainStackBridge.isThereAreError
+            visible:!mainStackBridge.isThereAreError[0]
 
             Rectangle{
                 color:"transparent"
@@ -33,7 +33,7 @@ Rectangle{
         RowLayout{
             Layout.fillWidth: true
             Layout.alignment:Qt.AlignHCenter
-            visible:!mainStackBridge.isThereAreError
+            visible:!mainStackBridge.isThereAreError[0]
 
             Text{
                 id:loadtext
@@ -46,12 +46,29 @@ Rectangle{
 
         Kirigami.InlineMessage{
             id:errorLabel
-            visible:mainStackBridge.isThereAreError
-            text:i18nd("lliurex-shutdowner","An error ocurred while loading data. Restart your computer and try again")
+            visible:mainStackBridge.isThereAreError[0]
+            text:getMsgError()
             type:Kirigami.MessageType.Error
             Layout.minimumWidth:750
             Layout.rightMargin:15
             Layout.leftMargin:15
-        }      
+
+        }
+    }
+
+    function getMsgError(){
+
+        switch(mainStackBridge.isThereAreError[1]){
+            case -50:
+                var msg=i18nd("lliurex-shutdowner","Unable to connect with localhost")
+                break;
+            case -60:
+                var msg=i18nd("lliurex-shutdowner","An error ocurred while loading data. Restart your computer and try again")
+                break;
+            default:
+                var msg=""
+                break;
+        }
+        return msg;
     }
 }
