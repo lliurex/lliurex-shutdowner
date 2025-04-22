@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.32.3) noble; urgency=medium
+
+  * Fixed load server info function
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 22 Apr 2025 16:15:15 +0200
+
 lliurex-shutdowner (2.32.2) noble; urgency=medium
 
   * Improved stability
