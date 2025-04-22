@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.21.7) jammy-testing; urgency=medium
+
+  * Fixed load server info function
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 22 Apr 2025 16:11:10 +0200
+
 lliurex-shutdowner (2.21.6) jammy-testing; urgency=medium
 
   * Improved stability
