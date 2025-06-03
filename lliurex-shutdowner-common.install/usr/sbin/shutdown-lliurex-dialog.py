@@ -20,7 +20,7 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 
-		self.adiClient="/usr/bin/natfree-client"
+		self.adiClient="/usr/bin/natfree-tie"
 		self.indicatorColor="#3daee9"
 		self.countdown=int(waitTime)*60
 		self.currentCounter=0

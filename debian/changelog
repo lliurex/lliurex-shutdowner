@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.21.9) jammy-testing; urgency=medium
+
+  * Replaced natfree-references
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 03 Jun 2025 08:22:58 +0200
+
 lliurex-shutdowner (2.21.8) jammy-testing; urgency=medium
 
   * Improved transitions between stacks

@@ -11,8 +11,8 @@ class N4dManager:
 	def __init__(self):
 
 		self.debug=False
-		self.adiServer="/usr/bin/natfree-server"
-		self.adiClient="/usr/bin/natfree-client"
+		self.adiServer="/usr/bin/natfree-adi"
+		self.adiClient="/usr/bin/natfree-tie"
 		self.detectedClients=0
 		self.standAlone=False
 		self.isClient=False

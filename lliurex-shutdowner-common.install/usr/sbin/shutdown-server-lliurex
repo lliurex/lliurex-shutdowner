@@ -17,7 +17,7 @@ class Shutdowner:
 	def __init__(self):
 		
 		self.init_var()
-		self.adi_server="/usr/bin/natfree-server"
+		self.adi_server="/usr/bin/natfree-adi"
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		

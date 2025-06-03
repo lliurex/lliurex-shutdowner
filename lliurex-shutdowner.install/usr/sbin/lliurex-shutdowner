@@ -14,8 +14,8 @@ class Tunnel(QObject):
 	def __init__(self):
 
 		QObject.__init__(self)
-		self.adiServer="/usr/bin/natfree-server"
-		self.adiClient="/usr/bin/natfree-client"
+		self.adiServer="/usr/bin/natfree-adi"
+		self.adiClient="/usr/bin/natfree-tie"
 		self.clearCache()
 		self.isStandAlone()
 
