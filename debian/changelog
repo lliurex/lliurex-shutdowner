@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.32.5) noble; urgency=medium
+
+  * Replaced natfree references
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Tue, 03 Jun 2025 08:17:00 +0200
+
 lliurex-shutdowner (2.32.4) noble; urgency=medium
 
   * Improved transitions between stacks
