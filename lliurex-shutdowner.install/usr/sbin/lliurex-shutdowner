@@ -76,35 +76,38 @@ class Tunnel(QObject):
 		self._isClient=False
 		isDesktop=False
 
-		cmd='lliurex-version -v'
-		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-		result=p.communicate()[0]
+		if os.path.exists(self.adiServer):
+			self._standAlone=True
+		else:
+			cmd='lliurex-version -v'
+			p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+			result=p.communicate()[0]
 
-		if type(result) is bytes:
-			result=result.decode()
-		flavours = [ x.strip() for x in result.split(',') ]
+			if type(result) is bytes:
+				result=result.decode()
+			flavours = [ x.strip() for x in result.split(',') ]
 
-		for item in flavours:
-			if 'server' in item:
-				self._standAlone=False
-				break
-			elif 'client' in item:
-				self._isClient=True
-			elif 'desktop' in item:
-				isDesktop=True
-				if os.path.exists(self.adiClient):
-					self._isClient=True
-				else:
-					if not os.path.exists(self.adiServer):
-						self._standAlone=True
-				
-		if self._isClient:
-			if isDesktop:
-				if self._checkConnectionWithServer():
+			for item in flavours:
+				if 'server' in item:
 					self._standAlone=False
-				else:
-					self._isClient=False
-					self._standAlone=True
+					break
+				elif 'client' in item:
+					self._isClient=True
+				elif 'desktop' in item:
+					isDesktop=True
+					if os.path.exists(self.adiClient):
+						self._isClient=True
+					else:
+						if not os.path.exists(self.adiServer):
+							self._standAlone=True
+					
+			if self._isClient:
+				if isDesktop:
+					if self._checkConnectionWithServer():
+						self._standAlone=False
+					else:
+						self._isClient=False
+						self._standAlone=True
 
 	#def is_StandAlone
 	
