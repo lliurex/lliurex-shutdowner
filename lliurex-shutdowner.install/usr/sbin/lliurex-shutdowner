@@ -72,7 +72,7 @@ class Tunnel(QObject):
 	def isStandAlone(self):
 
 		versionReference=["adi","desktop"]
-		self._standAlone=False
+		self._standAlone=True
 		self._isClient=False
 		isDesktop=False
 		flavours=[]
@@ -89,7 +89,6 @@ class Tunnel(QObject):
 
 		for item in flavours:
 			if 'adi' in item:
-				self._standAlone=False
 				break
 			elif 'desktop' in item:
 				isDesktop=True
