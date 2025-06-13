@@ -166,10 +166,10 @@ class N4dManager:
 					self.isClient=True
 				elif 'desktop' in item:
 					isDesktop=True
-					if os.path.exists(self.adiClient):
-						self.isClient=True
-					else:
-						if not os.path.exists(self.adiServer):
+					if not os.path.exists(self.adiServer):
+						if os.path.exists(self.adiClient):
+							self.isClient=True
+						else:
 							self.standAlone=True
 			
 			if self.isClient:

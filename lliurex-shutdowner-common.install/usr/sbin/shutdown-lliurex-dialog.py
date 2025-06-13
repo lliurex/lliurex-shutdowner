@@ -20,6 +20,7 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 
+		self.adiServer="/usr/bin/natfree-adi"
 		self.adiClient="/usr/bin/natfree-tie"
 		self.indicatorColor="#3daee9"
 		self.countdown=int(waitTime)*60
@@ -71,8 +72,9 @@ class Bridge(QObject):
 			elif 'desktop' in item:
 				isDesktop=True
 				visibleBtn=True
-				if os.path.exists(self.adiClient):
-					isClient=True
+				if not os.path.exists(self.adiServer):
+					if os.path.exists(self.adiClient):
+						isClient=True
 					
 		if isClient:
 			if isDesktop:

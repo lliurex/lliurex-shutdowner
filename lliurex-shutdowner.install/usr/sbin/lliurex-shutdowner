@@ -95,10 +95,10 @@ class Tunnel(QObject):
 					self._isClient=True
 				elif 'desktop' in item:
 					isDesktop=True
-					if os.path.exists(self.adiClient):
-						self._isClient=True
-					else:
-						if not os.path.exists(self.adiServer):
+					if not os.path.exists(self.adiServer):
+						if os.path.exists(self.adiClient):
+							self._isClient=True
+						else:
 							self._standAlone=True
 					
 			if self._isClient:
