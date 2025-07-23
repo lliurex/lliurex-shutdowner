@@ -20,11 +20,14 @@ class GatherInfo(QThread):
 	def run(self,*args):
 		
 		time.sleep(1)
-		self.manager=Bridge.n4dManager.loadInfo()
+		self.ret=Bridge.n4dManager.loadInfo()
 
 	#def run
 
 class Bridge(QObject):
+
+	INCORRECT_SERVER_ERROR=-50
+	LOAD_INFO_ERROR=-60
 
 	def __init__(self):
 
@@ -32,6 +35,7 @@ class Bridge(QObject):
 		self.core=Core.Core.get_core()
 		Bridge.n4dManager=self.core.n4dManager
 		self.cronContent="%s %s * * %s root %s >> /var/log/syslog\n"
+		self._isThereAreError=[False,""]
 
 	def initBridge(self):
 
@@ -40,25 +44,33 @@ class Bridge(QObject):
 		self._showMessage=[False,""]
 		self.previousError=""
 
-		Bridge.n4dManager.setServer(sys.argv[1],sys.argv[2])
-		self.gatherInfo=GatherInfo()
-		self.gatherInfo.start()
-		self.gatherInfo.finished.connect(self._loadConfig)
+		ret=Bridge.n4dManager.setServer(sys.argv[1],sys.argv[2])
+		if ret:
+			self.gatherInfo=GatherInfo()
+			self.gatherInfo.start()
+			self.gatherInfo.finished.connect(self._loadConfig)
+		else:
+			self.isThereAreError=[True,Bridge.INCORRECT_SERVER_ERROR]
 
 	#def initBridge	
 	
 	def _loadConfig(self):
 
-		self.core.clientStack.loadConfig()
-		self.core.serverStack.loadConfig()
-		self.core.settingsStack.loadConfig()
-		
-		self.saveValuesTimer = QTimer(None)
-		self.saveValuesTimer.timeout.connect(self.saveValues)
-		self.saveValuesTimer.start(5000)
-		self.countToShowError=0
-		self.waitTimeError=20
-		self.currentStack=1
+		if self.gatherInfo.ret:
+			self.core.clientStack.loadConfig()
+			self.core.serverStack.loadConfig()
+			self.core.settingsStack.loadConfig()
+			if not self.core.clientStack.loadError and not self.core.serverStack.loadError:
+				self.saveValuesTimer = QTimer(None)
+				self.saveValuesTimer.timeout.connect(self.saveValues)
+				self.saveValuesTimer.start(5000)
+				self.countToShowError=0
+				self.waitTimeError=20
+				self.currentStack=1
+			else:
+				self.isThereAreError=[True,Bridge.LOAD_INFO_ERROR]
+		else:
+			self.isThereAreError=[True,Bridge.LOAD_INFO_ERROR]
 
 	#def _loadInfo	
 
@@ -103,6 +115,20 @@ class Bridge(QObject):
 			self.on_showMessage.emit()
 
 	#def _setShowMessage
+
+	def _getIsThereAreError(self):
+
+		return self._isThereAreError
+
+	#def _getIsThereAreError
+
+	def _setIsThereAreError(self,isThereAreError):
+
+		if self._isThereAreError!=isThereAreError:
+			self._isThereAreError=isThereAreError
+			self.on_isThereAreError.emit()
+
+	#def _setIsThereAreError
 
 	def checkChanges(self):
 
@@ -197,14 +223,17 @@ class Bridge(QObject):
 	@Slot(bool,result=bool)
 	def closeShutdowner(self,state):
 		
-		acceptedClose=self.checkChanges()
-		if acceptedClose:
-			if not self.core.clientStack._isStandAlone:
-				self.core.clientStack.clientTimer.stop()
-			self.saveValuesTimer.stop()
-			return True
+		if not self.isThereAreError[0]:
+			acceptedClose=self.checkChanges()
+			if acceptedClose:
+				if not self.core.clientStack._isStandAlone:
+					self.core.clientStack.clientTimer.stop()
+				self.saveValuesTimer.stop()
+				return True
+			else:
+				return False
 		else:
-			return False
+			return True
 
 	#def closeShutdowner	
 
@@ -217,6 +246,8 @@ class Bridge(QObject):
 	on_showMessage=Signal()
 	showMessage=Property('QVariantList',_getShowMessage,_setShowMessage, notify=on_showMessage)
 
+	on_isThereAreError=Signal()
+	isThereAreError=Property('QVariantList',_getIsThereAreError,_setIsThereAreError,notify=on_isThereAreError)
 
 #class Bridge
 

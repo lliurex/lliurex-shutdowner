@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 10:55+0200\n"
+"POT-Creation-Date: 2025-03-20 13:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,42 +125,40 @@ msgstr ""
 msgid "Desktop configuration"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:49
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:46
 msgid "Server configuration"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:51
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:87
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:128
-msgid "Help"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:85
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:59
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:10
 msgid "System settings"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:243
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:78
+msgid "Help"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:182
 msgid "The client and server shutdown time are not compatible with each other"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:246
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:185
 msgid "The client and server shutdown days are not compatible with each other"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:249
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:188
 msgid ""
 "The client and server shutdown time and days are not compatible with each "
 "other"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:252
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:191
 msgid ""
 "Disabling automatic shutdown in this computer is only posible if automatic "
 "server shutdown is not enabled"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:255
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:194
 msgid "Changes saved successfully"
 msgstr ""
 
@@ -168,6 +166,15 @@ msgstr ""
 msgid "Disable automatic shutdown on this computer:"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:37
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:40
 msgid "Loading. Wait a moment..."
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:64
+msgid "Unable to connect with localhost"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:67
+msgid ""
+"An error ocurred while loading data. Restart your computer and try again"
 msgstr ""

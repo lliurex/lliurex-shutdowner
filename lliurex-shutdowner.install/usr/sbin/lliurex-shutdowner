@@ -14,6 +14,8 @@ class Tunnel(QObject):
 	def __init__(self):
 
 		QObject.__init__(self)
+		self.adiServer="/usr/bin/natfree-adi"
+		self.adiClient="/usr/bin/natfree-tie"
 		self.clearCache()
 		self.isStandAlone()
 
@@ -26,6 +28,7 @@ class Tunnel(QObject):
 		versionFile="/home/%s/.config/lliurex-shutdowner.conf"%user
 		cachePath1="/home/%s/.cache/lliurex-shutdowner"%user
 		cachePath2="/home/%s/.cache/lliurex-shutdowner-gui.py"%user
+		cachePath3="/home/%s/.cache/shutdown-lliurex-dialog.py"%user
 		installedVersion=self.getPackageVersion()
 
 		if not os.path.exists(versionFile):
@@ -51,6 +54,8 @@ class Tunnel(QObject):
 				shutil.rmtree(cachePath1)
 			if os.path.exists(cachePath2):
 				shutil.rmtree(cachePath2)
+			if os.path.exists(cachePath3):
+				shutil.rmtree(cachPath3)
 
 	#def clearCache
 
@@ -73,30 +78,39 @@ class Tunnel(QObject):
 		self._standAlone=False
 		self._isClient=False
 		isDesktop=False
-		cmd='lliurex-version -v'
-		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-		result=p.communicate()[0]
 
-		if type(result) is bytes:
-			result=result.decode()
-		flavours = [ x.strip() for x in result.split(',') ]
+		if os.path.exists(self.adiServer):
+			self._standAlone=True
+		else:
+			cmd='lliurex-version -v'
+			p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+			result=p.communicate()[0]
 
-		for item in flavours:
-			if 'server' in item:
-				self._standAlone=False
-				break
-			elif 'client' in item:
-				self._isClient=True
-			elif 'desktop' in item:
-				isDesktop=True
-				self._standAlone=True
-				
-		if self._isClient:
-			if isDesktop:
-				if not self._checkConnectionWithServer():
-					self._isClient=False
-				else:
+			if type(result) is bytes:
+				result=result.decode()
+			flavours = [ x.strip() for x in result.split(',') ]
+
+			for item in flavours:
+				if 'server' in item:
 					self._standAlone=False
+					break
+				elif 'client' in item:
+					self._isClient=True
+				elif 'desktop' in item:
+					isDesktop=True
+					if not os.path.exists(self.adiServer):
+						if os.path.exists(self.adiClient):
+							self._isClient=True
+						else:
+							self._standAlone=True
+					
+			if self._isClient:
+				if isDesktop:
+					if self._checkConnectionWithServer():
+						self._standAlone=False
+					else:
+						self._isClient=False
+						self._standAlone=True
 
 	#def is_StandAlone
 	
@@ -124,7 +138,6 @@ class Tunnel(QObject):
 
 	#def _getIsClient	
 
-		
 	standAlone=Property(bool,_getStandAlone,constant=True)
 	isClient=Property(bool,_getIsClient,constant=True)
 
