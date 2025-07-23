@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.21.4) jammy; urgency=medium
+
+  * Changed to support new model
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 23 Jul 2025 08:36:58 +0200
+
 lliurex-shutdowner (2.21.3) jammy; urgency=medium
 
   * Refactorized code
