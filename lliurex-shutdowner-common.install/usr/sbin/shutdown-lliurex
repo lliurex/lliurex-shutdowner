@@ -19,6 +19,7 @@ class Shutdowner:
 		
 		self.init_var()
 		self.flavours=[]
+		self.adi_server="/usr/bin/natfree-adi"
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
 		
@@ -50,7 +51,6 @@ class Shutdowner:
 		self.shutdown_function["client"]=self.client_shutdown
 		self.shutdown_function["desktop"]=self.standalone_shutdown
 		self.shutdown_function["unknown"]=self.basic_shutdown
-		
 		
 	#def init_var
 	
@@ -105,7 +105,6 @@ class Shutdowner:
 		
 	#def shutdown
 	
-	
 	def server_shutdown(self):
 		
 		self.dprint("Server shutdown")
@@ -131,7 +130,7 @@ class Shutdowner:
 		if not os.path.exists(THINCLIENT_CRON):			
 			self.dprint("Calling standalone_shutdown...")
 			self.standalone_shutdown(SERVER_WAIT_TIME)
-		
+	
 	#def server_shutdown
 	
 	def thin_shutdown(self):
@@ -148,7 +147,6 @@ class Shutdowner:
 			command="n4d-client -r -m shutdown -c ShutdownerClient"
 			os.system(command)
 
-		
 	#def  thin_shutdown
 	
 	def semi_shutdown(self):
@@ -175,11 +173,13 @@ class Shutdowner:
 		
 	#def unknown_shutdown
 	
-	
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Standalone shutdown")
-		
+
+		if os.path.exists(self.adi_server):
+			wait_time=SERVER_WAIT_TIME
+
 		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
 		standalone=standalone.decode("utf-8")
 		displays=set()
@@ -195,7 +195,6 @@ class Shutdowner:
 				
 			display=display.lstrip("(").rstrip(")")
 
-			
 			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 			self.dprint("\t%s"%command)
 			os.system(command)
@@ -229,23 +228,22 @@ class Shutdowner:
 	
 	def check_flavour(self):
 		
-		tmpFlavour=""
+		tmp_flavour=""
 		for item in self.flavours:
 			if 'server' in item:
-				tmpFlavour='server'
+				tmp_flavour='server'
 				break
 			elif 'client' in item:
-				tmpFlavour='client'
+				tmp_flavour='client'
 				break
 			elif 'desktop' in item:
-				tmpFlavour='desktop'
+				tmp_flavour='desktop'
 			else:
-				tmpFlavour='unknown'
+				tmp_flavour='unknown'
 				
-		return tmpFlavour
+		return tmp_flavour
 		
 	#def check_flavour
-	
 	
 #class Shutdowner
 

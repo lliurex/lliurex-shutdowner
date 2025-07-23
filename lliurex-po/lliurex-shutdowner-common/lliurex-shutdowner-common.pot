@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 13:31+0100\n"
+"POT-Creation-Date: 2025-03-20 13:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:50
+#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:43
 msgid "System will shutdown in a few seconds. Please, save your files"
 msgstr ""
 
-#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:51
+#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:44
 msgid "Cancel shutdown"
 msgstr ""

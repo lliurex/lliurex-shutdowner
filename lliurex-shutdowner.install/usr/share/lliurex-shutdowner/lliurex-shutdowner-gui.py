@@ -22,7 +22,6 @@ context.setContextProperty("settingsStackBridge", settingsStackBridge)
 
 url = QUrl("/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.qml")
 
-
 engine.load(url)
 if not engine.rootObjects():
 	sys.exit(-1)
