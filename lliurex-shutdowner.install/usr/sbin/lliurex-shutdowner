@@ -55,7 +55,7 @@ class Tunnel(QObject):
 			if os.path.exists(cachePath2):
 				shutil.rmtree(cachePath2)
 			if os.path.exists(cachePath3):
-				shutil.rmtree(cachPath3)
+				shutil.rmtree(cachePath3)
 
 	#def clearCache
 
