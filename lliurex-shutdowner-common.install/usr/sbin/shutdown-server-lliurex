@@ -48,9 +48,9 @@ class Shutdowner:
 	def what_am_i(self):
 		
 		if os.path.exists(self.adiServer):
-			return 'adi'
+			return "adi"
 
-		return 'unknown'
+		return "unknown"
 		'''
 		if os.system("lliurex-version -x adi")==0:
 			self.lliurex_flavour["adi"]=True

@@ -51,9 +51,9 @@ class Shutdowner:
 	def what_am_i(self):
 
 		if os.path.exists(self.adiServer):
-			return 'adi'
+			return "adi"
 		else:
-			return 'desktop'
+			return "desktop"
 		'''
 		self.get_flavours()
 
