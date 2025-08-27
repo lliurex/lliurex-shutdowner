@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.32.7) noble; urgency=medium
+
+  * Changed detection of ADI
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Wed, 27 Aug 2025 13:22:16 +0200
+
 lliurex-shutdowner (2.32.6) noble; urgency=medium
 
   * Connected adi with localhost
