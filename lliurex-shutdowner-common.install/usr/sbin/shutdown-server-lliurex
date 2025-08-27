@@ -17,6 +17,7 @@ class Shutdowner:
 	def __init__(self):
 		
 		self.init_var()
+		self.adiServer="/usr/bin/natfree-adi"
 		self.version_reference=["adi","desktop"]
 		self.current_flavour=self.what_am_i()
 		self.shutdown(self.current_flavour)
@@ -35,9 +36,10 @@ class Shutdowner:
 
 	def init_var(self):
 		
+		'''
 		self.lliurex_flavour={}
 		self.lliurex_flavour["adi"]=False
-	
+		'''
 		self.shutdown_function={}
 		self.shutdown_function["adi"]=self.server_shutdown
 		
@@ -45,12 +47,18 @@ class Shutdowner:
 	
 	def what_am_i(self):
 		
+		if os.path.exists(self.adiServer):
+			return "adi"
+
+		return "unknown"
+		'''
 		if os.system("lliurex-version -x adi")==0:
 			self.lliurex_flavour["adi"]=True
 		if self.lliurex_flavour["adi"]:
 			return "adi"
 			
 		return "unknown"
+		'''
 		
 	#def what_am_i
 		

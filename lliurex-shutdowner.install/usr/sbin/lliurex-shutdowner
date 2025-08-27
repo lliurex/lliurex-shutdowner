@@ -15,6 +15,7 @@ class Tunnel(QObject):
 
 		QObject.__init__(self)
 		self.adiClient="/usr/bin/natfree-tie"
+		self.adiServer="/usr/bin/natfree-adi"
 		self.clearCache()
 		self.isStandAlone()
 
@@ -75,6 +76,13 @@ class Tunnel(QObject):
 		self._standAlone=True
 		self._isClient=False
 		isDesktop=False
+
+		if not os.path.exists(self.adiServer):
+			if os.path.exists(self.adiClient):
+				if self._checkConnectionWithADI():
+					self._isClient=True
+					self._standAlone=False
+		'''
 		flavours=[]
 		cmd='lliurex-version -v'
 		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
@@ -99,7 +107,7 @@ class Tunnel(QObject):
 				if self._checkConnectionWithADI():
 					self._isClient=True
 					self._standAlone=False
-
+		'''
 	#def is_StandAlone
 	
 	def _checkConnectionWithADI(self):

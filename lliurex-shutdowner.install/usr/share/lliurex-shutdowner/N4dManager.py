@@ -147,6 +147,20 @@ class N4dManager:
 
 		self.standAlone=False
 		self.isClient=False
+
+		if os.path.exists(self.adiServer):
+			self.standAlone=False
+		else:
+			if os.path.exists(self.adiClient):
+				if self._checkConnectionWithADI():
+					self.isClient=True
+					self.standAlone=False
+				else:
+					self.standAlone=True
+			else:
+				self.standAlone=True				 
+		
+		'''
 		flavours=[]
 		isDesktop=False
 	
@@ -180,7 +194,7 @@ class N4dManager:
 		except Exception as e:
 			self.standAlone=True
 			self.isClient=False
-	
+		'''
 	#def isStandaloneMode
 
 	def isServerShut(self):

@@ -21,6 +21,7 @@ class Bridge(QObject):
 		QObject.__init__(self)
 
 		self.adiClient="/usr/bin/natfree-tie"
+		self.adiServer="/usr/bin/natfree-adi"
 		self.indicatorColor="#3daee9"
 		self.countdown=int(wait_time)*60
 		self.currentCounter=0
@@ -61,6 +62,20 @@ class Bridge(QObject):
 	def _showCancelBtn(self):
 
 		visibleBtn=False
+		
+		if os.path.exists(self.adiServer):
+			visibleBtn=True
+		else:
+			if os.path.exists(self.adiClient):
+				if self._checkConnectionWithADI():
+					visibleBtn=False
+				else:
+					visibleBtn=True
+			else:
+				visibleBtn=True
+
+		return visibleBtn	
+		'''
 		isClient=False
 		isDesktop=False
 		flavours=[]
@@ -89,6 +104,7 @@ class Bridge(QObject):
 					visibleBtn=False
 	
 		return visibleBtn
+		'''
 
 	#def _showCancelBtn
 	
@@ -201,7 +217,6 @@ if __name__=="__main__":
 		sys.exit(-1)
 
 	engine.quit.connect(QApplication.quit)
-	app.setWindowIcon(QIcon("/usr/share/icons/hicolor/scalable/apps/lliurex-shutdowner.svg"));
 	ret=app.exec()
 	del engine
 	del app
