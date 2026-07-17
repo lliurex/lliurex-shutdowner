@@ -1,5 +1,5 @@
-from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer
-from PySide6.QtGui import QCloseEvent
+from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer,QUrl
+from PySide6.QtGui import QCloseEvent,QDesktopServices
 import os 
 import sys
 import threading
@@ -11,16 +11,19 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class GatherInfo(QThread):
 
-	def __init__(self,*args):
+	infoGathered=Signal(bool)
 
-		QThread.__init__(self)
+	def __init__(self,manager):
+
+		super().__init__()
+		self.manager=manager
 	
 	#def __init__
 		
 	def run(self,*args):
 		
-		time.sleep(1)
-		self.ret=Bridge.n4dManager.loadInfo()
+		ret=self.manager.loadInfo()
+		self.infoGathered.emit(ret)
 
 	#def run
 
@@ -29,132 +32,152 @@ class Bridge(QObject):
 	INCORRECT_SERVER_ERROR=-50
 	LOAD_INFO_ERROR=-60
 
+	KIRIGAMI_MSG_OK=0
+	KIRIGAMI_MSG_ERROR=1
+	KIRIGAMI_MSG_WARNING=2
+	KIRIGAMI_MSG_INFO=3
+
+	currentStackChanged=Signal()
+	currentOptionStackChanged=Signal()
+	showMessageChanged=Signal()
+	isThereAreErrorChanged=Signal()
+
 	def __init__(self):
 
-		QObject.__init__(self)
+		super().__init__()
 		self.core=Core.Core.get_core()
-		Bridge.n4dManager=self.core.n4dManager
+		self.n4dManager=self.core.n4dManager
 		self.cronContent="%s %s * * %s root %s >> /var/log/syslog\n"
-		self._isThereAreError=[False,""]
+		self._isThereAreError={"show":False,"msgCode":""}
+
+	@Property(int, notify=currentStackChanged)
+	def currentStack(self):
+
+		return self._currentStack
+
+	#def currentStack	
+
+	@currentStack.setter
+	def currentStack(self,currentStack):
+		
+		if self._currentStack!=currentStack:
+			self._currentStack=currentStack
+			self.currentStackChanged.emit()	
+
+	#def currentStack
+
+	@Property(int,notify=currentOptionStackChanged)
+	def currentOptionStack(self):
+
+		return self._currentOptionStack
+
+	#def currentOptionStack	
+
+	@currentOptionStack.setter
+	def currentOptionStack(self,currentOptionStack):
+		
+		if self._currentOptionStack!=currentOptionStack:
+			self._currentOptionStack=currentOptionStack
+			self.currentOptionStackChanged.emit()	
+
+	#def _setcurrentOptionStack
+
+	@Property(dict,notify=showMessageChanged)
+	def showMessage(self):
+
+		return self._showMessage
+
+	#def showMessage
+	
+	@showMessage.setter
+	def showMessage(self,showMessage):
+
+		if self._showMessage!=showMessage:
+			self._showMessage=showMessage
+			self.showMessageChanged.emit()
+
+	#def showMessage
+
+	@Property(dict, notify=isThereAreErrorChanged)
+	def isThereAreError(self):
+
+		return self._isThereAreError
+
+	#def isThereAreError
+
+	@isThereAreError.setter
+	def isThereAreError(self,isThereAreError):
+
+		if self._isThereAreError!=isThereAreError:
+			self._isThereAreError=isThereAreError
+			self.isThereAreErrorChanged.emit()
+
+	#def isThereAreError
 
 	def initBridge(self):
 
 		self._currentStack=0
 		self._currentOptionStack=0
-		self._showMessage=[False,""]
+		self._showMessage={"show":False,"msgCode":"","type":""}
 		self.previousError=""
 
-		ret=Bridge.n4dManager.setServer(sys.argv[1],sys.argv[2])
-		if ret:
-			self.gatherInfo=GatherInfo()
-			self.gatherInfo.start()
-			self.gatherInfo.finished.connect(self._loadConfig)
-		else:
-			self.isThereAreError=[True,Bridge.INCORRECT_SERVER_ERROR]
+		ret=self.n4dManager.setServer(sys.argv[1],sys.argv[2])
+		if not ret:
+			self.isThereAreError={"show":True,"msgCode":Bridge.INCORRECT_SERVER_ERROR}
+			return
+		
+		self.gatherInfoT=GatherInfo(self.n4dManager)
+		self.gatherInfoT.start()
+		self.gatherInfoT.infoGathered.connect(self._loadConfig)
+		self.gatherInfoT.finished.connect(self.gatherInfoT.deleteLater)
 
 	#def initBridge	
 	
-	def _loadConfig(self):
+	@slot(bool)
+	def _loadConfig(self,ret):
 
-		if self.gatherInfo.ret:
-			self.core.clientStack.loadConfig()
-			self.core.serverStack.loadConfig()
-			self.core.settingsStack.loadConfig()
-			if not self.core.clientStack.loadError and not self.core.serverStack.loadError:
-				self.saveValuesTimer = QTimer(None)
-				self.saveValuesTimer.timeout.connect(self.saveValues)
-				self.saveValuesTimer.start(5000)
-				self.countToShowError=0
-				self.waitTimeError=20
-				self.currentStack=1
-			else:
-				self.isThereAreError=[True,Bridge.LOAD_INFO_ERROR]
-		else:
-			self.isThereAreError=[True,Bridge.LOAD_INFO_ERROR]
+		if not ret:
+			self.isThereAreError={"show":True,"msgCode":Bridge.LOAD_INFO_ERROR}
+			return
+
+		self.core.clientStack.loadConfig()
+		self.core.serverStack.loadConfig()
+		self.core.settingsStack.loadConfig()
+		
+		if self.core.clientStack.loadError and self.core.serverStack.loadError:
+			self.isThereAreError={"show":True,"msgCode":Bridge.LOAD_INFO_ERROR}
+			return
+
+		self.saveValuesTimer = QTimer(None)
+		self.saveValuesTimer.timeout.connect(self.saveValues)
+		self.saveValuesTimer.start(5000)
+		self.countToShowError=0
+		self.waitTimeError=20
+		self.currentStack=1
 
 	#def _loadInfo	
-
-	def _getCurrentStack(self):
-
-		return self._currentStack
-
-	#def _getCurrentStack	
-
-	def _setCurrentStack(self,currentStack):
-		
-		if self._currentStack!=currentStack:
-			self._currentStack=currentStack
-			self.on_currentStack.emit()	
-
-	#def _setcurrentStack
-
-	def _getCurrentOptionStack(self):
-
-		return self._currentOptionStack
-
-	#def _getCurrentOptionStack	
-
-	def _setCurrentOptionStack(self,currentOptionStack):
-		
-		if self._currentOptionStack!=currentOptionStack:
-			self._currentOptionStack=currentOptionStack
-			self.on_currentOptionStack.emit()	
-
-	#def _setcurrentOptionStack
-
-	def _getShowMessage(self):
-
-		return self._showMessage
-
-	#def _getShowMessage
-	
-	def _setShowMessage(self,showMessage):
-
-		if self._showMessage!=showMessage:
-			self._showMessage=showMessage
-			self.on_showMessage.emit()
-
-	#def _setShowMessage
-
-	def _getIsThereAreError(self):
-
-		return self._isThereAreError
-
-	#def _getIsThereAreError
-
-	def _setIsThereAreError(self,isThereAreError):
-
-		if self._isThereAreError!=isThereAreError:
-			self._isThereAreError=isThereAreError
-			self.on_isThereAreError.emit()
-
-	#def _setIsThereAreError
 
 	def checkChanges(self):
 
 		newVar=self.core.clientStack.gatherValues()
-		if newVar!=Bridge.n4dManager.shutdownerVar:
-			error=self.core.serverStack.checkCompatClientServer(newVar)
-			if not error[0]:
-				self.countToShowError=0
-				Bridge.n4dManager.shutdownerVar=newVar
-				self.previousError=""
-				Bridge.n4dManager.setShutdownerValues()
-				dayConfigured=False
-				for item in self.core.clientStack.weekClientValues:
-					if item:
-						dayConfigured=True
-						break
-				
-				if self.core.clientStack.cronSwitch and not dayConfigured:
-					return True
-			
-				return True
-			else:
-				if self.previousError!=error[1]:
-					self.showMessage=error
-					self.previousError=error[1]
+		if newVar==self.n4dManager.shutdownerVar:
+			return True
+
+		error=self.core.serverStack.checkCompatClientServer(newVar)
+		if error.get("error"):
+			if self.previousError!=error.get("code"):
+				self.previousError=error.get("code")
+				self.showMessage={"show":True,"msgCode":error.get("code"),"type":Bridge.KIRIGAMI_MSG_ERROR}
 				return False
+		
+		self.countToShowError=0
+		self.n4dManager.shutdownerVar=newVar
+		self.previousError=""
+		self.n4dManager.setShutdownerValues()
+		dayConfigured=False
+		
+		if self.core.clientStack.cronSwitch and not not any(self.core.clientStack.weekClientValues.values())::
+			return False
 		
 		return True
 	
@@ -164,52 +187,41 @@ class Bridge(QObject):
 
 		newVar=self.core.clientStack.gatherValues()
 
-		if newVar!=Bridge.n4dManager.shutdownerVar:
-			error=self.core.serverStack.checkCompatClientServer(newVar)
-			if not error[0]:
-				if not self.core.settingsStack.overrideError:
-					self.showMessage=[False,""]
-				self.previousError=""
-				Bridge.n4dManager.shutdownerVar=newVar
-				self.countToShowError=0
-				t=threading.Thread(target=Bridge.n4dManager.setShutdownerValues)
-				t.daemon=True
-				t.start()
-			else:
-				self.countToShowError+=5
-				if self.countToShowError>self.waitTimeError:
-					if self.previousError!=error[1]:
-						self.showMessage=error
-						self.previousError=error[1]
-						self.countToShowError=0
-		else:
+		if newVar==self.n4dManager.shutdownerVar:
 			if not self.core.settingsStack.overrideError:
-				self.showMessage=[False,""]	
+				self.showMessage={"show":False,"msgCode":"","type":""}	
 				self.previousError=""
 				self.countToShowError=0
+
+			return
+
+		error=self.core.serverStack.checkCompatClientServer(newVar)
+		if error.get("error"):
+			self.countToShowError+=5
+			if self.countToShowError>self.waitTimeError:
+				if self.previousError!=error.get("code"):
+					self.previousError=error.get("code")
+					self.showMessage={"show":True,"msgCode":error.get("code"),"type":Bridge.KIRIGAMI_MSG_ERROR}
+					self.countToShowError=0
+
+			return
+
+		if not self.core.settingsStack.overrideError:
+			self.showMessage={"show":False,"msgCode":"","type":""}
+			self.previousError=""
+			self.n4dManager.shutdownerVar=newVar
+			self.countToShowError=0
+			t=threading.Thread(target=self.n4dManager.setShutdownerValues)
+			t.daemon=True
+			t.start()
 	
 	#def saveValues
 
 	@Slot()
 	def openHelp(self):
-		lang=os.environ["LANG"]
 
-		if 'valencia' in lang:
-			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex+Shutdowner.'
-		else:
-			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex-Shutdowner'
-		
-		self.openHelpT=threading.Thread(target=self._openHelp)
-		self.openHelpT.daemon=True
-		self.openHelpT.start()
-
-	#def OpenHelp
-
-	def _openHelp(self):
-
-		os.system(self.helpCmd)
-
-	#def _openHelp
+		helpUrl='https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Lliurex+Shutdowner'
+		QDesktopServices.openUrl(QUrl(helpUrl))
 
 	@Slot(int)
 	def manageTransitions(self,stack):
@@ -223,31 +235,20 @@ class Bridge(QObject):
 	@Slot(bool,result=bool)
 	def closeShutdowner(self,state):
 		
-		if not self.isThereAreError[0]:
-			acceptedClose=self.checkChanges()
-			if acceptedClose:
-				if not self.core.clientStack._isStandAlone:
-					self.core.clientStack.clientTimer.stop()
-				self.saveValuesTimer.stop()
-				return True
-			else:
-				return False
-		else:
+		if self.isThereAreError.get("show"):
 			return True
 
+		acceptedClose=self.checkChanges()
+		
+		if acceptedClose:
+			if not self.core.clientStack._isStandAlone:
+				self.core.clientStack.clientTimer.stop()
+			self.saveValuesTimer.stop()
+			return True
+		else:
+			return False
+	
 	#def closeShutdowner	
-
-	on_currentStack=Signal()
-	currentStack=Property(int,_getCurrentStack,_setCurrentStack, notify=on_currentStack)
-
-	on_currentOptionStack=Signal()
-	currentOptionStack=Property(int,_getCurrentOptionStack,_setCurrentOptionStack, notify=on_currentOptionStack)
-
-	on_showMessage=Signal()
-	showMessage=Property('QVariantList',_getShowMessage,_setShowMessage, notify=on_showMessage)
-
-	on_isThereAreError=Signal()
-	isThereAreError=Property('QVariantList',_getIsThereAreError,_setIsThereAreError,notify=on_isThereAreError)
 
 #class Bridge
 
