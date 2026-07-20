@@ -123,7 +123,7 @@ class Bridge(QObject):
 		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
 		self._initClockClient={"hour":clientValues.get("hour"),"minute":clientValues.get("minute")}
 		self.clockClientValues=copy.deepcopy(self._initClockClient)
-		self._initWeekDaysClient={str(i):valor for i, valor enumare(clientValues.get("weekdays"))}
+		self._initWeekDaysClient={str(i):valor for i, valor in enumerate(clientValues.get("weekdays"))}
 		self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
 
 		if not self._isStandAlone:
@@ -154,17 +154,18 @@ class Bridge(QObject):
 			newVar["cron_values"]["weekdays"][i]=self.weekClientValues.get(key,False)
 
 		newVar["cron_values"]["server_shutdown"]=self.core.serverStack.serverShut
-		newVar["cron_values"]=self.clockClientValue
+		newVar["cron_values"]["hour"]=self.clockClientValues.get("hour")
+		newVar["cron_values"]["minute"]=self.clockClientValues.get("minute")
 
 		selectedDays=[
 			str(int(k)+1)
 			for k, v in self.weekClientValues.items()
-			if v and k.isdigit() and init(k) <5
+			if v and k.isdigit() and int(k) <5
 		]
 
 		days=",".join(selectedDays)
-		minute=self.clockClientValue.get("minute")
-		hour=self.clockClientValue.get("hour")
+		minute=self.clockClientValues.get("minute")
+		hour=self.clockClientValues.get("hour")
 		newVar["cron_content"]=self.core.mainStack.cronContent%(minute,hour,days,self.shutdownBin)
 		
 		if not self._isStandAlone and self.core.serverStack.serverShut:
@@ -188,7 +189,7 @@ class Bridge(QObject):
 	@Slot(dict)
 	def getClockClientValues(self,data):
 
-		changes=(key:value for key,value in data.items() if self.initClockClient[key]!=value)
+		changes={key:value for key,value in data.items() if self.initClockClient[key]!=value}
 
 		if changes:
 			self.initClockClient={**self.initClockClient,**changes}
@@ -200,7 +201,7 @@ class Bridge(QObject):
 	@Slot(dict)
 	def getWeekClientValues(self,data):
 
-		changes=(key:value for key,value in data.items() if self.initWeekDaysClient[key]!=value)
+		changes={key:value for key,value in data.items() if self.initWeekDaysClient[key]!=value}
 
 		if changes:
 			self.initWeekDaysClient={**self.initWeekDaysClient,**changes}

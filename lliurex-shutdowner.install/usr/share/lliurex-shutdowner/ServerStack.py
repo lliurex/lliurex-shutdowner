@@ -18,9 +18,9 @@ class Bridge(QObject):
 
 	def __init__(self,ticket=None,passwd=None):
 
-		QObject.__init__(self)
+		super().__init__()
 		self.core=Core.Core.get_core()
-		Bridge.n4dManager=self.core.n4dManager
+		self.n4dManager=self.core.n4dManager
 		self.customShutdownBin="/usr/sbin/shutdown-lliurex-server"
 		self.loadError=False
 
@@ -92,7 +92,7 @@ class Bridge(QObject):
 	
 	def loadConfig(self):
 
-		serverValues=Bridge.n4dManager.getServerCronValues()
+		serverValues=self.n4dManager.getServerCronValues()
 
 		if serverValues is None:
 			self.loadError=True
@@ -102,7 +102,7 @@ class Bridge(QObject):
 			self.loadError=True
 			return
 		
-		serverInfo=Bridge.n4dManager.isServerShut()
+		serverInfo=self.n4dManager.isServerShut()
 		self._serverShut=serverInfo.get("status")
 		
 		if not serverInfo.get("data"):
@@ -113,7 +113,7 @@ class Bridge(QObject):
 		self.customServerShut=copy.deepcopy(self._customServerShut)
 		self._initClockServer={"hour":serverValues.get("hour"),"minute":serverValues.get("minute")}
 		self.clockServerValues=copy.deepcopy(self._initClockServer)
-		self._initWeekDaysServer={str(i):valor for i, valor enumare(serverValues.get("weekdays"))}
+		self._initWeekDaysServer = {str(i): valor for i, valor in enumerate(serverValues.get("weekdays", []))}
 		self.weekServerValues=copy.deepcopy(self._initWeekDaysServer)
 	
 	#def load Config
@@ -133,7 +133,7 @@ class Bridge(QObject):
 		cronValues=newVar.get("cron_values",{})
 		serverCron=newVar.get("server_cron",{})
 
-		if cronValues.get("server_shutdown") and serverCron.get("custom_shutdown")
+		if cronValues.get("server_shutdown") and serverCron.get("custom_shutdown"):
 
 			serverValues=serverCron.get("cron_server_values",{})
 
@@ -161,10 +161,11 @@ class Bridge(QObject):
 
 	def gatherValuesServer(self,newVar):
 
-		if not any(self.weekServerValues.values())
+		if not any(self.weekServerValues.values()):
 			return newVar
 
-		newVar["server_cron"]["cron_server_values"]=self.clockServerValues
+		newVar["server_cron"]["cron_server_values"]["hour"]=self.clockServerValues.get("hour")
+		newVar["server_cron"]["cron_server_values"]["minute"]=self.clockServerValues.get("minute")
 		for i in range(5):
 			key=str(i)
 			newVar["server_cron"]["cron_server_values"]["weekdays"][i]=self.weekServerValues.get(key,False)
@@ -174,7 +175,7 @@ class Bridge(QObject):
 		selectedDays=[
 			str(int(k)+1)
 			for k, v in self.weekServerValues.items()
-			if v and k.isdigit() and init(k) <5
+			if v and k.isdigit() and int(k) <5
 		]
 
 		days=",".join(selectedDays)
@@ -189,7 +190,7 @@ class Bridge(QObject):
 	@Slot(dict)
 	def getClockServerValues(self,data):
 
-		changes=(key:value for key,value in data.items() if self.initClockServer[key]!=value)
+		changes={key:value for key,value in data.items() if self.initClockServer[key]!=value}
 
 		if changes:
 			self.initClockServer={**self.initClockServer,**changes}
@@ -201,7 +202,7 @@ class Bridge(QObject):
 	@Slot(dict)
 	def getWeekServerValues(self,data):
 
-		changes=(key:value for key,value in data.items() if self.initWeekDaysServer[key]!=value)
+		changes={key:value for key,value in data.items() if self.initWeekDaysServer[key]!=value}
 
 		if changes:
 			self.initWeekDaysServer={**self.initWeekDaysServer,**changes}

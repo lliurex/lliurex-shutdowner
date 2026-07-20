@@ -11,17 +11,20 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class SwitchOverrideShutdown(QThread):
 
-	def __init__(self,*args):
+	overrideSwitched=Signal(dict)
 
-		QThread.__init__(self)
-		self.state=args[0]
-		self.ret=[]
+	def __init__(self,manager,action):
+
+		super().__init__()
+		self,manager=manager
+		self.state=action
 
 	#def __init__
 
 	def run (self,*args):
 
-		self.ret=Bridge.n4dManager.switchOverrideShutdown(self.state)
+		ret=self.manager.switchOverrideShutdown(self.state)
+		self.overrideSwitched.emit(ret)
 	
 	#def run
 
@@ -29,65 +32,67 @@ class SwitchOverrideShutdown(QThread):
 
 class Bridge(QObject):
 
+	isClientShutDownOverrideChanged=Signal()
 
 	def __init__(self,ticket=None,passwd=None):
 
-		QObject.__init__(self)
+		super().__init__()
 		self.core=Core.Core.get_core()
-		Bridge.n4dManager=self.core.n4dManager
+		self.n4dManager=self.core.n4dManager
 		self.overrideError=False
 
 		#self.initBridge(ticket,passwd)
 
-	#def __init_-
+	#def __init__
 
-	def loadConfig(self):
-
-		self._isClientShutDownOverride=Bridge.n4dManager.isClientShutdownOverride()
-
-	#def getConfig
-
-	def _getIsClientShutDownOverride(self):
+	@Property(bool,notify=isClientShutDownOverrideChanged)
+	def isClientShutDownOverride(self):
 
 		return self._isClientShutDownOverride
 
-	#def _getIsClientShutDownOverride
+	#def isClientShutDownOverride
 
-	def _setIsClientShutDownOverride(self,isClientShutDownOverride):
+	@isClientShutDownOverride.setter
+	def isClientShutDownOverride(self,isClientShutDownOverride):
 
 		if self._isClientShutDownOverride!=isClientShutDownOverride:
 			self._isClientShutDownOverride=isClientShutDownOverride
-			self.on_isClientShutDownOverride.emit()
+			self.isClientShutDownOverrideChanged.emit()
 
-	#def _setIsClientShutDownOverride
+	#def isClientShutDownOverride
+
+	def loadConfig(self):
+
+		self._isClientShutDownOverride=self.n4dManager.isClientShutdownOverride()
+
+	#def getConfig
 
 	@Slot(bool)
 	def overrideShutdownSwitch(self,state):
 
 		self.isClientShutDownOverride=state
-		self.overrideShutDown=SwitchOverrideShutdown(self.isClientShutDownOverride)
-		self.overrideShutDown.start()
-		self.overrideShutDown.finished.connect(self._overrideShutdownSwitch)
+		self.overrideShutDownT=SwitchOverrideShutdown(self.n4dManager,self.isClientShutDownOverride)
+		self.overrideShutDownT.start()
+		sekf.overrideShutDownT.overrideSwitched.connect(self._overrideShutdownSwitch)
+		self.overrideShutDownT.finished.connect(self.overrideShutDownT.deleteLater)
 
 	#def overrrideShutdownSwitch
 
-	def _overrideShutdownSwitch(self):
+	@Slot(dict)
+	def _overrideShutdownSwitch(self,ret):
 
 		INCOMPATIBILITY_OVERRIDE_OPTION=-40
 
-		if not self.overrideShutDown.ret[1]:
-			if self.overrideShutDown.ret[0]=='Enable':
+		if not ret.get("status"):
+			if ret.get("action")=='Enable':
 				self.overrideError=True
-				self.core.mainStack.showMessage=[True,INCOMPATIBILITY_OVERRIDE_OPTION]	
+				self.core.mainStack.showMessage={"show":True,"msgCode":INCOMPATIBILITY_OVERRIDE_OPTION,"type":self.core.mainStack.KIRIGAMI_MSG_ERROR}	
 		else:
 			self.overrideError=False
 
-		self.isClientShutDownOverride=Bridge.n4dManager.isClientShutdownOverride()
+		self.isClientShutDownOverride=self.n4dManager.isClientShutdownOverride()
 
 	#def _overrrideShutdownSwitch
-
-	on_isClientShutDownOverride=Signal()
-	isClientShutDownOverride=Property(bool,_getIsClientShutDownOverride,_setIsClientShutDownOverride,notify=on_isClientShutDownOverride)
 
 #class Bridge
 

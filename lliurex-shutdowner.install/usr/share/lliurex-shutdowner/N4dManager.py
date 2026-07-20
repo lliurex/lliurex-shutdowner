@@ -118,7 +118,7 @@ class N4dManager:
 			if isinstance(ret,dict):
 				for clientData in ret.values():
 					if isinstance(clientData,dict) and clientData.get("missed_pings",0)<1:
-					count+=1
+						count+=1
 		except Exception as e:
 			pass
 			
@@ -134,9 +134,14 @@ class N4dManager:
 			
 	#def updateClientListThread
 	
-	def setShutdownerValues(self):
+	def setShutdownerValues(self,newVar):
 		
-		self.client.ShutdownerManager.save_variable(self.shutdownerVar)
+		self.shutdownerVar=newVar
+		try:
+			self.client.ShutdownerManager.save_variable(self.shutdownerVar)
+		except Exception as e:
+			print(f"ERROR: {e}")
+			pass
 		
 	#def setShutdownerValues
 	
@@ -152,7 +157,7 @@ class N4dManager:
 		self.isClient=False
 
 		if os.path.exists(self.adiServer):
-			return self.standAlone=False
+			return self.standAlone
 
 		if os.path.exists(self.adiClient):
 			if self._checkConnectionWithADI():
@@ -200,7 +205,7 @@ class N4dManager:
 		try:
 			ret=self.localClient.ShutdownerClient.enable_override_shutdown() if value else self.localClient.ShutdownerClient.disable_override_shutdown()
 
-		except Exception as :
+		except Exception as e:
 			pass
 
 		return {"action":action,"status":ret}

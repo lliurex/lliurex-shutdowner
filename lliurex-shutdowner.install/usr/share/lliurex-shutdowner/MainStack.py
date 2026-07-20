@@ -133,7 +133,7 @@ class Bridge(QObject):
 
 	#def initBridge	
 	
-	@slot(bool)
+	@Slot(bool)
 	def _loadConfig(self,ret):
 
 		if not ret:
@@ -171,12 +171,12 @@ class Bridge(QObject):
 				return False
 		
 		self.countToShowError=0
-		self.n4dManager.shutdownerVar=newVar
+		#self.n4dManager.shutdownerVar=newVar
 		self.previousError=""
-		self.n4dManager.setShutdownerValues()
+		self.n4dManager.setShutdownerValues(newVar)
 		dayConfigured=False
 		
-		if self.core.clientStack.cronSwitch and not not any(self.core.clientStack.weekClientValues.values())::
+		if self.core.clientStack.cronSwitch and not not any(self.core.clientStack.weekClientValues.values()):
 			return False
 		
 		return True
@@ -211,7 +211,7 @@ class Bridge(QObject):
 			self.previousError=""
 			self.n4dManager.shutdownerVar=newVar
 			self.countToShowError=0
-			t=threading.Thread(target=self.n4dManager.setShutdownerValues)
+			t=threading.Thread(target=self.n4dManager.setShutdownerValues(newVar))
 			t.daemon=True
 			t.start()
 	
