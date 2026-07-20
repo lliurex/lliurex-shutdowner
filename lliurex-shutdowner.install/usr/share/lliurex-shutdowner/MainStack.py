@@ -2,7 +2,6 @@ from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer,QUrl
 from PySide6.QtGui import QCloseEvent,QDesktopServices
 import os 
 import sys
-import threading
 import time
 import copy
 
@@ -27,6 +26,22 @@ class GatherInfo(QThread):
 
 	#def run
 
+class SaveInfo(QThread):
+
+	def __init__(self,manager,newVar):
+
+		super().__init__()
+		self.manager=manager
+		self.newVar=newVar
+	
+	#def __init__
+		
+	def run(self,*args):
+		
+		self.manager.setShutdownerValues(self.newVar)
+
+	#def run
+
 class Bridge(QObject):
 
 	INCORRECT_SERVER_ERROR=-50
@@ -40,7 +55,8 @@ class Bridge(QObject):
 	currentStackChanged=Signal()
 	currentOptionStackChanged=Signal()
 	showMessageChanged=Signal()
-	isThereAreErrorChanged=Signal()
+	isThereAnErrorChanged=Signal()
+	closeGuiChanged=Signal()
 
 	def __init__(self):
 
@@ -48,7 +64,9 @@ class Bridge(QObject):
 		self.core=Core.Core.get_core()
 		self.n4dManager=self.core.n4dManager
 		self.cronContent="%s %s * * %s root %s >> /var/log/syslog\n"
-		self._isThereAreError={"show":False,"msgCode":""}
+		self._isThereAnError={"show":False,"msgCode":""}
+		self._closeGui=False
+		self.saveInfoT=None
 
 	@Property(int, notify=currentStackChanged)
 	def currentStack(self):
@@ -98,21 +116,37 @@ class Bridge(QObject):
 
 	#def showMessage
 
-	@Property(dict, notify=isThereAreErrorChanged)
-	def isThereAreError(self):
+	@Property(dict, notify=isThereAnErrorChanged)
+	def isThereAnError(self):
 
-		return self._isThereAreError
+		return self._isThereAnError
 
-	#def isThereAreError
+	#def isThereAnError
 
-	@isThereAreError.setter
-	def isThereAreError(self,isThereAreError):
+	@isThereAnError.setter
+	def isThereAnError(self,isThereAnError):
 
-		if self._isThereAreError!=isThereAreError:
-			self._isThereAreError=isThereAreError
-			self.isThereAreErrorChanged.emit()
+		if self._isThereAnError!=isThereAnError:
+			self._isThereAnError=isThereAnError
+			self.isThereAnErrorChanged.emit()
 
-	#def isThereAreError
+	#def isThereAnError
+
+	@Property(bool,notify=closeGuiChanged)
+	def closeGui(self):
+
+		return self._closeGui
+
+	#def closeGui
+
+	@closeGui.setter
+	def closeGui(self,closeGui):
+
+		if self._closeGui!=closeGui:
+			self._closeGui=closeGui
+			self.closeGuiChanged.emit()
+
+	#def closeGui
 
 	def initBridge(self):
 
@@ -123,7 +157,7 @@ class Bridge(QObject):
 
 		ret=self.n4dManager.setServer(sys.argv[1],sys.argv[2])
 		if not ret:
-			self.isThereAreError={"show":True,"msgCode":Bridge.INCORRECT_SERVER_ERROR}
+			self.isThereAnError={"show":True,"msgCode":Bridge.INCORRECT_SERVER_ERROR}
 			return
 		
 		self.gatherInfoT=GatherInfo(self.n4dManager)
@@ -137,7 +171,7 @@ class Bridge(QObject):
 	def _loadConfig(self,ret):
 
 		if not ret:
-			self.isThereAreError={"show":True,"msgCode":Bridge.LOAD_INFO_ERROR}
+			self.isThereAnError={"show":True,"msgCode":Bridge.LOAD_INFO_ERROR}
 			return
 
 		self.core.clientStack.loadConfig()
@@ -145,7 +179,7 @@ class Bridge(QObject):
 		self.core.settingsStack.loadConfig()
 		
 		if self.core.clientStack.loadError and self.core.serverStack.loadError:
-			self.isThereAreError={"show":True,"msgCode":Bridge.LOAD_INFO_ERROR}
+			self.isThereAnError={"show":True,"msgCode":Bridge.LOAD_INFO_ERROR}
 			return
 
 		self.saveValuesTimer = QTimer(None)
@@ -176,7 +210,7 @@ class Bridge(QObject):
 		self.n4dManager.setShutdownerValues(newVar)
 		dayConfigured=False
 		
-		if self.core.clientStack.cronSwitch and not not any(self.core.clientStack.weekClientValues.values()):
+		if self.core.clientStack.cronSwitch and not any(self.core.clientStack.weekClientValues.values()):
 			return False
 		
 		return True
@@ -207,15 +241,26 @@ class Bridge(QObject):
 			return
 
 		if not self.core.settingsStack.overrideError:
+			if self.saveInfoT is not None and self.saveInfoT.isRunning():
+				return
 			self.showMessage={"show":False,"msgCode":"","type":""}
 			self.previousError=""
-			self.n4dManager.shutdownerVar=newVar
 			self.countToShowError=0
-			t=threading.Thread(target=self.n4dManager.setShutdownerValues(newVar))
-			t.daemon=True
-			t.start()
-	
+			self.saveInfoT=SaveInfo(self.n4dManager,newVar)
+			self.saveInfoT.start()
+
 	#def saveValues
+
+	def stopServices(self):
+
+		if hasattr(self,'saveValuesTimer'):
+			self.saveValuesTimer.stop()
+
+		if self.saveInfoT is not None and self.saveInfoT.isRunning():
+			self.saveInfoT.requestInterruption()
+			self.saveInfoT.wait()
+
+	#def stopServices
 
 	@Slot()
 	def openHelp(self):
@@ -232,11 +277,11 @@ class Bridge(QObject):
 
 	#def manageTransitions
 
-	@Slot(bool,result=bool)
-	def closeShutdowner(self,state):
+	@Slot()
+	def closeShutdowner(self):
 		
-		if self.isThereAreError.get("show"):
-			return True
+		if self.isThereAnError.get("show"):
+			self.closeGui=False
 
 		acceptedClose=self.checkChanges()
 		
@@ -244,9 +289,9 @@ class Bridge(QObject):
 			if not self.core.clientStack._isStandAlone:
 				self.core.clientStack.clientTimer.stop()
 			self.saveValuesTimer.stop()
-			return True
+			self.closeGui=True
 		else:
-			return False
+			self.closeGui=False
 	
 	#def closeShutdowner	
 

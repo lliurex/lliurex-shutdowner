@@ -29,6 +29,7 @@ if not engine.rootObjects():
 	sys.exit(-1)
 
 engine.quit.connect(QApplication.quit)
+app.aboutToQuit.connect(mainStackBridge.stopServices)
 ret=app.exec()
 del engine
 del app

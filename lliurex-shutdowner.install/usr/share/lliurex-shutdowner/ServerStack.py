@@ -140,7 +140,6 @@ class Bridge(QObject):
 			serverTime=(serverValues.get("hour",0)*60+serverValues.get("minute",0))
 			clientTime=(cronValues.get("hour",0)*60+cronValues.get("minute",0))
 			errorClock=serverTime<clientTime
-
 			serverWeekdays=serverValues.get("weekdays",[])
 			clientWeekdays=cronValues.get("weekdays",[])
 			errorWeek=any(

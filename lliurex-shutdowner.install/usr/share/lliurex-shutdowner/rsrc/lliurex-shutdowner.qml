@@ -3,89 +3,119 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import org.kde.plasma.core as PlasmaCore
-import org.kde.kirigami as Kirigami
-
 
 ApplicationWindow {
+    id:mainWindow
+    property bool closing: false
+    property int margin: 1
+
     visible: true
     title: "LliureX Shutdowner"
-    property int margin: 1
+
     width: mainLayout.implicitWidth + 2 * margin
     height: mainLayout.implicitHeight + 2 * margin
-    minimumWidth: mainLayout.Layout.minimumWidth + 2 * margin
-    minimumHeight: mainLayout.Layout.minimumHeight + 2 * margin
-    maximumWidth: mainLayout.Layout.maximumWidth + 2 * margin
-    maximumHeight: mainLayout.Layout.maximumHeight + 2 * margin
+
+    minimumWidth: 800 + 2 * margin
+    minimumHeight: 600 + 2 * margin
+    maximumWidth:800 + 2 * margin
+    maximumHeight: 600 + 2 * margin
+
     Component.onCompleted: {
-        x = Screen.width / 2 - width / 2
-        y = Screen.height / 2 - height / 0.5
+        x = Screen.width / 2 - minimumWidth / 2
+        y = Screen.height / 2 - minimumHeight /2
     }
 
-    onClosing:(close)=> {
-        if (mainStackBridge.closeShutdowner(true)){
-            close.accepted=true;
-        }else{
-            close.accepted=false;   
+    
+    onClosing: (close) => {
+        close.accepted = closing;
+        if (!closing) {
+            mainStackBridge.closeShutdowner();
+            closeTimer.start();
+        }
+    }
+
+    Timer {
+        id: closeTimer
+        interval: 100
+        repeat: true
+        onTriggered: {
+            if (mainStackBridge.closeGui) {
+                stop();
+                mainWindow.closing = true;
+                mainWindow.close();
+            }
         }
     }
 
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
-        anchors.margins: margin
-        Layout.minimumWidth:795
-        Layout.maximumWidth:795
 
-        RowLayout {
-            id: bannerBox
-            Layout.alignment:Qt.AlignTop
-            Layout.minimumHeight:120
-            Layout.maximumHeight:120
+        Rectangle{
+            color: "#0049ab"
+            Layout.fillWidth: true
+            Layout.preferredHeight: 120
+
             Image{
                 id:banner
-                source: "/usr/share/lliurex-shutdowner/rsrc/lliurex-shutdowner.png"
+                source: "lliurex-shutdowner.png"
+                asynchronous:false
+                anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
             }
         }
 
         StackView {
-            id: mainWiew
-            property int currentIndex:mainStackBridge.currentStack
-            implicitWidth: 795
-            Layout.alignment:Qt.AlignVCenter
-            Layout.leftMargin:0
-	    Layout.minimumHeight:clientStackBridge.isStandAlone? 430:480
-	    Layout.maximumHeight:clientStackBridge.isStandAlone? 430:480
+            id: mainView
+            Layout.fillWidth:true
+            Layout.fillHeight:true
+            Layout.minimumHeight:480
 
+            property int currentIndex:mainStackBridge.currentStack
             initialItem:loadingView
 
             onCurrentIndexChanged:{
-                switch(currentIndex){
+                switch (currentIndex){
                     case 0:
                         mainView.replace(loadingView)
-                        break
+                        break;
                     case 1:
-                        mainWiew.replace(applicationOptionView)
-                        break
+                        mainView.replace(applicationOptionsView)
                 }
             }
-        }
 
-        Component{
-            id:loadingView
-            Loading{
-                id:loading
+            replaceEnter: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 60
+                }
+            }
+            replaceExit: Transition {
+                NumberAnimation { 
+                    property: "opacity"
+                    from: 1
+                    to: 0
+                    duration: 60
+                }
+            }
+
+            Component{
+                id:loadingView
+                Loading{
+                    id:loading
+                }
+            }
+            Component{
+                id:applicationOptionsView
+                ApplicationOptions{
+                    id:applicationOptions
+                }
             }
 
         }
 
-        Component{
-            id:applicationOptionView
-            ApplicationOptions{
-                id:applicationOption
-            }
-
-        }
     }
+}
 
-
-}       

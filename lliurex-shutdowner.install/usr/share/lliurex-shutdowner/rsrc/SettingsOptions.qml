@@ -5,33 +5,32 @@ import org.kde.kirigami as Kirigami
 
 
 Rectangle{
-    color:"transparent"
-    Text{ 
-       text:i18nd("lliurex-shutdowner","System settings")
-        font.family: "Quattrocento Sans Bold"
-        font.pointSize: 16
-    }
+	color:"transparent"
 
-    GridLayout {
-		id: mainGridSettings
-		rows:1
-		flow: GridLayout.TopToBottom
-		Layout.fillWidth: true
-		anchors.horizontalCenter:parent.horizontalCenter
-		       
-     	GridLayout {
-     		id: settingsGrid
-     		columns:2
-     		flow: GridLayout.LeftToRight
-     		Layout.bottomMargin: 10
-     		columnSpacing:10
-     		Layout.alignment:Qt.AlignHCenter
-     		Layout.topMargin:55
+   ColumnLayout{
+     	id:generalLayout
+      anchors.top:parent.top
+      anchors.left:parent.left
+      anchors.right:parent.right
+
+      anchors.leftMargin:5
+      anchors.rightMargin:15
+      anchors.bottomMargin:25
+      spacing: 10
+
+	   Text{ 
+	      text:i18nd("lliurex-shutdowner","System settings")
+	      font.pointSize: 16
+	   }
+     
+     	ColumnLayout{
+         id: settingsGrid
+         spacing:5
+
 
      		Text {
      			id:textMessageSettings
      			text:i18nd("lliurex-shutdowner","Disable automatic shutdown on this computer:")
-				font.family: "Quattrocento Sans Bold"
 				font.pointSize: 10
 				Layout.alignment:Qt.AlignRight
 			}   
@@ -59,7 +58,7 @@ Rectangle{
 				}	
 
 				onToggled: {
-					settingsStackBridge.overrideShutdownSwitch(toggleswitch.checked);
+					settingsStackBridge.overrideShutdownSwitch(toggleswitch.checked)
 				}
 			}
 		}
