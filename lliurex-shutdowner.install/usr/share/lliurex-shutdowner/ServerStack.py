@@ -127,7 +127,7 @@ class Bridge(QObject):
 		errorWeek=False
 		errorClock=False
 
-		if self.core.clientStack._isStandAlone or newVar.get("cron_enabled"):
+		if self.core.clientStack._isStandAlone or not newVar.get("cron_enabled"):
 			return {"error":False,"code":""}
 
 		cronValues=newVar.get("cron_values",{})
@@ -137,8 +137,8 @@ class Bridge(QObject):
 
 			serverValues=serverCron.get("cron_server_values",{})
 
-			serverTime=(serverValues.get("hour",0)*60+serverValues.get("miniute",0)*60)
-			clientTime=(cronValues.get("hour",0)*60+cronValues.get("minute")*60)
+			serverTime=(serverValues.get("hour",0)*60+serverValues.get("minute",0))
+			clientTime=(cronValues.get("hour",0)*60+cronValues.get("minute",0))
 			errorClock=serverTime<clientTime
 
 			serverWeekdays=serverValues.get("weekdays",[])
