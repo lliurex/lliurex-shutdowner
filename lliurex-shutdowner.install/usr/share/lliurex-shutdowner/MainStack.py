@@ -197,15 +197,21 @@ class Bridge(QObject):
 		if newVar==self.n4dManager.shutdownerVar:
 			return True
 
+		error=self.core.clientStack.checkAnyDayChecked()
+		if error.get("error"):
+			if self.previousError!=error.get("code"):
+				self.previousError=error.get("code")
+				self.showMessage={"show":True,"msgCode":error.get("code"),"type":Bridge.KIRIGAMI_MSG_ERROR}
+			return False
+
 		error=self.core.serverStack.checkCompatClientServer(newVar)
 		if error.get("error"):
 			if self.previousError!=error.get("code"):
 				self.previousError=error.get("code")
 				self.showMessage={"show":True,"msgCode":error.get("code"),"type":Bridge.KIRIGAMI_MSG_ERROR}
-				return False
+			return False
 		
 		self.countToShowError=0
-		#self.n4dManager.shutdownerVar=newVar
 		self.previousError=""
 		self.n4dManager.setShutdownerValues(newVar)
 		dayConfigured=False
@@ -226,8 +232,15 @@ class Bridge(QObject):
 				self.showMessage={"show":False,"msgCode":"","type":""}	
 				self.previousError=""
 				self.countToShowError=0
-
 			return
+
+		error=self.core.clientStack.checkAnyDayChecked()
+		if error.get("error"):
+			if self.previousError!=error.get("code"):
+				self.previousError=error.get("code")
+				self.showMessage={"show":True,"msgCode":error.get("code"),"type":Bridge.KIRIGAMI_MSG_ERROR}
+				self.countToShowError=0
+			return 
 
 		error=self.core.serverStack.checkCompatClientServer(newVar)
 		if error.get("error"):

@@ -16,9 +16,9 @@ ApplicationWindow {
     height: mainLayout.implicitHeight + 2 * margin
 
     minimumWidth: 800 + 2 * margin
-    minimumHeight: 600 + 2 * margin
+    minimumHeight: 545 + 2 * margin
     maximumWidth:800 + 2 * margin
-    maximumHeight: 600 + 2 * margin
+    maximumHeight: 545 + 2 * margin
 
     Component.onCompleted: {
         x = Screen.width / 2 - minimumWidth / 2
@@ -52,7 +52,7 @@ ApplicationWindow {
         anchors.fill: parent
 
         Rectangle{
-            color: "#0049ab"
+            color: "#23262f"
             Layout.fillWidth: true
             Layout.preferredHeight: 120
 
@@ -69,7 +69,7 @@ ApplicationWindow {
             id: mainView
             Layout.fillWidth:true
             Layout.fillHeight:true
-            Layout.minimumHeight:480
+            Layout.minimumHeight:420
 
             property int currentIndex:mainStackBridge.currentStack
             initialItem:loadingView

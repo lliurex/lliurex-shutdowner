@@ -11,7 +11,7 @@ Item {
     property alias dayBtnChecked: dayBtn.checked
     property alias dayBtnText: dayBtn.text
 
-    property bool layoutEnabled: true
+    property alias dayBtnEnabled:dayBtn.enabled
 
     signal dayBtnClicked(bool value)
 
@@ -45,7 +45,8 @@ Item {
     }
 
     function paletteBtn(status, isHovered = false) {
-        if (dayBtnItem.layoutEnabled) { 
+
+        if (dayBtn.enabled) { 
             if (status) {
                 return isHovered ? "#add8e6" : "#3daee9";
             } else {
@@ -57,7 +58,7 @@ Item {
     }
 
     function paletteBtnText(status) {
-        if (dayBtnItem.layoutEnabled) {
+        if (dayBtn.enabled) {
             return status ? "#ffffff" : "#000000";
         } else {
             return status ? "#ffffff" : "#b9babc";

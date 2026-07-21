@@ -8,20 +8,19 @@ Rectangle{
 
 	ColumnLayout{
 		id:generalLayout
-      anchors.top:parent.top
-      anchors.left:parent.left
-      anchors.right:parent.right
+      	anchors.top:parent.top
+      	anchors.left:parent.left
+      	anchors.right:parent.right
 
-      anchors.leftMargin:5
-      anchors.rightMargin:15
-      anchors.bottomMargin:25
-      spacing: 10
+      	anchors.leftMargin:5
+      	anchors.rightMargin:15
+      	anchors.bottomMargin:25
+      	spacing: 10
 
-      Text{ 
-      	text:!clientStackBridge.isStandAlone?i18nd("lliurex-shutdowner","Client shutdown configuration"):i18nd("lliurex-shutdowner","Desktop shutdown configuration")
-      	font.pointSize: 16
-
-      }
+      	Text{ 
+	      	text:!clientStackBridge.isStandAlone?i18nd("lliurex-shutdowner","Client shutdown configuration"):i18nd("lliurex-shutdowner","Desktop shutdown configuration")
+	      	font.pointSize: 16
+	    }
 
     
 		GroupBox {

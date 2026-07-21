@@ -141,7 +141,8 @@ RowLayout{
             type: getMessageType(mainStackBridge.showMessage.type)
             Layout.fillWidth:true
             Layout.bottomMargin:15
-            Layout.rightMargin:10
+            Layout.leftMargin:5
+            Layout.rightMargin:15
             
         }
 
@@ -158,6 +159,8 @@ RowLayout{
                 return i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other")
             case -40:
                 return i18nd("lliurex-shutdowner","Disabling automatic shutdown in this computer is only posible if automatic server shutdown is not enabled")
+            case -50:
+                return i18nd("lliurex-shutdowner","No days has been set to schedule the shutdown")
             default:
                 return i18nd("lliurex-shutdowner","Changes saved successfully");
         }

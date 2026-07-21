@@ -11,6 +11,10 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class Bridge(QObject):
 
+	INCOMPATIBILITY_HOUR_ERROR=-10
+	INCOMPATIBILITY_WEEK_ERROR=-20
+	INCOMPATIBILITY_HOUR_AND_WEEK_ERROR=-30
+
 	initClockServerChanged=Signal()
 	initWeekDaysServerChanged=Signal()
 	serverShutChanged=Signal()
@@ -120,10 +124,6 @@ class Bridge(QObject):
 
 	def checkCompatClientServer(self,newVar):
 
-		INCOMPATIBILITY_HOUR_ERROR=-10
-		INCOMPATIBILITY_WEEK_ERROR=-20
-		INCOMPATIBILITY_HOUR_AND_WEEK_ERROR=-30
-
 		errorWeek=False
 		errorClock=False
 
@@ -148,11 +148,11 @@ class Bridge(QObject):
 			)
 		
 		if errorClock and errorWeek:
-			return {"error":True,"code":INCOMPATIBILITY_HOUR_AND_WEEK_ERROR}
+			return {"error":True,"code":Bridge.INCOMPATIBILITY_HOUR_AND_WEEK_ERROR}
 		elif errorClock:
-			return {"error":True,"code":INCOMPATIBILITY_HOUR_ERROR}
+			return {"error":True,"code":Bridge.INCOMPATIBILITY_HOUR_ERROR}
 		elif errorWeek:
-			return {"error":True,"code":INCOMPATIBILITY_WEEK_ERROR}
+			return {"error":True,"code":Bridge.INCOMPATIBILITY_WEEK_ERROR}
 
 		return {"error":False,"code":""}
 	

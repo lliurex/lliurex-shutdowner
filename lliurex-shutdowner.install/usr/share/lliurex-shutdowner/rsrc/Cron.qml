@@ -41,7 +41,7 @@ ColumnLayout{
                 Text {
                     text: modelData.toString().padStart(2, "0")
                     font.pointSize: 40
-                    color: itemHoverHandler.hovered?"#add8e6":"#3daee9"
+                    color: paletteText(itemHoverHandler.hovered)
                     anchors.centerIn: parent
                 }
 
@@ -196,6 +196,7 @@ ColumnLayout{
 			onClicked:{
 				timeSelector.open()
 			}
+			
 		}
 		
 	}	
@@ -204,9 +205,12 @@ ColumnLayout{
 		id: daysLayout
 		enabled:daysLayoutEnabled
 		Layout.alignment:Qt.AlignHCenter
-		Layout.fillWidth: true
 		Layout.bottomMargin: 10
 		spacing:8
+
+        Item{
+            Layout.fillWidth:true
+        }
 
 		ListModel {
             id: daysModel
@@ -224,6 +228,7 @@ ColumnLayout{
         	DayButton{
         		dayBtnChecked:weekDays[model.key]
         		dayBtnText: i18nd("bell-scheduler", model.name)
+                dayBtnEnabled:daysLayout.enabled
         		onDayBtnClicked: (value) => {
                     updateWeekDays({[model.key]: value});
                 }
@@ -231,11 +236,15 @@ ColumnLayout{
         	}
 
         }
+
+        Item{
+            Layout.fillWidth:true
+        }
 	    
 	}
 
 
-	 TimeSelector {
+	TimeSelector {
         id: timeSelector
         
         Binding{
@@ -281,5 +290,14 @@ ColumnLayout{
 
     function validateEntry(hour, minute) {
         return hour !== "" && minute !== "";
+    }
+
+    function paletteText(isHovered=false) {
+
+        if (clockLayout.enabled) { 
+            return isHovered ? "#add8e6":"#3daee9"
+        }else {
+            return "#87cefa"
+        }
     }
 }				

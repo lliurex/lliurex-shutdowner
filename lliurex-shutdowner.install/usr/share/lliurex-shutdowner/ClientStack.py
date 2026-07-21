@@ -11,6 +11,8 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class Bridge(QObject):
 
+	NO_DAYS_CHECKED=-50
+
 	isCronEnabledChanged=Signal()
 	initClockClientChanged=Signal()
 	initWeekDaysClientChanged=Signal()
@@ -177,6 +179,15 @@ class Bridge(QObject):
 		return newVar
 
 	#def gatherValues
+
+	def checkAnyDayChecked(self):
+
+		if self.cronSwitch and not any(self.weekClientValues.values()):
+			return {"error":True,"code":Bridge.NO_DAYS_CHECKED}
+
+		return {"error":False,"code":""}
+
+	#def checkAnyDayChecked
 	
 	@Slot(bool)
 	def getCronSwitchValue(self,state):
@@ -207,7 +218,7 @@ class Bridge(QObject):
 			self.initWeekDaysClient={**self.initWeekDaysClient,**changes}
 		
 		self.weekClientValues=self.initWeekDaysClient
-	
+
 	#def getWeekClientValues
 
 	@Slot()
