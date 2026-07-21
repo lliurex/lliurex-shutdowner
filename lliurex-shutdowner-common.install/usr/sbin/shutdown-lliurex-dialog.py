@@ -16,6 +16,8 @@ _=gettext.gettext
 
 class Bridge(QObject):
 
+	timeRemainingChanged=Signal()
+
 	def __init__(self,wait_time):
 
 		QObject.__init__(self)
@@ -31,13 +33,42 @@ class Bridge(QObject):
 		self.countdownTimer.timeout.connect(self.updateCountDown)
 
 		if wait_time=="2":
-			self._timeRemaining=["02:00",self.indicatorColor]
+			self._timeRemaining={"time":"02:00","color":self.indicatorColor}
 		else:
-			self._timeRemaining=["01:00",self.indicatorColor]
+			self._timeRemaining={"time":"01:00","color":self.indicatorColor}
 
 		self.initValues()
 
 	#def __init__
+
+	@Property(dict,notify=timeRemainingChanged)
+	def timeRemaining(self):
+
+		return self._timeRemaining
+
+	#def timeRemaining	
+
+	@timeRemaining.setter
+	def timeRemaining(self,timeRemaining):
+
+		self._timeRemaining=timeRemaining
+		self.timeRemainingChanged.emit()	
+
+	#def timeRemaining
+
+	@Property(dict,constant=True)
+	def translateMsg(self):
+
+		return self._translateMsg
+
+	#def translateMsg
+
+	@Property(bool,constant=True)
+	def visibleCancelBtn(self):
+
+		return self._visibleCancelBtn
+
+	#def visibleCancelBtn	
 	
 	def initValues(self):
 		
@@ -53,7 +84,7 @@ class Bridge(QObject):
 		warningMsg=_("System will shutdown in a few seconds. Please, save your files")
 		cancelBtnMsg=_("Cancel shutdown")
 
-		self._translateMsg=[warningMsg,cancelBtnMsg]
+		self._translateMsg={"msg":warningMsg,"btnMsg":cancelBtnMsg}
 		self._visibleCancelBtn=visibleBtn
 		self.countdownTimer.start(1000)
 	
@@ -75,37 +106,7 @@ class Bridge(QObject):
 				visibleBtn=True
 
 		return visibleBtn	
-		'''
-		isClient=False
-		isDesktop=False
-		flavours=[]
-		cmd='lliurex-version -v'
-		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-		result=p.communicate()[0]
-
-		if type(result) is bytes:
-			result=result.decode()
-
-		for x in result.split(","):
-			if x.strip() in self.versionReference:
-				flavours.append(x.strip())
-
-		for item in flavours:
-			if 'adi' in item:
-				visibleBtn=True
-				break
-			elif 'desktop' in item:
-				isDesktop=True
-				visibleBtn=True
-				
-		if isDesktop:
-			if os.path.exists(self.adiClient):
-				if self._checkConnectionWithADI():
-					visibleBtn=False
 	
-		return visibleBtn
-		'''
-
 	#def _showCancelBtn
 	
 	def _checkConnectionWithADI(self):
@@ -123,7 +124,22 @@ class Bridge(QObject):
 	def updateCountDown(self):
 
 		self.currentCounter+=1
+		count=self.countdown-self.currentCounter
 
+		if count>=0:
+			mins,secs=divmod(count,60)
+
+			if count<=10:
+				self.indicatorColor="#ff0000"
+
+			self.timeRemaining={"time":f"{mins:02d}:{secs:02d}","color":self.indicatorColor}
+
+			self.blockDestroy=False
+		else:
+			self.countdownTimer.stop()
+			self.blockDestroy=True
+
+		'''
 		if self.countdown-self.currentCounter >=0:
 			count=self.countdown-self.currentCounter
 			
@@ -146,34 +162,10 @@ class Bridge(QObject):
 		else:
 			self.countdownTimer.stop()
 			self.blockDestroy=True
+		'''
 
 		
 	#def updateCountDown
-
-	def _getTranslateMsg(self):
-
-		return self._translateMsg
-
-	#def _getVisibleCancelBtn	
-	
-	def _getVisibleCancelBtn(self):
-
-		return self._visibleCancelBtn
-
-	#def _getVisibleCancelBtn	
-
-	def _getTimeRemaining(self):
-
-		return self._timeRemaining
-
-	#def _getTimeRemaining	
-
-	def _setTimeRemaining(self,timeRemaining):
-
-		self._timeRemaining=timeRemaining
-		self.on_timeRemaining.emit()	
-
-	#def _setTimeRemaining
 
 	@Slot()
 	def cancelClicked(self):
@@ -192,12 +184,6 @@ class Bridge(QObject):
 		return self.blockDestroy	
 
 	#def closed	
-		
-	on_timeRemaining=Signal()
-	timeRemaining=Property('QVariantList',_getTimeRemaining,_setTimeRemaining, notify=on_timeRemaining)
-	translateMsg=Property('QVariantList',_getTranslateMsg,constant=True)
-	visibleCancelBtn=Property(bool,_getVisibleCancelBtn,constant=True)
-
 	
 if __name__=="__main__":
 
@@ -216,7 +202,7 @@ if __name__=="__main__":
 	if not engine.rootObjects():
 		sys.exit(-1)
 
-	engine.quit.connect(QApplication.quit)
+	engine.quit.connect(app.quit)
 	ret=app.exec()
 	del engine
 	del app

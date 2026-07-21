@@ -4,175 +4,110 @@ import os
 import time
 import subprocess
 import syslog
+import shlex
 
-#in minutes
-SERVER_WAIT_TIME=2
-CLIENT_WAIT_TIME=1
+SERVER_WAIT_TIME = 2
+CLIENT_WAIT_TIME = 1
 
-DEBUG=False
+DEBUG = False
 
 class Shutdowner:
-	
-	def __init__(self):
-		
-		self.init_var()
-		self.flavours=[]
-		self.version_reference=["adi","desktop"]
-		self.adiServer="/usr/bin/natfree-adi"
-		self.current_flavour=self.what_am_i()
-		self.shutdown(self.current_flavour)
-		
-	#def __init__
-	
-	def dprint(self,msg):
-		
-		msg="[lliurex-shutdowner] %s"%msg
-		
-		if DEBUG:
-			print(msg)
-			syslog.syslog(msg)
-		
-	#def dprint
 
-	def init_var(self):
-		
-		'''
-		self.lliurex_flavour={}
-		self.lliurex_flavour["adi"]=False
-		self.lliurex_flavour["desktop"]=False
-		'''
-		self.shutdown_function={}
-		self.shutdown_function["adi"]=self.adi_shutdown
-		self.shutdown_function["desktop"]=self.standalone_shutdown
-		self.shutdown_function["unknown"]=self.basic_shutdown
-		
-	#def init_var
-	
-	def what_am_i(self):
+    def __init__(self):
+        
+        self.version_reference = ["adi", "desktop"]
+        self.adiServer = "/usr/bin/natfree-adi"
 
-		if os.path.exists(self.adiServer):
-			return "adi"
-		else:
-			return "desktop"
-		'''
-		self.get_flavours()
+        self.init_var()
+        self.current_flavour = self.what_am_i()
+        self.shutdown(self.current_flavour)
 
-		if os.system("lliurex-version -x adi")==0:
-			self.lliurex_flavour["adi"]=True
-		else:
-			ret=self.check_flavour()
-			if ret=="adi":
-				self.lliurex_flavour["adi"]=True
-		if os.system("lliurex-version -x desktop")==0:
-			self.lliurex_flavour["desktop"]=True
-		else:
-			ret=self.check_flavour()
-			if ret=="desktop":
-				self.lliurex_flavour["desktop"]=True
-				
-		if self.lliurex_flavour["adi"]:
-			return "adi"
-		if self.lliurex_flavour["desktop"]:
-			return "desktop"
-			
-		return "unknown"
-		'''
-	#def what_am_i
-		
-	def shutdown(self,flavour):
-		
-		return self.shutdown_function[flavour]()
-		
-	#def shutdown
-	
-	def adi_shutdown(self):
-		
-		self.dprint("Server shutdown")
-		self.dprint("Calling standalone_shutdown...")
-		self.standalone_shutdown(SERVER_WAIT_TIME)
-		
-	#def adi_shutdown
-	
-	def unknown_shutdown(self):
-		
-		self.dprint("Unknown shutdown")
-		self.dprint("Calling basic_shutdown...")
-		self.basic_shutdown()
-		
-	#def unknown_shutdown
-	
-	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
-		
-		self.dprint("Standalone shutdown")
-		waylandCommand='"wayland;xcb"'
-		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
-		standalone=standalone.decode("utf-8")
-		displays=set()
-		
-		for item in standalone.strip("\n").split("\n"):
-			
-			display=None		
-			x=item.split(" ")
-			user=x[0]
-			display=x[-1]
-			
-			if "(" not in display or ")" not in display or ":" not in display:
-				command="su -c 'QT_QPA_PLATFORM=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(waylandCommand, wait_time,user)
-			else:
-				display=display.lstrip("(").rstrip(")")
-				command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
-			
-			self.dprint("\t%s"%command)
-			os.system(command)
-	
-		self.dprint("Calling basic_shutdown...")
-		self.basic_shutdown(wait_time)
-		
-	#def standalone_shutdown
-	
-	def basic_shutdown(self,wait_time=CLIENT_WAIT_TIME):
-		
-		self.dprint("Basic shutdown")
-		command="/sbin/shutdown -h +%s"%wait_time
-		self.dprint("\t%s"%command)
-		os.system(command)
-		
-	#def basic_shutdown
+    #def __init
 
-	def get_flavours(self):
-	
-		cmd="lliurex-version -v"
-		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-		result=p.communicate()[0]
-		
-		if type(result) is bytes:
-			result=result.decode()
+    def dprint(self, msg):
+        
+        msg = f"[lliurex-shutdowner] {msg}"
+        if DEBUG:
+            print(msg)
+            syslog.syslog(msg)
 
-		for x in result.split(','):
-			if x.strip() in self.version_reference:
-				self.flavours.append(x.strip())
-			
-	#def get_flavours
-	
-	def check_flavour(self):
-		
-		tmp_flavour=""
-		for item in self.flavours:
-			if 'adi' in item:
-				tmp_flavour='server'
-				break
-			elif 'desktop' in item:
-				tmp_flavour='desktop'
-			else:
-				tmp_flavour='unknown'
-				
-		return tmp_flavour
-		
-	#def check_flavour
-	
-#class Shutdowner
+    #def dprint
 
-if __name__=="__main__":
-	
-	sd=Shutdowner()
+    def init_var(self):
+        
+        self.shutdown_function = {
+            "adi": self.adi_shutdown,
+            "desktop": self.standalone_shutdown,
+            "unknown": self.basic_shutdown
+        }
 
+    #def init_var
+
+    def what_am_i(self):
+        
+        if os.path.exists(self.adiServer):
+            return "adi"
+        return "desktop"
+
+    #def what_am_i
+
+    def shutdown(self, flavour):
+
+        func = self.shutdown_function.get(flavour, self.basic_shutdown)
+        return func()
+
+    #def shutdown
+
+    def adi_shutdown(self):
+        
+        self.dprint("Server shutdown")
+        self.dprint("Calling standalone_shutdown...")
+        self.standalone_shutdown(wait_time=SERVER_WAIT_TIME)
+
+    #def adi_shutdown
+
+    def standalone_shutdown(self, wait_time=CLIENT_WAIT_TIME):
+        
+        self.dprint("Standalone shutdown")
+        waylandCommand = '"wayland;xcb"'
+
+        p1 = subprocess.Popen(["who"], stdout=subprocess.PIPE)
+        stdout, _ = p1.communicate()
+        lines = stdout.decode("utf-8").strip().split("\n")
+
+        for item in lines:
+            if not item.strip():
+                continue
+
+            parts = item.split()
+            if len(parts) < 2:
+                continue
+
+            user = parts[0]
+            display = parts[-1]
+
+            if "(" not in display or ")" not in display or ":" not in display:
+                command = f"su -c 'QT_QPA_PLATFORM={waylandCommand} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {shlex.quote(user)} &"
+            else:
+                display = display.lstrip("(").rstrip(")")
+                command = f"su -c 'DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {shlex.quote(user)} &"
+
+            self.dprint(f"\t{command}")
+            os.system(command)
+
+        self.dprint("Calling basic_shutdown...")
+        self.basic_shutdown(wait_time)
+
+    #def standalone_shutdown
+
+    def basic_shutdown(self, wait_time=CLIENT_WAIT_TIME):
+
+        self.dprint("Basic shutdown")
+        command = ["/sbin/shutdown", "-h", f"+{wait_time}"]
+        self.dprint(f"\t{' '.join(command)}")
+        subprocess.Popen(command)
+
+    #def basic_shutdown
+
+if __name__ == "__main__":
+    sd = Shutdowner()

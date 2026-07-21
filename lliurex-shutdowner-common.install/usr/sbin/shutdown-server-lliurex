@@ -4,9 +4,9 @@ import os
 import time
 import subprocess
 import syslog
+import shlex
 
 
-#in minutes
 SERVER_WAIT_TIME=2
 CLIENT_WAIT_TIME=1
 
@@ -26,7 +26,7 @@ class Shutdowner:
 	
 	def dprint(self,msg):
 		
-		msg="[lliurex-shutdowner] %s"%msg
+		msg=f"[lliurex-shutdowner] {msg}"
 		
 		if DEBUG:
 			print(msg)
@@ -35,11 +35,7 @@ class Shutdowner:
 	#def dprint
 
 	def init_var(self):
-		
-		'''
-		self.lliurex_flavour={}
-		self.lliurex_flavour["adi"]=False
-		'''
+
 		self.shutdown_function={}
 		self.shutdown_function["adi"]=self.server_shutdown
 		
@@ -51,14 +47,7 @@ class Shutdowner:
 			return "adi"
 
 		return "unknown"
-		'''
-		if os.system("lliurex-version -x adi")==0:
-			self.lliurex_flavour["adi"]=True
-		if self.lliurex_flavour["adi"]:
-			return "adi"
-			
-		return "unknown"
-		'''
+		
 		
 	#def what_am_i
 		
@@ -72,7 +61,6 @@ class Shutdowner:
 		
 		self.dprint("Server shutdown")
 		
-		# server always handles shutdown dialogs for thin clients
 		self.standalone_shutdown(SERVER_WAIT_TIME)
 		
 	#def server_shutdown
@@ -84,42 +72,48 @@ class Shutdowner:
 		self.basic_shutdown()
 		
 	#def unknown_shutdown
-	
-	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
-		
-		self.dprint("Standalone shutdown")
-		waylandCommand='"wayland;xcb"'
-		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
-		standalone=standalone.decode("utf-8")
-		displays=set()
-		for item in standalone.strip("\n").split("\n"):
-			
-			display=None		
-			x=item.split(" ")
-			user=x[0]
-			display=x[-1]
-			
-			if "(" not in display or ")" not in display or ":" not in display:
-				command="su -c 'QT_QPA_PLATFORM=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(waylandCommand, wait_time,user)
-			else:
-				display=display.lstrip("(").rstrip(")")
-				command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
 
-			self.dprint("\t%s"%command)
+	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
+
+		self.dprint("Standalone shutdown")
+		waylandCommand = '"wayland;xcb"'
+
+		p1 = subprocess.Popen(["who"], stdout=subprocess.PIPE)
+		stdout, _ = p1.communicate()
+		lines = stdout.decode("utf-8").strip().split("\n")
+
+		for item in lines:
+			if not item.strip():
+				continue
+
+			parts = item.split()
+			if len(parts) < 2:
+				continue
+
+			user = parts[0]
+			display = parts[-1]
+
+			if "(" not in display or ")" not in display or ":" not in display:
+				command = f"su -c 'QT_QPA_PLATFORM={waylandCommand} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {shlex.quote(user)} &"
+			else:
+				display = display.lstrip("(").rstrip(")")
+				command = f"su -c 'DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {shlex.quote(user)} &"
+
+			self.dprint(f"\t{command}")
 			os.system(command)
-	
+
 		self.dprint("Calling basic_shutdown...")
 		self.basic_shutdown(wait_time)
-		
+
 	#def standalone_shutdown
-	
+
 	def basic_shutdown(self,wait_time=CLIENT_WAIT_TIME):
-		
+
 		self.dprint("Basic shutdown")
-		command="/sbin/shutdown -h +%s"%wait_time
-		self.dprint("\t%s"%command)
-		os.system(command)
-		
+		command = ["/sbin/shutdown", "-h", f"+{wait_time}"]
+		self.dprint(f"\t{' '.join(command)}")
+		subprocess.Popen(command)
+
 	#def basic_shutdown
 	
 #class Shutdowner
