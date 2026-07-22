@@ -44,7 +44,7 @@ RowLayout{
                 optionIcon:"configure"
                 optionEnabled:serverStackBridge.serverShut?false:true
                 visible:clientStackBridge.isClient
-                onMenuOptionClicked:nainStackBridge.manageTransitions(2)
+                onMenuOptionClicked:mainStackBridge.manageTransitions(2)
 
             }
             

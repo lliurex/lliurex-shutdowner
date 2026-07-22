@@ -23,6 +23,7 @@ Rectangle{
             Image{
                 id:spinnerImage
                 source: "loading.png"
+                visible:!mainStackBridge.isThereAnError.show
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
                 Layout.alignment: Qt.AlignHCenter
@@ -65,6 +66,7 @@ Rectangle{
             Text {
                 id: loadText
                 text:i18nd("lliurex-access-control", "Loading. Wait a moment...")
+                visible:!mainStackBridge.isThereAnError.show
                 font.pointSize: 10
                 color: palette.windowText
                 Layout.alignment: Qt.AlignHCenter
@@ -79,7 +81,7 @@ Rectangle{
          switch(mainStackBridge.isThereAnError.msgCode){
             case -50:
                 return i18nd("lliurex-shutdowner","Unable to connect with localhost")
-            case 60:
+            case -60:
                 return i18nd("lliurex-shutdowner","An error ocurred when loading data. Restart your computer and try again")
             default:
                 return ""

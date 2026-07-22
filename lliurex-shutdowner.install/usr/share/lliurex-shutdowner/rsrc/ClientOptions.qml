@@ -56,24 +56,6 @@ Rectangle{
 						Layout.alignment:Qt.AlignVCenter
 						Layout.fillWidth: true
 						Layout.rightMargin:5
-						indicator: Rectangle {
-							implicitWidth: 40
-							implicitHeight: 10
-							x: toggleswitch.width - width - toggleswitch.rightPadding
-							y: parent.height/2 - height/2 
-							radius: 7
-							color: toggleswitch.checked ? "#3daee9" : "#d3d3d3"
-
-							Rectangle {
-								x: toggleswitch.checked ? parent.width - width : 0
-								width: 20
-								height: 20
-								y:parent.height/2-height/2
-								radius: 10
-								border.color: "#808080"
-					    	}
-						}	
-
 						onToggled: {
 							clientStackBridge.getCronSwitchValue(toggleswitch.checked)
 							cronClient.clockLayoutEnabled=toggleswitch.checked

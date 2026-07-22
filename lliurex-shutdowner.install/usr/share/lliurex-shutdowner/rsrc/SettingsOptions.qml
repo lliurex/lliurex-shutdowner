@@ -23,9 +23,9 @@ Rectangle{
 	      font.pointSize: 16
 	   }
      
-     	ColumnLayout{
+     	RowLayout{
          id: settingsGrid
-         spacing:5
+         Layout.fillWidth: true
 
 
      		Text {
@@ -39,24 +39,6 @@ Rectangle{
 				id:toggleswitch
 				checked: settingsStackBridge.isClientShutDownOverride
 				Layout.alignment:Qt.AlignLeft
-				indicator: Rectangle {
-					implicitWidth: 40
-					implicitHeight: 10
-					x: toggleswitch.width - width - toggleswitch.rightPadding
-					y: parent.height/2 - height/2 
-					radius: 7
-					color: toggleswitch.checked ? "#3daee9" : "#d3d3d3"
-
-					Rectangle {
-						x: toggleswitch.checked ? parent.width - width : 0
-						width: 20
-						height: 20
-						y:parent.height/2-height/2
-						radius: 10
-						border.color: "#808080"
-				   }
-				}	
-
 				onToggled: {
 					settingsStackBridge.overrideShutdownSwitch(toggleswitch.checked)
 				}

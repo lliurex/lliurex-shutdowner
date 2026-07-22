@@ -16,7 +16,7 @@ class SwitchOverrideShutdown(QThread):
 	def __init__(self,manager,action):
 
 		super().__init__()
-		self,manager=manager
+		self.manager=manager
 		self.state=action
 
 	#def __init__
@@ -73,7 +73,7 @@ class Bridge(QObject):
 		self.isClientShutDownOverride=state
 		self.overrideShutDownT=SwitchOverrideShutdown(self.n4dManager,self.isClientShutDownOverride)
 		self.overrideShutDownT.start()
-		sekf.overrideShutDownT.overrideSwitched.connect(self._overrideShutdownSwitch)
+		self.overrideShutDownT.overrideSwitched.connect(self._overrideShutdownSwitch)
 		self.overrideShutDownT.finished.connect(self.overrideShutDownT.deleteLater)
 
 	#def overrrideShutdownSwitch

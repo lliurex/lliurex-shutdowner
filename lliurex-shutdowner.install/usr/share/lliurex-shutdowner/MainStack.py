@@ -294,7 +294,8 @@ class Bridge(QObject):
 	def closeShutdowner(self):
 		
 		if self.isThereAnError.get("show"):
-			self.closeGui=False
+			self.closeGui=True
+			return
 
 		acceptedClose=self.checkChanges()
 		
