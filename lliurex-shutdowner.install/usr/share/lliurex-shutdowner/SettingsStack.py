@@ -32,6 +32,8 @@ class SwitchOverrideShutdown(QThread):
 
 class Bridge(QObject):
 
+	INCOMPATIBILITY_OVERRIDE_OPTION=-40
+
 	isClientShutDownOverrideChanged=Signal()
 
 	def __init__(self,ticket=None,passwd=None):
@@ -81,12 +83,10 @@ class Bridge(QObject):
 	@Slot(dict)
 	def _overrideShutdownSwitch(self,ret):
 
-		INCOMPATIBILITY_OVERRIDE_OPTION=-40
-
 		if not ret.get("status"):
 			if ret.get("action")=='Enable':
 				self.overrideError=True
-				self.core.mainStack.showMessage={"show":True,"msgCode":INCOMPATIBILITY_OVERRIDE_OPTION,"type":self.core.mainStack.KIRIGAMI_MSG_ERROR}	
+				self.core.mainStack.showMessage={"show":True,"msgCode":Bridge.INCOMPATIBILITY_OVERRIDE_OPTION,"type":self.core.mainStack.KIRIGAMI_MSG_ERROR}	
 		else:
 			self.overrideError=False
 
