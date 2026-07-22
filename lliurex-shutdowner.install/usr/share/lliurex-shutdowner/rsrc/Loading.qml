@@ -24,8 +24,8 @@ Rectangle{
                 id:spinnerImage
                 source: "loading.png"
                 visible:!mainStackBridge.isThereAnError.show
-                Layout.preferredWidth: 24
-                Layout.preferredHeight: 24
+                Layout.preferredWidth: 32
+                Layout.preferredHeight: 32
                 Layout.alignment: Qt.AlignHCenter
                 fillMode: Image.PreserveAspectFit
                 smooth:false

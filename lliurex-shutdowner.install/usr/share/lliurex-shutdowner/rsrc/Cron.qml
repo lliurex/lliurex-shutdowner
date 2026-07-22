@@ -31,8 +31,8 @@ ColumnLayout{
         Component {
             id: numberDelegate
             Item {
-                width: 60
-                height: 60
+                width: 80
+                height: 80
 
                 HoverHandler{
                     id:itemHoverHandler
@@ -40,7 +40,7 @@ ColumnLayout{
 
                 Text {
                     text: modelData.toString().padStart(2, "0")
-                    font.pointSize: 40
+                    font.pointSize: 50
                     color: paletteText(itemHoverHandler.hovered)
                     anchors.centerIn: parent
                 }
@@ -53,8 +53,8 @@ ColumnLayout{
         }
 
         Rectangle {
-            width: 60
-            height: 60
+            width: 80
+            height: 80
             color: "transparent"
             clip: true
 
@@ -101,13 +101,13 @@ ColumnLayout{
                 }
 
                 path: Path {
-                    startX: 30; startY: -60
+                    startX: 40; startY: -80
                     PathPercent {value:0.0}
 
-                    PathLine { x: 30; y: 30 }
+                    PathLine { x: 40; y: 40 }
                     PathPercent {value:0.5}
 
-                    PathLine { x: 30; y: 120 }
+                    PathLine { x: 40; y: 160 }
                     PathPercent {value:1.0}
 
                 }
@@ -116,14 +116,14 @@ ColumnLayout{
 
         Text {
             text: ":"
-            font.pointSize: 30
+            font.pointSize: 40
             color: "#3daee9"
             Layout.alignment: Qt.AlignCenter
         }
 
         Rectangle {
-            width: 60
-            height: 60
+            width: 80
+            height: 80
             color: "transparent"
             clip: true
 
@@ -167,13 +167,13 @@ ColumnLayout{
                 }
 
                 path: Path {
-                    startX: 30; startY: -60
+                    startX: 40; startY: -80
                     PathPercent {value:0.0}
 
-                    PathLine { x: 30; y: 30 }
+                    PathLine { x: 40; y: 40 }
                     PathPercent {value:0.5}
 
-                    PathLine { x: 30; y: 120 }
+                    PathLine { x: 40; y: 160 }
                     PathPercent {value:1.0}
                 }
             }
@@ -212,25 +212,23 @@ ColumnLayout{
             Layout.fillWidth:true
         }
 
-		ListModel {
-            id: daysModel
-            ListElement { key: "0"; name: "Monday" }
-            ListElement { key: "1"; name: "Tuesday" }
-            ListElement { key: "2"; name: "Wednesday" }
-            ListElement { key: "3"; name: "Thursday" }
-            ListElement { key: "4"; name: "Friday" }
-        }
 
         Repeater {
 
-        	model:daysModel
+        	model:[
+               { key: "0", name: i18nd("lliurex-shutdowner","Monday")},
+               { key: "1", name: i18nd("lliurex-shutdowner","Tuesday") },
+               { key: "2", name: i18nd("lliurex-shutdowner","Wednesday") },
+               { key: "3", name: i18nd("lliurex-shutdowner","Thursday") },
+               { key: "4", name: i18nd("lliurex-shutdowner","Friday") } 
+            ]
 
         	DayButton{
-        		dayBtnChecked:weekDays[model.key]
-        		dayBtnText: i18nd("bell-scheduler", model.name)
+        		dayBtnChecked:weekDays[modelData.key]
+        		dayBtnText: modelData.name
                 dayBtnEnabled:daysLayout.enabled
         		onDayBtnClicked: (value) => {
-                    updateWeekDays({[model.key]: value});
+                    updateWeekDays({[modelData.key]: value});
                 }
 
         	}

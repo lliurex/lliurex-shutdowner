@@ -22,16 +22,12 @@ class Shutdowner:
         self.current_flavour = self.what_am_i()
         self.shutdown(self.current_flavour)
 
-    #def __init
-
     def dprint(self, msg):
         
         msg = f"[lliurex-shutdowner] {msg}"
         if DEBUG:
             print(msg)
             syslog.syslog(msg)
-
-    #def dprint
 
     def init_var(self):
         
@@ -41,30 +37,22 @@ class Shutdowner:
             "unknown": self.basic_shutdown
         }
 
-    #def init_var
-
     def what_am_i(self):
         
         if os.path.exists(self.adiServer):
             return "adi"
         return "desktop"
 
-    #def what_am_i
-
     def shutdown(self, flavour):
 
         func = self.shutdown_function.get(flavour, self.basic_shutdown)
         return func()
-
-    #def shutdown
 
     def adi_shutdown(self):
         
         self.dprint("Server shutdown")
         self.dprint("Calling standalone_shutdown...")
         self.standalone_shutdown(wait_time=SERVER_WAIT_TIME)
-
-    #def adi_shutdown
 
     def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
         
@@ -109,11 +97,11 @@ class Shutdowner:
             ).stdout.strip()
             
             if session_type == "wayland":
-                command = "su -c 'QT_QPA_PLATFORM=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &" % (waylandCommand, wait_time, user)
+                command = f"su -c 'QT_QPA_PLATFORM={waylandCommand} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {user} &"
             else:
                 if not display:
                     display = ":0"
-                command = "su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &" % (display, wait_time, user)
+                command = f"su -c 'DISPLAY=%{display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {user} &" 
                     
             self.dprint("\t%s" % command)
             os.system(command)
@@ -130,8 +118,6 @@ class Shutdowner:
         command = ["/sbin/shutdown", "-h", f"+{wait_time}"]
         self.dprint(f"\t{' '.join(command)}")
         subprocess.Popen(command)
-
-    #def basic_shutdown
 
 if __name__ == "__main__":
     sd = Shutdowner()
