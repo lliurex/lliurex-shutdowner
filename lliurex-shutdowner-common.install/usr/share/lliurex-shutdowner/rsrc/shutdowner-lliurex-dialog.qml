@@ -94,10 +94,7 @@ ApplicationWindow {
                 icon.height: 16
                 text: bridge.translateMsg.btnMsg
 
-                onClicked: {
-                    bridge.cancelClicked();
-                    removePropertiesConnect();
-                }
+                onClicked:bridge.cancelClicked()
 
                 background: Rectangle {
                     implicitWidth: 100

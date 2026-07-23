@@ -139,32 +139,6 @@ class Bridge(QObject):
 			self.countdownTimer.stop()
 			self.blockDestroy=True
 
-		'''
-		if self.countdown-self.currentCounter >=0:
-			count=self.countdown-self.currentCounter
-			
-			if count==120:
-				self.timeRemaining=["02:00",self.indicatorColor]
-			elif count>69:
-				self.timeRemaining=["01:"+str(count-60),self.indicatorColor]
-			elif count>60:
-				self.timeRemaining=["01:0"+str(count-60),self.indicatorColor]
-			elif count==60:
-				self.timeRemaining=["01:00",self.indicatorColor]
-			elif count<10:
-				self.indicatorColor="#ff0000"
-				self.timeRemaining=["00:0"+str(count),self.indicatorColor]
-			else:
-				if count==10:
-					self.indicatorColor="#ff0000"
-				self.timeRemaining=["00:"+str(count),self.indicatorColor]
-			self.blockDestroy=False		
-		else:
-			self.countdownTimer.stop()
-			self.blockDestroy=True
-		'''
-
-		
 	#def updateCountDown
 
 	@Slot()
