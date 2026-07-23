@@ -41,7 +41,7 @@ class Tunnel(QObject):
 		userHome=os.path.expanduser("~")
 		versionFile=os.path.join(userHome,".config/lliurex-shutdowner.conf")
 		cachePath1=os.path.join(userHome,".cache/lliurex-shutdowner")
-		cachePath2=os.path.join(userHome,".cache/lliurex-shutdowner.py")
+		cachePath2=os.path.join(userHome,".cache/lliurex-shutdowner-gui.py")
 
 		installedVersion=self.getPackageVersion()
 
