@@ -37,20 +37,22 @@ class Shutdowner:
 
 	def init_var(self):
 		
-		self.lliurex_flavour={}
-		self.lliurex_flavour["server"]=False
-		self.lliurex_flavour["client"]=False
-		self.lliurex_flavour["thin"]=False
-		self.lliurex_flavour["semi"]=False
-		self.lliurex_flavour["desktop"]=False
+		self.lliurex_flavour={
+			"server":False,
+			"client":False,
+			"thin":False,
+			"semi":False,
+			"desktop":False
+		}
 		
-		self.shutdown_function={}
-		self.shutdown_function["server"]=self.server_shutdown
-		self.shutdown_function["thin"]=self.thin_shutdown
-		self.shutdown_function["semi"]=self.semi_shutdown
-		self.shutdown_function["client"]=self.client_shutdown
-		self.shutdown_function["desktop"]=self.standalone_shutdown
-		self.shutdown_function["unknown"]=self.basic_shutdown
+		self.shutdown_function={
+			"server":self.server_shutdown,
+			"thin":self.thin_shutdown,
+			"semi":self.semi_shutdown,
+			"client":self.client_shutdown,
+			"desktop":self.standalone_shutdown,
+			"unknown":self.basic_shutdown
+		}
 		
 	#def init_var
 	
@@ -58,42 +60,21 @@ class Shutdowner:
 
 		self.get_flavours()
 
-		if os.system("lliurex-version -x server")==0:
-			self.lliurex_flavour["server"]=True
-		else:
-			ret=self.check_flavour()
-			if ret=="server":
-				self.lliurex_flavour["server"]=True
-		if os.system("lliurex-version -x client")==0:
-			self.lliurex_flavour["client"]=True
-		else:
-			ret=self.check_flavour()
-			if ret=="client":
-				self.lliurex_flavour["client"]=True
-		if os.system("lliurex-version -x thin")==0:
-			self.lliurex_flavour["thin"]=True
-		if os.system("lliurex-version -x semi")==0:
-			self.lliurex_flavour["semi"]=True
-		if os.system("lliurex-version -x desktop")==0:
-			self.lliurex_flavour["desktop"]=True
-		else:
-			ret=self.check_flavour()
-			if ret=="desktop":
-				self.lliurex_flavour["desktop"]=True
-			
-		# order is important here. Thin is also detected as server
-		# semi is also detected as client
-		
-		if self.lliurex_flavour["thin"]:
-			return "thin"			
-		if self.lliurex_flavour["server"]:
-			return "server"
-		if self.lliurex_flavour["semi"]:
-			return "semi"
-		if self.lliurex_flavour["client"]:
-			return "client"
-		if self.lliurex_flavour["desktop"]:
-			return "desktop"
+		flavours=["server","client","thin","semi","deskop"]
+
+		for flavour in flavours:
+			if subprocess.run(["lliurex-version", "-x", flavour],capture_output=True).returncode==0:
+				self.lliurex_flavour[flavour]=True
+
+		if not any(self.lliurex_flavour.values()):
+			fallBackFlavour=self.check_flavour()
+			if fallBackFlavour in ["server","client","desktop"]:
+				self.lliurex_flavour[fallBackFlavour]=True
+
+		priorityOrder=["thin","server","semi","client","desktop"]
+		for flavour in priorityOrder:
+			if self.lliurex_flavour.get(flavour):
+				return flavour
 			
 		return "unknown"
 		
@@ -122,7 +103,7 @@ class Shutdowner:
 				for item in tmp:
 					if "DISPLAY=" in item:
 						display=item.split("=")[1]
-						command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,CLIENT_WAIT_TIME,user)
+						command=f"su -c 'DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {CLIENT_WAIT_TIME}' {user} &"
 						self.dprint(command)
 						os.system(command)
 		
@@ -180,25 +161,44 @@ class Shutdowner:
 		if os.path.exists(self.adi_server):
 			wait_time=SERVER_WAIT_TIME
 
-		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
-		standalone=standalone.decode("utf-8")
-		displays=set()
-		for item in standalone.strip("\n").split("\n"):
-			
-			display=None		
-			x=item.split(" ")
-			user=x[0]
-			display=x[-1]
-			
-			if "(" not in display or ")" not in display or ":" not in display:
+		try:
+			result = subprocess.run(
+				["loginctl", "list-sessions", "--no-legend"],
+				stdout=subprocess.PIPE,
+				stderr=subprocess.PIPE,
+				text=True
+			)	
+			sessions = result.stdout
+		except Exception as e:
+			self.dprint(f"Error running loginctl: {e}")
+			sessions = []
+
+		for line in sessions.strip().splitlines():
+			parts=line.split()
+			if not parts:
 				continue
 				
-			display=display.lstrip("(").rstrip(")")
+			session_id = parts[0]
+			user = parts[2]
+			
+			try:
+				info = subprocess.run(
+						["loginctl", "show-session", session_id, "-p", "Display"],
+						stdout=subprocess.PIPE, text=True, check=True
+					)
+				sessionInfo=info.stdout.strip()
+			except subprocess.SubprocessError:
+				continue
 
-			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
-			self.dprint("\t%s"%command)
-			os.system(command)
-	
+			if not sessionInfo.startswith("Display=") or "=" not in sessionInfo:
+				continue
+
+			display=sessionInfo.split("=",1)[1]
+			cmd=["su","-c",f"DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}",user]
+
+			self.dprint("\t%s"%cmd)
+			subprocess.Popen(cmd)
+			
 		self.dprint("Calling basic_shutdown...")
 		self.basic_shutdown(wait_time)
 		
@@ -214,34 +214,26 @@ class Shutdowner:
 	#def basic_shutdown
 
 	def get_flavours(self):
+
+		try:
+			result=subprocess.check_output(['lliurex-version', '-v'],text=True)
+			self.flavours=[x.strip() for x in result.split(",")]
+		except (subprocess.CalledProcessError,FileNotFoundError):
+			return		
 	
-		cmd="lliurex-version -v"
-		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-		result=p.communicate()[0]
-		
-		if type(result) is bytes:
-			result=result.decode()
-			
-		self.flavours= [ x.strip() for x in result.split(',') ]
-		
 	#def get_flavours
 	
 	def check_flavour(self):
-		
-		tmp_flavour=""
+
 		for item in self.flavours:
 			if 'server' in item:
-				tmp_flavour='server'
-				break
-			elif 'client' in item:
-				tmp_flavour='client'
-				break
-			elif 'desktop' in item:
-				tmp_flavour='desktop'
-			else:
-				tmp_flavour='unknown'
-				
-		return tmp_flavour
+				return 'server'
+			if "client" in item:
+				return "client"
+			if "desktop" in item:
+				return "desktop"
+
+		return "unknown"
 		
 	#def check_flavour
 	

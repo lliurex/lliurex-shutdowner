@@ -4,102 +4,77 @@ import QtQuick.Layouts 1.15
 import org.kde.kirigami 2.16 as Kirigami
 
 
-GridLayout{
+RowLayout{
     id: optionsGrid
-    columns: 2
-    flow: GridLayout.LeftToRight
-    columnSpacing:10
+    spacing: 10
 
     Rectangle{
-        width:200
-        Layout.minimumHeight:430
-        Layout.preferredHeight:clientStackBridge.isStandAlone? 500:580
+        width:215
         Layout.fillHeight:true
-        border.color: "#d3d3d3"
+        border.color: palette.mid
 
-        GridLayout{
+        ColumnLayout{
             id: menuGrid
-            rows:4 
-            flow: GridLayout.TopToBottom
-            rowSpacing:0
+            Layout.fillWidth:true
+            Layout.fillHeight: true
+            spacing: 0
 
-            MenuOptionBtn {
-                id:clientOption
-                optionText:{
-                    if (!clientStackBridge.isStandAlone){
-                        i18nd("lliurex-shutdowner","Client configuration")
-                    }else{
-                        i18nd("lliurex-shutdowner","Desktop configuration")
-                    }
-                }
-                optionIcon:"/usr/share/icons/breeze/devices/22/computer.svg"
-                optionEnabled:true
-                Connections{
-                    function onMenuOptionClicked(){
-                        mainStackBridge.manageTransitions(0)
-                    }
-                }
+            MenuOptionBtn { 
+                id: clientOption 
+                optionText: clientStackBridge.isStandAlone
+                    ?i18nd("lliurex-shutdowner", "Desktop configuration")
+                    :i18nd("lliurex-shutdowner", "Client configuration")
+                optionIcon: "devices/24/computer" 
+                optionEnabled: true 
+                onMenuOptionClicked: mainStackBridge.manageTransitions(0)
             }
 
             MenuOptionBtn {
                 id:serverOption
                 optionText:i18nd("lliurex-shutdowner","Server configuration")
-                optionIcon:"/usr/share/icons/breeze/places/22/network-workgroup.svg"                  
+                optionIcon:"places/24/network-workgroup"                  
                 optionEnabled:clientStackBridge.isCronEnabled
                 visible:!clientStackBridge.isStandAlone
-                Connections{
-                    function onMenuOptionClicked(){
-                        mainStackBridge.manageTransitions(1)
-                    }
-                }
+                onMenuOptionClicked:mainStackBridge.manageTransitions(1)
             }
 
             MenuOptionBtn{
                 id:settingsOption
                 optionText:i18nd("lliurex-shutdowner","System settings")
-                optionIcon:"/usr/share/icons/breeze/actions/22/configure.svg"
-                optionEnabled:{
-                    if (!serverStackBridge.serverShut){
-                        true
-                    }else{
-                        false
-                    }
-                }
+                optionIcon:"actions/24/configure"
+                optionEnabled:serverStackBridge.serverShut?false:true
                 visible:clientStackBridge.isClient
-                Connections{
-                    function onMenuOptionClicked(){
-                        mainStackBridge.manageTransitions(2)
-                    }
-                }
-            }
+                onMenuOptionClicked:mainStackBridge.manageTransitions(2)
 
+            }
+            
             MenuOptionBtn {
                 id:helpOption
                 optionText:i18nd("lliurex-shutdowner","Help")
-                optionIcon:"/usr/share/icons/breeze/actions/22/help-contents.svg"
+                optionIcon:"actions/24/help-contents.svg"
                 optionEnabled:true
                 visible:true
-                Connections{
-                    function onMenuOptionClicked(){
-                        mainStackBridge.openHelp();
-                    }
-                }
+                onMenuOptionClicked:mainStackBridge.openHelp()
+             }
+
+            Item {
+                    Layout.fillHeight:true
+
             }
         }
     }
-    GridLayout{
-        id:mainGrid
-        rows:2
-        flow:GridLayout.TopToBottom
-        Layout.bottomMargin:10
+
+    ColumnLayout{
+        Layout.fillWidth:true
+        Layout.fillHeight:true
+        spacing:0
 
         StackView {
             id: optionsLayout
-            property int currentIndex:mainStackBridge.currentOptionStack
             Layout.fillHeight:true
             Layout.fillWidth:true
-            Layout.alignment:Qt.AlignHCenter
 
+            property int currentIndex:mainStackBridge.currentOptionStack
             initialItem:clientView
 
             onCurrentIndexChanged:{
@@ -119,18 +94,19 @@ GridLayout{
             }
 
             replaceEnter: Transition {
-                PropertyAnimation {
+                NumberAnimation {
                     property: "opacity"
                     from: 0
-                    to:1
+                    to: 1
                     duration: 60
                 }
             }
+
             replaceExit: Transition {
-                PropertyAnimation {
+                NumberAnimation {
                     property: "opacity"
                     from: 1
-                    to:0
+                    to: 0
                     duration: 60
                 }
             }
@@ -141,6 +117,7 @@ GridLayout{
                     id:clientOptions
                 }
             }
+
             Component{
                 id:serverView
                 ServerOptions{
@@ -159,43 +136,53 @@ GridLayout{
 
         Kirigami.InlineMessage {
             id: messageLabel
-            visible:mainStackBridge.showMessage[0]
+            visible:mainStackBridge.showMessage.show
             text:getMessageText()
-            type: {
-                if (mainStackBridge.showMessage[1]==""){
-                    Kirigami.MessageType.Positive;
-                }else{
-                    Kirigami.MessageType.Error;
-                }
-            }
-            Layout.minimumWidth:580
-            Layout.topMargin:30
+            type: getMessageType(mainStackBridge.showMessage.type)
+            Layout.fillWidth:true
+            Layout.bottomMargin:15
+            Layout.leftMargin:5
+            Layout.rightMargin:15
             
         }
-        
+
     }
 
     function getMessageText(){
 
-        switch(mainStackBridge.showMessage[1]){
+        switch(mainStackBridge.showMessage.msgCode){
             case -10:
-                var msg=i18nd("lliurex-shutdowner","The client and server shutdown time are not compatible with each other");
-                break;
+                return i18nd("lliurex-shutdowner","The client and server shutdown time are not compatible with each other")
             case -20:
-                var msg=i18nd("lliurex-shutdowner","The client and server shutdown days are not compatible with each other");
-                break;
+                return i18nd("lliurex-shutdowner","The client and server shutdown days are not compatible with each other")
             case -30:
-                var msg=i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other");
-                break;
+                return i18nd("lliurex-shutdowner","The client and server shutdown time and days are not compatible with each other")
             case -40:
-                var msg=i18nd("lliurex-shutdowner","Disabling automatic shutdown in this computer is only posible if automatic server shutdown is not enabled")
-                break;
+                return i18nd("lliurex-shutdowner","Disabling automatic shutdown in this computer is only posible if automatic server shutdown is not enabled")
+            case -50:
+                return i18nd("lliurex-shutdowner","No days has been set to schedule the shutdown")
             default:
-                var msg=i18nd("lliurex-shutdowner","Changes saved successfully");
-                break
+                return i18nd("lliurex-shutdowner","Changes saved successfully");
         }
-        return msg;
+        return ""
     }
+
+    function getMessageType(type){
+
+        switch (type) {
+            case 0:
+                return Kirigami.MessageType.Positive
+            case 1:
+                return Kirigami.MessageType.Error
+            case 2:
+                return Kirigami.MessageType.Warning
+            case 3:
+                return Kirigami.MessageType.Information
+           default:
+                return Kirigami.MessageType.Information
+        }
+
+    } 
 
 }
 
