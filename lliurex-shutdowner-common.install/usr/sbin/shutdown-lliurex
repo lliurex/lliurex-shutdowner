@@ -103,9 +103,9 @@ class Shutdowner:
 				for item in tmp:
 					if "DISPLAY=" in item:
 						display=item.split("=")[1]
-						command=f"su -c 'DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {CLIENT_WAIT_TIME}' {user} &"
-						self.dprint(command)
-						os.system(command)
+						command=["su","-c",f"DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {CLIENT_WAIT_TIME}",user]
+						self.dprint(" ".join(command))
+						subprocess.Popen(command)
 		
 		# if THINCLIENT_CRON file does not exist. server shutsdow itself as well
 		if not os.path.exists(THINCLIENT_CRON):			
@@ -125,8 +125,8 @@ class Shutdowner:
 			# this is executed inside client itself
 			
 			time.sleep(60*CLIENT_WAIT_TIME)
-			command="n4d-client -r -m shutdown -c ShutdownerClient"
-			os.system(command)
+			command=["n4d-client", "-r", "-m", "shutdown", "-c", "ShutdownerClient"]
+			subproces.run(command)
 
 	#def  thin_shutdown
 	
@@ -196,7 +196,7 @@ class Shutdowner:
 			display=sessionInfo.split("=",1)[1]
 			cmd=["su","-c",f"DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}",user]
 
-			self.dprint("\t%s"%cmd)
+			self.dprint(f"\t{' '.join(cmd)}")
 			subprocess.Popen(cmd)
 			
 		self.dprint("Calling basic_shutdown...")
@@ -207,9 +207,9 @@ class Shutdowner:
 	def basic_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Basic shutdown")
-		command="/sbin/shutdown -h +%s"%wait_time
-		self.dprint("\t%s"%command)
-		os.system(command)
+		command=["/sbin/shutdown", "-h", f"+{wait_time}"]
+		self.dprint(f"\t{' '.join(command)}")
+		subprocess.Popen(command)
 		
 	#def basic_shutdown
 

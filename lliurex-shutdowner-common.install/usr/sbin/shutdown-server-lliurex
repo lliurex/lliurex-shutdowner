@@ -125,7 +125,7 @@ class Shutdowner:
 			display=sessionInfo.split("=",1)[1]
 			cmd=["su","-c",f"DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}",user]
 
-			self.dprint("\t%s"%cmd)
+			self.dprint(f"\t{' '.join(cmd)}")
 			subprocess.Popen(cmd)
 			
 		self.dprint("Calling basic_shutdown...")
@@ -137,9 +137,9 @@ class Shutdowner:
 	def basic_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Basic shutdown")
-		command="/sbin/shutdown -h +%s"%wait_time
-		self.dprint("\t%s"%command)
-		os.system(command)
+		command=["/sbin/shutdown", "-h", f"+{wait_time}"]
+		self.dprint(f"\t{' '.join(command)}")
+		subprocess.Popen(command)
 		
 	#def basic_shutdown
 	

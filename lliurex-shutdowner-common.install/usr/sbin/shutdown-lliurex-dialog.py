@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 from PySide2.QtWidgets import QApplication
-from PySide2.QtCore import QUrl, QObject, Slot, Signal, Property,QTimer,QCoreApplication
+from PySide2.QtCore import QUrl, QObject, Slot, Signal, Property,QTimer
 from PySide2.QtQml import QQmlApplicationEngine
 from PySide2.QtGui import QIcon
 
@@ -144,7 +144,7 @@ class Bridge(QObject):
 	def cancelClicked(self):
 		self.countdownTimer.stop()
 		subprocess.run(["shutdown","-c"])
-		QCoreApplication.quit()
+		QApplication.quit()
 
 	#def cancelClicked
 
