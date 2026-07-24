@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.21.6) jammy; urgency=medium
+
+  * Refactorized code to improve performance and facilitate future maintenance
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Fri, 24 Jul 2026 11:38:54 +0200
+
 lliurex-shutdowner (2.21.5) jammy; urgency=medium
 
   * Fixed minor bug in lancher
