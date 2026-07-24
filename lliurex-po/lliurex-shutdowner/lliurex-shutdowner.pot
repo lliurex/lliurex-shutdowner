@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 13:53+0100\n"
+"POT-Creation-Date: 2026-07-22 12:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,164 +17,167 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:121
-msgid "You can use the mouse wheel to change the hour"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:156
-msgid "You can use the mouse wheel to change the minutes"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:174
-msgid "Click to edit shutdown time with keyboard "
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:243
-msgid "Cancel"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:253
-msgid "Apply"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:290
-msgid "Monday"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:302
-msgid "Tuesday"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:313
-msgid "Wednesday"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:325
-msgid "Thursday"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:336
-msgid "Friday"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:10
-msgid "Client shutdown configuration"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:10
-msgid "Desktop shutdown configuration"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:55
-msgid "Automatic client shutdown"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:55
-msgid "Automatic shutdown"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:140
-msgid "Shutdown server as well:"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:166
-msgid "Click to change server shutdown settings"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:195
-msgid "Currently detected clients:"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:216
-msgid "Shutdown clients now"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:232
-msgid "Custom shutdown"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:234
-msgid "2 minutes after clients"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:237
-msgid "Not configured"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:10
-msgid "Server shutdown configuration"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:48
-msgid "Automatic server shutdown"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:99
-msgid "Shutdown server 2 minutes after clients)"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:116
-msgid "Custom:"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:29
-msgid "Client configuration"
-msgstr ""
-
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:31
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:25
 msgid "Desktop configuration"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:45
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:26
+msgid "Client configuration"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:34
 msgid "Server configuration"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:58
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:10
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:43
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:22
 msgid "System settings"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:77
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:53
 msgid "Help"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:181
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:155
 msgid "The client and server shutdown time are not compatible with each other"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:184
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:157
 msgid "The client and server shutdown days are not compatible with each other"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:187
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:159
 msgid ""
 "The client and server shutdown time and days are not compatible with each "
 "other"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:190
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:161
 msgid ""
 "Disabling automatic shutdown in this computer is only posible if automatic "
 "server shutdown is not enabled"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:193
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:163
+msgid "No days has been set to schedule the shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ApplicationOptions.qml:165
 msgid "Changes saved successfully"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:21
+msgid "Client shutdown configuration"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:21
+msgid "Desktop shutdown configuration"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:47
+msgid "Automatic client shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:47
+msgid "Automatic shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:115
+msgid "Shutdown server as well:"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:140
+msgid "Click to change server shutdown settings"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:168
+msgid "Currently detected clients:"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:187
+msgid "Shutdown clients now"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:202
+msgid "Custom shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:204
+msgid "2 minutes after clients"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ClientOptions.qml:207
+msgid "Not configured"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:51
+msgid "You can use the mouse wheel to change the value"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:194
+msgid "Click to edit shutdown time with keyboard "
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:219
+msgid "Monday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:220
+msgid "Tuesday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:221
+msgid "Wednesday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:222
+msgid "Thursday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Cron.qml:223
+msgid "Friday"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:68
+msgid "Loading. Wait a moment..."
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:83
+msgid "Unable to connect with localhost"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:85
+msgid "An error ocurred when loading data. Restart your computer and try again"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:22
+msgid "Server shutdown configuration"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:50
+msgid "Automatic server shutdown"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:84
+msgid "Shutdown server 2 minutes after clients)"
+msgstr ""
+
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/ServerOptions.qml:100
+msgid "Custom:"
 msgstr ""
 
 #: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/SettingsOptions.qml:33
 msgid "Disable automatic shutdown on this computer:"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:40
-msgid "Loading. Wait a moment..."
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/TimeSelector.qml:40
+msgid "Edit time"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:63
-msgid "Unable to connect with localhost"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/TimeSelector.qml:86
+msgid "Apply"
 msgstr ""
 
-#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/Loading.qml:66
-msgid ""
-"An error ocurred while loading data. Restart your computer and try again"
+#: ../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/TimeSelector.qml:107
+msgid "Cancel"
 msgstr ""

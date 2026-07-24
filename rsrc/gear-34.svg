@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   class="svg-icon"
+   style="overflow:hidden;fill:currentColor"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="gear-34.svg"
+   width="32"
+   height="32"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:export-filename="../lliurex-shutdowner.install/usr/share/lliurex-shutdowner/rsrc/loading.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="5.8046875"
+     inkscape:cx="108.70525"
+     inkscape:cy="4.7375505"
+     inkscape:window-width="1920"
+     inkscape:window-height="892"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     d="m 15.996125,10.396552 c -3.093468,0 -5.60345,2.509982 -5.60345,5.605665 0,3.092359 2.509982,5.60677 5.60345,5.60677 3.093468,0 5.585735,-2.514411 5.585735,-5.60677 0,-3.095683 -2.49116,-5.605665 -5.585735,-5.605665 z m 11.234579,8.824242 -1.009749,2.43248 2.039429,4.00468 -2.497803,2.497803 -4.097683,-1.935354 -2.432479,0.998676 -1.234508,3.779921 -0.158327,0.501553 h -3.529697 l -1.527913,-4.26708 -2.43248,-1.003108 -4.0102139,2.030574 -2.4966961,-2.495588 1.9331406,-4.099898 -1.002,-2.430265 L 0.5,17.840138 v -3.528591 l 4.2692955,-1.530125 1.002,-2.428051 L 3.9754461,6.8081722 3.738508,6.3431567 6.2318832,3.8497814 10.335101,5.7818151 12.76426,4.7775999 13.997661,0.99989333 14.157096,0.49944738 h 3.529696 L 19.215811,4.7709568 21.641647,5.775172 25.657399,3.7401706 28.152988,6.2335445 26.219847,10.33012 27.218525,12.763708 31.5,14.156543 v 3.527481 l -4.268188,1.535664 z"
+     id="path2"
+     style="stroke-width:0.0345995" />
+</svg>

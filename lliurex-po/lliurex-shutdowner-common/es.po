@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 13:31+0100\n"
-"PO-Revision-Date: 2021-02-17 13:47+0100\n"
+"POT-Creation-Date: 2026-07-22 12:13+0200\n"
+"PO-Revision-Date: 2026-07-22 12:13+0200\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.4.2\n"
 
-#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:50
+#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:84
 msgid "System will shutdown in a few seconds. Please, save your files"
 msgstr "El sistema se apagará en pocos segundos. Por favor, guarda tus ficheros."
 
-#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:51
+#: ../lliurex-shutdowner-common.install/usr/sbin/shutdown-lliurex-dialog.py:85
 msgid "Cancel shutdown"
 msgstr "Cancelar apagado"

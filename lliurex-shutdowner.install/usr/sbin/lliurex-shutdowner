@@ -19,33 +19,45 @@ class Tunnel(QObject):
 		self.clearCache()
 		self.isStandAlone()
 
-	#def __init	
+	#def __init
+
+	@Property(bool,constant=True)
+	def standAlone(self):
+
+		return self._standAlone
+
+	#def standAlone
+
+	@Property(bool,constant=True)
+	def isClient(self):
+		
+		return self._isClient
+
+	#def isClient
 
 	def clearCache(self):
 
 		clear=False
-		user=os.environ["USER"]
-		versionFile="/home/%s/.config/lliurex-shutdowner.conf"%user
-		cachePath1="/home/%s/.cache/lliurex-shutdowner"%user
-		cachePath2="/home/%s/.cache/lliurex-shutdowner-gui.py"%user
+		userHome=os.path.expanduser("~")
+		versionFile=os.path.join(userHome,".config/lliurex-shutdowner.conf")
+		cachePath1=os.path.join(userHome,".cache/lliurex-shutdowner")
+		cachePath2=os.path.join(userHome,".cache/lliurex-shutdowner-gui.py")
+
 		installedVersion=self.getPackageVersion()
 
 		if not os.path.exists(versionFile):
 			with open(versionFile,'w') as fd:
 				fd.write(installedVersion)
-				fd.close()
 
 			clear=True
 
 		else:
 			with open(versionFile,'r') as fd:
 				fileVersion=fd.readline()
-				fd.close()
 
 			if fileVersion!=installedVersion:
 				with open(versionFile,'w') as fd:
 					fd.write(installedVersion)
-					fd.close()
 				clear=True
 		
 		if clear:
@@ -72,43 +84,16 @@ class Tunnel(QObject):
 
 	def isStandAlone(self):
 
-		versionReference=["adi","desktop"]
 		self._standAlone=True
 		self._isClient=False
 		isDesktop=False
 
-		if not os.path.exists(self.adiServer):
-			if os.path.exists(self.adiClient):
-				if self._checkConnectionWithADI():
-					self._isClient=True
-					self._standAlone=False
-		'''
-		flavours=[]
-		cmd='lliurex-version -v'
-		p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-		result=p.communicate()[0]
-
-		if type(result) is bytes:
-			result=result.decode()
-
-		for x in result.split(","):
-			if x.strip() in versionReference:
-				flavours.append(x.strip())
-
-		for item in flavours:
-			if 'adi' in item:
-				break
-			elif 'desktop' in item:
-				isDesktop=True
-				self._standAlone=True
-				
-		if isDesktop:
-			if os.path.exists(self.adiClient):
-				if self._checkConnectionWithADI():
-					self._isClient=True
-					self._standAlone=False
-		'''
-	#def is_StandAlone
+		if not os.path.exists(self.adiServer) and os.path.exists(self.adiClient):
+			if self._checkConnectionWithADI():
+				self._isClient=True
+				self._standAlone=False
+		
+	#def isStandAlone
 	
 	def _checkConnectionWithADI(self):
 
@@ -122,21 +107,6 @@ class Tunnel(QObject):
 
 	#def _checkConnectionWithADI
 	
-	def _getStandAlone(self):
-
-		return self._standAlone
-
-	#def _getStandAlone
-
-	def _getIsClient(self):
-		
-		return self._isClient
-
-	#def _getIsClient	
-
-	standAlone=Property(bool,_getStandAlone,constant=True)
-	isClient=Property(bool,_getIsClient,constant=True)
-
 	@Slot(str)
 	def on_authenticated(self,passwd):
 		
@@ -148,11 +118,10 @@ class Tunnel(QObject):
 	def on_ticket(self,ticket):
 
 		ticket=ticket.replace(' ','##U+0020##')
-		passwd=None
-		if self._isClient:
-			passwd="'"+self.passwd+"'"
-		os.system("python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py %s %s &"%(ticket,passwd))
-		app.quit()
+		passwd=f"'{self.passwd}'" if self._isClient else "None"
+		cmd=["python3","/usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py",ticket,passwd]
+		subprocess.Popen(cmd)
+		QApplication.quit()
 
 	#def on_ticket
 	

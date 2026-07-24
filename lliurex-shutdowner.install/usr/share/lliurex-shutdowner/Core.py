@@ -49,6 +49,6 @@ class Core:
 		
 		if Core.DEBUG:
 			
-			print("[CORE] %s"%msg)
+			print(f"[CORE] {msg}")
 	
 	#def  dprint
