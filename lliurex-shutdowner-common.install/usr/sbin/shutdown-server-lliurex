@@ -35,22 +35,24 @@ class Shutdowner:
 
 	def init_var(self):
 		
-		self.lliurex_flavour={}
-		self.lliurex_flavour["server"]=False
+		self.lliurex_flavour={
+			"server":False
+		}
 	
-		self.shutdown_function={}
-		self.shutdown_function["server"]=self.server_shutdown
-		self.shutdown_function["unknown"]=self.unknown_shutdown
+		self.shutdown_function={
+			"server":self.server_shutdown,
+			"unknown":self.unknown_shutdown
+		}
 		
 	#def init_var
 	
 	def what_am_i(self):
 		
-		if os.system("lliurex-version -x server")==0:
+		if subprocess.run(["lliurex-version", "-x", "server"],capture_output=True).returncode==0:
 			self.lliurex_flavour["server"]=True
-		if self.lliurex_flavour["server"]:
 			return "server"
-		elif os.system("lliurex-version -x desktop")==0:
+
+		if subprocess.run(["lliurex-version", "-x", "desktop"],capture_output=True).returncode==0:
 			if os.path.exists(self.adi_server):
 				return "server"
 				
@@ -84,37 +86,60 @@ class Shutdowner:
 	def standalone_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Standalone shutdown")
-		
-		standalone=subprocess.Popen(["who | grep tty"],shell=True,stdout=subprocess.PIPE).communicate()[0]
-		standalone=standalone.decode("utf-8")
-		displays=set()
-		for item in standalone.strip("\n").split("\n"):
-			
-			display=None		
-			x=item.split(" ")
-			user=x[0]
-			display=x[-1]
-			
-			if "(" not in display or ")" not in display or ":" not in display:
+
+		if os.path.exists(self.adi_server):
+			wait_time=SERVER_WAIT_TIME
+
+		try:
+			result = subprocess.run(
+				["loginctl", "list-sessions", "--no-legend"],
+				stdout=subprocess.PIPE,
+				stderr=subprocess.PIPE,
+				text=True
+			)
+			sessions = result.stdout
+		except Exception as e:
+			self.dprint(f"Error running loginctl: {e}")
+			sessions = []
+
+		for line in sessions.strip().splitlines():
+			parts=line.split()
+			if not parts:
 				continue
 				
-			display=display.lstrip("(").rstrip(")")
+			session_id = parts[0]
+			user = parts[2]
 			
-			command="su -c 'DISPLAY=%s /usr/sbin/shutdown-lliurex-dialog.py %s' %s &"%(display,wait_time,user)
-			self.dprint("\t%s"%command)
-			os.system(command)
-	
+			try:
+				info = subprocess.run(
+						["loginctl", "show-session", session_id, "-p", "Display"],
+						stdout=subprocess.PIPE, text=True, check=True
+					)
+				sessionInfo=info.stdout.strip()
+			except subprocess.SubprocessError:
+				continue
+
+			if not sessionInfo.startswith("Display=") or "=" not in sessionInfo:
+				continue
+
+			display=sessionInfo.split("=",1)[1]
+			cmd=["su","-c",f"DISPLAY={display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}",user]
+
+			self.dprint(f"\t{' '.join(cmd)}")
+			subprocess.Popen(cmd)
+			
 		self.dprint("Calling basic_shutdown...")
 		self.basic_shutdown(wait_time)
+
 		
 	#def standalone_shutdown
 	
 	def basic_shutdown(self,wait_time=CLIENT_WAIT_TIME):
 		
 		self.dprint("Basic shutdown")
-		command="/sbin/shutdown -h +%s"%wait_time
-		self.dprint("\t%s"%command)
-		os.system(command)
+		command=["/sbin/shutdown", "-h", f"+{wait_time}"]
+		self.dprint(f"\t{' '.join(command)}")
+		subprocess.Popen(command)
 		
 	#def basic_shutdown
 	

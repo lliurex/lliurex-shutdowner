@@ -1,372 +1,300 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.6
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 
-GridLayout{
-	id:calendar
-	rows:2
-	flow: GridLayout.TopToBottom
+ColumnLayout{
+	id:scheduler
+    spacing: 10
+    focus: true
 
 	property alias clockLayoutEnabled:clockLayout.enabled
-	property alias currentHour:hoursTumbler.currentIndex
-	property alias currentMinutes: minutesTumbler.currentIndex
+	property alias currentHour:hoursSelector.currentIndex
+	property alias currentMinutes: minutesSelector.currentIndex
 	signal updateClock(variant value)
 	property alias daysLayoutEnabled:daysLayout.enabled
-	property alias mondayChecked:mondaybtn.dayBtnChecked
-	property alias tuesdayChecked:tuesdaybtn.dayBtnChecked
-	property alias wednesdayChecked:wednesdaybtn.dayBtnChecked
-	property alias thursdayChecked:thursdaybtn.dayBtnChecked
-	property alias fridayChecked:fridaybtn.dayBtnChecked
+
+	property var weekDays
 	signal updateWeekDays(variant value)
 
 
 	RowLayout {
-		id:clockLayout
-		enabled:shutBridge.isCronEnabled
-		Layout.leftMargin: 5
-		Layout.rightMargin:5
-		Layout.bottomMargin: 10
-		Layout.alignment:Qt.AlignHCenter
-		spacing:10   	
-		Item {
-			Layout.fillWidth: true
-			width:200
-		}
-		
+        id: clockLayout
+        Layout.alignment: Qt.AlignHCenter
+        spacing: 5
 
-		Component {
-			id: delegateComponent
-			Label {
-				font.pointSize: 55
-				color: clockLayout.enabled? "#3daee9":"#87cefa"
-				text: formatText(Tumbler.tumbler.count, modelData)
-				horizontalAlignment: Text.AlignHCenter
-				verticalAlignment: Text.AlignVCenter
-				MouseArea {
-					id: mouseAreaHour
-					anchors.fill: parent
-					hoverEnabled: true
-					onEntered: {
-						parent.color="#add8e6"
-					}
-					onExited: {
-						parent.color="#3daee9"
-					}
-					onWheel:{
-						var index=modelData
-						wheel.accepted=false
-						if (wheel.angleDelta.y>0){
-							if (modelData==0){
-								if (Tumbler.tumbler.count==24){
-									Tumbler.tumbler.currentIndex=23;
-								}else{
-									Tumbler.tumbler.currentIndex=59;
-								}
-							}else{
-								Tumbler.tumbler.currentIndex=modelData-1;
-							}
-						}else{
-							if (modelData==23){
-								if (Tumbler.tumbler.count==24){
-									Tumbler.tumbler.currentIndex=0;
-								}else{
-									Tumbler.tumbler.currentIndex=modelData+1;
-								}
-							}else{ 
-								if (modelData==59){
-									if (Tumbler.tumbler.count==60){
-										Tumbler.tumbler.currentIndex=0;
-									}else{
-										Tumbler.tumbler.currentIndex=modelData+1;
-									}
-								}else{
-									Tumbler.tumbler.currentIndex=modelData+1;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-			 
-		Rectangle {
-			anchors.topMargin: 4
-			Layout.fillWidth: true
-	       	Layout.alignment:Qt.AlignCenter
-		    height: 100
-		    width: 80
-		    color:"transparent"
-		    Tumbler {
-		    	id: hoursTumbler
-		    	width:80
-	            height:100
-	            model: 24
-	            currentIndex:currentHour
-	            delegate:delegateComponent 
-	            visibleItemCount:1
-	            hoverEnabled:true
-	        	ToolTip.delay: 1000
-	            ToolTip.timeout: 3000
-	            ToolTip.visible: hovered
-	            ToolTip.text:i18nd("lliurex-shutdowner","You can use the mouse wheel to change the hour")
-	            onCurrentIndexChanged: {
-	            	updateClock(["H",hoursTumbler.currentIndex]);
-	            } 
-	        }       
-		}
-		Text{
-			id:clockSeparator
-			Layout.fillWidth: true
-	       	Layout.alignment:Qt.AlignCenter
-	       	Layout.leftMargin:10
-			font.pointSize:55
-			color: clockLayout.enabled? "#3daee9":"#87cefa"
-			text:":"
-	    }
-	    Rectangle {
-	    	anchors.topMargin: 4
-	    	Layout.fillWidth: true
-	       	Layout.alignment:Qt.AlignCenter
-	    	height: 100
-	    	width: 80
-	    	color:"transparent"
+        property int hoursWheelAccumulator:0
+        property int minutesWheelAccumulator:59
+        readonly property int wheelThreshold:360
 
-	    	Tumbler {
-	    		id: minutesTumbler
-	    		height:100
-	    		width:80
-	    		model: 60
-	    		currentIndex:currentMinutes
-	    		delegate: delegateComponent
-	    		visibleItemCount:1
-	    		hoverEnabled:true
-	    	 	ToolTip.delay: 1000
-	    	 	ToolTip.timeout: 3000
-	    	 	ToolTip.visible: hovered
-	    	 	ToolTip.text:i18nd("lliurex-shutdowner","You can use the mouse wheel to change the minutes")
-	    		onCurrentIndexChanged: {
-	    			updateClock(["M",minutesTumbler.currentIndex]);
-	    		}
-	    	}
-		} 
+        Component {
+            id: numberDelegate
+            Item {
+                width: 80
+                height: 80
+
+                HoverHandler{
+                    id:itemHoverHandler
+                }
+
+                Text {
+                    text: modelData.toString().padStart(2, "0")
+                    font.pointSize: 50
+                    color: paletteText(itemHoverHandler.hovered)
+                    anchors.centerIn: parent
+                }
+
+                ToolTip.delay:1000
+                ToolTip.timeout:1000
+                ToolTip.visible:itemHoverHandler.hovered
+                ToolTip.text:i18nd("lliurex-shutdowner","You can use the mouse wheel to change the value")
+            }
+        }
+
+        Rectangle {
+            width: 80
+            height: 80
+            color: "transparent"
+            clip: true
+
+            PathView {
+                id: hoursSelector
+                anchors.fill: parent
+                focus: true
+                model: 24
+                delegate: numberDelegate
+
+                pathItemCount: 3
+                preferredHighlightBegin: 0.5
+                preferredHighlightEnd: 0.5
+                highlightRangeMode: PathView.StrictlyEnforceRange
+
+
+                onCurrentIndexChanged: {
+                	updateClock({"hour": hoursSelector.currentIndex});
+                }
+
+                WheelHandler {
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+
+                    onWheel: (event) => {
+
+                        let delta=event.angleDelta.y;
+
+                        if ((delta >0 && clockLayout.hoursWheelAccumulator < 0) || ( delta <0 && clockLayout.hoursWheelAccumulator > 0)){
+                            clockLayout.hoursWheelAccumulator = 0;
+                        }
+
+                        clockLayout.hoursWheelAccumulator+=delta;
+
+                        if (clockLayout.hoursWheelAccumulator >= clockLayout.wheelThreshold){
+                            hoursSelector.decrementCurrentIndex();
+                            clockLayout.hoursWheelAccumulator=0;
+                        } 
+                        else if (clockLayout.hoursWheelAccumulator <= -clockLayout.wheelThreshold) {
+                            hoursSelector.incrementCurrentIndex();
+                            clockLayout.hoursWheelAccumulator=0;
+                        }
+                            
+                    }
+                }
+
+                path: Path {
+                    startX: 40; startY: -80
+                    PathPercent {value:0.0}
+
+                    PathLine { x: 40; y: 40 }
+                    PathPercent {value:0.5}
+
+                    PathLine { x: 40; y: 160 }
+                    PathPercent {value:1.0}
+
+                }
+            }
+        }
+
+        Text {
+            text: ":"
+            font.pointSize: 40
+            color: "#3daee9"
+            Layout.alignment: Qt.AlignCenter
+        }
+
+        Rectangle {
+            width: 80
+            height: 80
+            color: "transparent"
+            clip: true
+
+            PathView {
+                id: minutesSelector
+                anchors.fill: parent
+                focus: true
+                model: 60
+                delegate: numberDelegate
+
+                pathItemCount: 3
+                preferredHighlightBegin: 0.5
+                preferredHighlightEnd: 0.5
+                highlightRangeMode: PathView.StrictlyEnforceRange
+
+
+                onCurrentIndexChanged: {
+                    updateClock({"minute": minutesSelector.currentIndex});
+                }
+
+                WheelHandler {
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    onWheel: (event) => {
+
+                        let delta=event.angleDelta.y;
+
+                        if ((delta >0 && clockLayout.minutesWheelAccumulator < 0) || ( delta <0 && clockLayout.minutesWheelAccumulator > 0)){
+                            clockLayout.minutesWheelAccumulator = 0;
+                        }
+
+                        clockLayout.minutesWheelAccumulator+=delta;
+
+                        if (clockLayout.minutesWheelAccumulator >= clockLayout.wheelThreshold){ 
+                            minutesSelector.decrementCurrentIndex();
+                            clockLayout.minutesWheelAccumulator = 0;
+                        } else if (clockLayout.minutesWheelAccumulator <= -clockLayout.wheelThreshold) {
+                            minutesSelector.incrementCurrentIndex();
+                            clockLayout.minutesWheelAccumulator = 0;
+                        }
+                    }
+                }
+
+                path: Path {
+                    startX: 40; startY: -80
+                    PathPercent {value:0.0}
+
+                    PathLine { x: 40; y: 40 }
+                    PathPercent {value:0.5}
+
+                    PathLine { x: 40; y: 160 }
+                    PathPercent {value:1.0}
+                }
+            }
+        }
+ 
 		Button {
 			id:editHourBtn
 			display:AbstractButton.IconOnly
-			icon.name:"edit-entry.svg"
-			Layout.preferredHeight: 40
-	       	Layout.alignment:Qt.AlignCenter
-			Layout.topMargin:20
-			Layout.leftMargin:10
-			hoverEnabled:true
+			icon.name:"edit-entry"
+			Layout.alignment:Qt.AlignCenter
+            Layout.topMargin: 10
+            Layout.leftMargin: 10
+            hoverEnabled: true
+
 			ToolTip.delay: 1000
 			ToolTip.timeout: 3000
 			ToolTip.visible: hovered
 			ToolTip.text:i18nd("lliurex-shutdowner","Click to edit shutdown time with keyboard ")
+			
 			onClicked:{
-				hourEntry.text=formatEditText(hoursTumbler.currentIndex),
-				minuteEntry.text=formatEditText(minutesTumbler.currentIndex),
-				popupEditHour.open();
+				timeSelector.open()
 			}
-			Popup {
-				id: popupEditHour
-				x: Math.round(parent.width/ 2)
-       			y: Math.round(parent.height)
-				rightMargin:popupEditHour.width
-				width: 205
-				height: 170
-				modal: true
-				focus: true
-				closePolicy: Popup.NoAutoClose
-				enter: Transition {
-				        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
-				}
-				exit: Transition {
-					NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
-    			}
-				GridLayout{
-					id:popupGrid
-					rows:3
-					flow: GridLayout.TopToBottom
-					RowLayout {
-						id: popupHourLayout
-					    Layout.alignment:Qt.AlignHCenter
-					    Layout.fillWidth: true
-					    Layout.bottomMargin: 10
-					    spacing:4
-				    	TextField{
-				    		id: hourEntry
-				    		validator: RegExpValidator { regExp: /([0-1][0-9]|2[0-3])/ }
-				    		implicitWidth: 70
-				    		horizontalAlignment: TextInput.AlignHCenter
-				    		color:"#3daee9"
-				    		font.pointSize: 40
-				    	}
-
-				    	Text{
-							font.pointSize:40
-							color:"#3daee9"
-							text:":"
-				    	}
-				    	
-				    	TextField{
-				    		id: minuteEntry
-				    		validator: RegExpValidator { regExp: /[0-5][0-9]/ }
-				    		implicitWidth: 70
-				    		horizontalAlignment: TextInput.AlignHCenter
-				    		color:"#3daee9"
-				    		font.pointSize: 40
-				    	}
-				    }
-
-			    	RowLayout {
-					   id: footPopup
-					   Layout.fillWidth: true
-					   Layout.bottomMargin: 10
-
-					   Layout.alignment:Qt.AlignHCenter
-					   spacing:8
-
-					   Button {
-					   		id:cancelEditBtn
-						   	display:AbstractButton.TextBesideIcon
-						   	icon.name:"dialog-cancel.svg"
-						   	text:i18nd("lliurex-shutdowner","Cancel")
-						   	Layout.preferredHeight: 40
-						   	onClicked:{
-						   		popupEditHour.close();
-					   		}
-					 	}
-					 	Button {
-							id:applyEditBtn
-						   	display:AbstractButton.TextBesideIcon
-						   	icon.name:"dialog-ok-apply.svg"
-						   	text:i18nd("lliurex-shutdowner","Apply")
-						   	Layout.preferredHeight: 40
-						   	onClicked:{
-						   		if (validateEntry(hourEntry.text,minuteEntry.text)){
-						   			hoursTumbler.currentIndex=hourEntry.text,
-						   			minutesTumbler.currentIndex=minuteEntry.text,
-									delay(1000, function() {
-										popupEditHour.close();
-							        })
-							    }else{
-							    	popupEditHour.close();
-							    }
-						   		
-					   		}
-					 	}
-					}      
-
-			    }
-			}
-		}       
-		Item {
-			Layout.fillWidth: true
-			width:200
+			
 		}
+		
 	}	
 
 	RowLayout {
 		id: daysLayout
 		enabled:daysLayoutEnabled
-	    Layout.alignment:Qt.AlignHCenter
-	    Layout.fillWidth: true
-	    Layout.bottomMargin: 10
-	    spacing:8
+		Layout.alignment:Qt.AlignHCenter
+		Layout.bottomMargin: 10
+		spacing:8
 
-	    DayButton {
-	      	id:mondaybtn
-			dayBtnChecked:mondayChecked
-			dayBtnText:i18nd("lliurex-shutdowner","Monday")
-			Connections{
-				function onDayBtnClicked(value){
-					updateWeekDays(["MO",value]);	
-				}
-			}
-					
-		}
-				
-		DayButton {
-	       	id:tuesdaybtn
-			dayBtnChecked:tuesdayChecked
-			dayBtnText:i18nd("lliurex-shutdowner","Tuesday")
-			Connections{
-				function onDayBtnClicked(value){
-					updateWeekDays(["TU",value]);
-				}
-			}
-		}
-		
-		DayButton {
-			id:wednesdaybtn
-			dayBtnChecked:wednesdayChecked
-			dayBtnText:i18nd("lliurex-shutdowner","Wednesday")
-			Connections{
-				function onDayBtnClicked(value){
-					updateWeekDays(["WE",value]);
-				}
-			}
-			
-		}
-				
-		DayButton {
-			id:thursdaybtn
-			dayBtnChecked:thursdayChecked
-			dayBtnText:i18nd("lliurex-shutdowner","Thursday")
-			Connections{
-				function onDayBtnClicked(value){
-					updateWeekDays(["TH",value]);
-				}
-			}
-		}
-			
-		DayButton {
-			id:fridaybtn
-			dayBtnChecked:fridayChecked
-			dayBtnText:i18nd("lliurex-shutdowner","Friday")
-			Connections{
-				function onDayBtnClicked(value){
-					updateWeekDays(["FR",value]);
-				}
-			}
-		}
+        Item{
+            Layout.fillWidth:true
+        }
+
+
+        Repeater {
+
+        	model:[
+               { key: "0", name: i18nd("lliurex-shutdowner","Monday")},
+               { key: "1", name: i18nd("lliurex-shutdowner","Tuesday") },
+               { key: "2", name: i18nd("lliurex-shutdowner","Wednesday") },
+               { key: "3", name: i18nd("lliurex-shutdowner","Thursday") },
+               { key: "4", name: i18nd("lliurex-shutdowner","Friday") } 
+            ]
+
+        	DayButton{
+        		dayBtnChecked:weekDays[modelData.key]
+        		dayBtnText: modelData.name
+                dayBtnEnabled:daysLayout.enabled
+        		onDayBtnClicked: (value) => {
+                    updateWeekDays({[modelData.key]: value});
+                }
+
+        	}
+
+        }
+
+        Item{
+            Layout.fillWidth:true
+        }
+	    
 	}
 
-	
 
-	function formatText(count, modelData) {
-        var data = count === 12 ? modelData + 1 : modelData;
-        return data.toString().length < 2 ? "0" + data : data;
-    }	
+	TimeSelector {
+        id: timeSelector
+        
+        Binding{
+            target:timeSelector
+            property:"hourValue"
+            value:hoursSelector.currentIndex.toString().padStart(2, "0")
 
-    function formatEditText(value){
-    	if (value<10){
-    		return "0"+value.toString();
-    	}else{
-    		return value.toString();
-    	}
+        }
 
+        Binding{
+            target:timeSelector
+            property:"minuteValue"
+            value:minutesSelector.currentIndex.toString().padStart(2, "0")
+
+        }
+
+        Connections {
+            target: timeSelector
+            function onTimeApplyClicked(hourValue, minuteValue){
+                hoursSelector.currentIndex = hourValue
+                minutesSelector.currentIndex = minuteValue
+            }
+        }
     }
 
-    function validateEntry(hour,minute){
-
-    	if ((hour =="") || (minute=="")){
-    		console.log("Vacio");
-    		return false;
-    	}else{
-    		return true;
-    	}
-
-    }
     Timer {
-        id: timer
+        id: safetyTimer
+        property var callback: null
+        onTriggered: {
+            if (callback) {
+                callback();
+                callback = null;
+            }
+        }
     }
 
     function delay(delayTime, cb) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(cb);
-        timer.start();
+        safetyTimer.stop();
+        safetyTimer.interval = delayTime;
+        safetyTimer.callback = cb;
+        safetyTimer.start();
+    }
+
+    function validateEntry(hour, minute) {
+        return hour !== "" && minute !== "";
+    }
+
+    function paletteText(isHovered=false) {
+
+        if (clockLayout.enabled) { 
+            return isHovered ? "#add8e6":"#3daee9"
+        }else {
+            return "#87cefa"
+        }
     }
 }				

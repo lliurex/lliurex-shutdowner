@@ -24,29 +24,26 @@ class Tunnel(QObject):
 	def clearCache(self):
 
 		clear=False
-		user=os.environ["USER"]
-		versionFile="/home/%s/.config/lliurex-shutdowner.conf"%user
-		cachePath1="/home/%s/.cache/lliurex-shutdowner"%user
-		cachePath2="/home/%s/.cache/lliurex-shutdowner-gui.py"%user
-		cachePath3="/home/%s/.cache/shutdown-lliurex-dialog.py"%user
+		userHome=os.path.expanduser("~")
+		versionFile=os.path.join(userHome,".config/lliurex-shutdowner.conf")
+		cachePath1=os.path.join(userHome,".cache/lliurex-shutdowner")
+		cachePath2=os.path.join(userHome,".cache/lliurex-shutdowner-gui.py")
+
 		installedVersion=self.getPackageVersion()
 
 		if not os.path.exists(versionFile):
 			with open(versionFile,'w') as fd:
 				fd.write(installedVersion)
-				fd.close()
 
 			clear=True
 
 		else:
 			with open(versionFile,'r') as fd:
 				fileVersion=fd.readline()
-				fd.close()
 
 			if fileVersion!=installedVersion:
 				with open(versionFile,'w') as fd:
 					fd.write(installedVersion)
-					fd.close()
 				clear=True
 		
 		if clear:
@@ -54,8 +51,6 @@ class Tunnel(QObject):
 				shutil.rmtree(cachePath1)
 			if os.path.exists(cachePath2):
 				shutil.rmtree(cachePath2)
-			if os.path.exists(cachePath3):
-				shutil.rmtree(cachePath3)
 
 	#def clearCache
 
@@ -77,40 +72,38 @@ class Tunnel(QObject):
 
 		self._standAlone=False
 		self._isClient=False
-		isDesktop=False
 
 		if os.path.exists(self.adiServer):
 			self._standAlone=True
-		else:
-			cmd='lliurex-version -v'
-			p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-			result=p.communicate()[0]
+			return
 
-			if type(result) is bytes:
-				result=result.decode()
-			flavours = [ x.strip() for x in result.split(',') ]
+		try:
+			result=subprocess.check_output(['lliurex-version', '-v'],text=True)
+			flavours=[x.strip() for x in result.split(",")]
+		except (subprocess.CalledProcessError,FileNotFoundError):
+			self._standAlone=True
+			return
 
-			for item in flavours:
-				if 'server' in item:
-					self._standAlone=False
-					break
-				elif 'client' in item:
-					self._isClient=True
-				elif 'desktop' in item:
-					isDesktop=True
-					if not os.path.exists(self.adiServer):
-						if os.path.exists(self.adiClient):
-							self._isClient=True
-						else:
-							self._standAlone=True
-					
-			if self._isClient:
-				if isDesktop:
-					if self._checkConnectionWithServer():
-						self._standAlone=False
-					else:
-						self._isClient=False
-						self._standAlone=True
+		if any('server' in item for item in flavours):
+			return
+
+		self._isClient=any('client' in item for item in flavours)
+
+		isDesktop=any('desktop' in item for item in flavours)
+			
+		if isDesktop:
+			if os.path.exists(self.adiClient):
+				self._isClient=True
+			else:
+				self._standAlone=True
+
+
+		if self._isClient and isDesktop:
+			if self._checkConnectionWithServer():
+				self._standAlone=False
+			else:
+				self._isClient=False
+				self._standAlone=True
 
 	#def is_StandAlone
 	
@@ -154,8 +147,8 @@ class Tunnel(QObject):
 		ticket=ticket.replace(' ','##U+0020##')
 		passwd=None
 		if self._isClient:
-			passwd="'"+self.passwd+"'"
-		os.system("python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py %s %s &"%(ticket,passwd))
+			passwd=f"'{self.passwd}'"
+		os.system(f"python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py {ticket} {passwd} &")
 		app.quit()
 
 	#def on_ticket

@@ -11,166 +11,181 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class Bridge(QObject):
 
+	NO_DAYS_CHECKED=-50
+
+	isCronEnabledChanged=Signal()
+	initClockClientChanged=Signal()
+	initWeekDaysClientChanged=Signal()
+	detectedClientsChanged=Signal()
+	
 	def __init__(self,ticket=None,passwd=None):
 
-		QObject.__init__(self)
+		super().__init__()
 		self.core=Core.Core.get_core()
-		Bridge.n4dManager=self.core.n4dManager
+		self.n4dManager=self.core.n4dManager
 		self.shutdownBin="/usr/sbin/shutdown-lliurex"
-		self._isStandAlone=Bridge.n4dManager.standAlone
-		self._isClient=Bridge.n4dManager.isClient
+		self._isStandAlone=self.n4dManager.standAlone
+		self._isClient=self.n4dManager.isClient
 		self._detectedClients="0"
 		self.loadError=False
 
 	#def __init__
 
-	def loadConfig(self):
+	@Property(bool,notify=isCronEnabledChanged)
+	def isCronEnabled(self):
 
-		clientValues=Bridge.n4dManager.getCronValues()	
+		return self._isCronEnabled
 
-		if clientValues!=None:
-			if len(clientValues)>0:
-				self._isCronEnabled=Bridge.n4dManager.isCronEnabled()
-				self.cronSwitch=copy.deepcopy(self._isCronEnabled)
+	#def isCronEnabled
 
-				self._initClockClient=[clientValues["hour"],clientValues["minute"]]
-				self.clockClientValues=copy.deepcopy(self._initClockClient)
-				self._initWeekDaysClient=[clientValues["weekdays"][0],clientValues["weekdays"][1],clientValues["weekdays"][2],clientValues["weekdays"][3],clientValues["weekdays"][4]]
-				self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
+	@isCronEnabled.setter
+	def isCronEnabled(self,isCronEnabled):
 
-				if not self._isStandAlone:
-					self.clientTimer = QTimer(None)
-					self.clientTimer.timeout.connect(self.getClient)
-					self.clientTimer.start(2000)
-			else:
-				self.loadError=True
-		else:
-			self.loadError=True	
-	
-	#def loadConfig	
+		if self._isCronEnabled!=isCronEnabled:
+			self._isCronEnabled=isCronEnabled
+			self.isCronEnabledChanged.emit()
 
-	def getClient(self):
+	#def isCronEnabled
 
-		self.detectedClients=str(Bridge.n4dManager.detectedClients)
+	@Property('QVariant',notify=initClockClientChanged)
+	def initClockClient(self):
 
-	#def getClient
+		return self._initClockClient
+
+	#def initClockClient
+
+	@initClockClient.setter
+	def initClockClient(self,initClockClient):
+
+		if self._initClockClient!=initClockClient:
+			self._initClockClient=initClockClient
+			self.initClockClientChanged.emit()
+
+	#def initClockClient
+
+	@Property('QVariant',notify=initWeekDaysClientChanged)
+	def initWeekDaysClient(self):
+
+		return self._initWeekDaysClient
+
+	#def initWeekDaysClient
+
+	@initWeekDaysClient.setter
+	def initWeekDaysClient(self,initWeekDaysClient):
+
+		if self._initWeekDaysClient!=initWeekDaysClient:
+			self._initWeekDaysClient=initWeekDaysClient
+			self.initWeekDaysClientChanged.emit()
+
+	#def initWeekDaysClient
+
+	@Property(str,notify=detectedClientsChanged)
+	def detectedClients(self):
+
+		return self._detectedClients
+
+	#def detectedClients	
+
+	@detectedClients.setter
+	def detectedClients(self,detectedClients):
+
+		if self._detectedClients!=detectedClients:
+			self._detectedClients=detectedClients
+			self.detectedClientsChanged.emit()	
+
+	#def detectedClients
 
 	def _getIsStandAlone(self):
 
 		return self._isStandAlone
 
-	#def _getIsStandAlone
+	#def isStandAlone
 
 	def _getIsClient(self):
 		
 		return self._isClient
 
-	#def _getIsClient	
+	#def isClient	
 
-	def _getIsCronEnabled(self):
+	def loadConfig(self):
 
-		return self._isCronEnabled
+		clientValues=self.n4dManager.getCronValues()	
 
-	#def _getIsCronEnabled
+		if clientValues is None:
+			self.loadError=True
+			return
 
-	def _setIsCronEnabled(self,isCronEnabled):
+		if not clientValues:
+			self.loadError=True
+			return
 
-		if self._isCronEnabled!=isCronEnabled:
-			self._isCronEnabled=isCronEnabled
-			self.on_isCronEnabled.emit()
+		self._isCronEnabled=self.n4dManager.isCronEnabled()
+		self.cronSwitch=copy.deepcopy(self._isCronEnabled)
+		self._initClockClient={"hour":clientValues.get("hour"),"minute":clientValues.get("minute")}
+		self.clockClientValues=copy.deepcopy(self._initClockClient)
+		self._initWeekDaysClient={str(i):valor for i, valor in enumerate(clientValues.get("weekdays"))}
+		self.weekClientValues=copy.deepcopy(self._initWeekDaysClient)
 
-	#def _setIsCronEnabled
+		if not self._isStandAlone:
+			self.clientTimer = QTimer(None)
+			self.clientTimer.timeout.connect(self.getClient)
+			self.clientTimer.start(2000)
+	
+	#def loadConfig	
 
-	def _getInitClockClient(self):
+	def getClient(self):
 
-		return self._initClockClient
+		self.detectedClients=str(self.n4dManager.detectedClients)
 
-	#def _getinitClockClient
-
-	def _setInitClockClient(self,initClockClient):
-
-		if self._initClockClient!=initClockClient:
-			self._initClockClient=initClockClient
-			self.on_initClockClient.emit()
-
-	#def _setInitClockClient	
-
-	def _getInitWeekDaysClient(self):
-
-		return self._initWeekDaysClient
-
-	#def _getInitWeekDaysClient
-
-	def _setInitWeekDaysClient(self,initWeekDaysClient):
-
-		if self._initWeekDaysClient!=initWeekDaysClient:
-			self._initWeekDaysClient=initWeekDaysClient
-			self.on_initWeekDaysClient.emit()
-
-	#def _setInitWeekDaysClient	
-
-	def _getDetectedClients(self):
-
-		return self._detectedClients
-
-	#def _getDetectedClients	
-
-	def _setDetectedClients(self,detectedClients):
-
-		if self._detectedClients!=detectedClients:
-			self._detectedClients=detectedClients
-			self.on_detectedClients.emit()	
-
-	#def _setDetectedClients
+	#def getClient
 
 	def gatherValues(self):
 
 		getServerValues=False
-		newVar=copy.deepcopy(Bridge.n4dManager.shutdownerVar)
+		newVar=copy.deepcopy(self.n4dManager.shutdownerVar)
 		newVar["cron_enabled"]=self.cronSwitch
 
-		if self.cronSwitch:
+		if not self.cronSwitch or not any(self.weekClientValues.values()):
+			newVar["cron_enabled"]=False
+			return newVar
 
-			dayConfigured=False
+		for i in range(5):
+			key=str(i)
+			newVar["cron_values"]["weekdays"][i]=self.weekClientValues.get(key,False)
 
-			for item in self.weekClientValues:
-				if item:
-					dayConfigured=True
-					break
-			
-			if dayConfigured:
+		newVar["cron_values"]["server_shutdown"]=self.core.serverStack.serverShut
+		newVar["cron_values"]["hour"]=self.clockClientValues.get("hour")
+		newVar["cron_values"]["minute"]=self.clockClientValues.get("minute")
 
-				newVar["cron_values"]["weekdays"][0]=self.weekClientValues[0]
-				newVar["cron_values"]["weekdays"][1]=self.weekClientValues[1]
-				newVar["cron_values"]["weekdays"][2]=self.weekClientValues[2]
-				newVar["cron_values"]["weekdays"][3]=self.weekClientValues[3]
-				newVar["cron_values"]["weekdays"][4]=self.weekClientValues[4]
-				newVar["cron_values"]["server_shutdown"]=self.core.serverStack.serverShut
-				newVar["cron_values"]["hour"]=self.clockClientValues[0]
-				newVar["cron_values"]["minute"]=self.clockClientValues[1]
+		selectedDays=[
+			str(int(k)+1)
+			for k, v in self.weekClientValues.items()
+			if v and k.isdigit() and int(k) <5
+		]
 
-				days=""
-				count=1
-				for day in newVar["cron_values"]["weekdays"]:
-					if day:
-						days+="%s,"%count
-					count+=1
-				days=days.rstrip(",")
-				newVar["cron_content"]=self.core.mainStack.cronContent%(self.clockClientValues[1],self.clockClientValues[0],days,self.shutdownBin)
-				if not self._isStandAlone and self.core.serverStack.serverShut:
-					if self.core.serverStack.customServerShut:
-						newVar=self.core.serverStack.gatherValuesServer(newVar)	
-					else:
-						newVar["server_cron"]["custom_shutdown"]=False
-				else:
-					if self._isStandAlone:
-						newVar["cron_values"]["server_shutdown"]=False
+		days=",".join(selectedDays)
+		minute=self.clockClientValues.get("minute")
+		hour=self.clockClientValues.get("hour")
+		newVar["cron_content"]=self.core.mainStack.cronContent%(minute,hour,days,self.shutdownBin)
+		
+		if not self._isStandAlone and self.core.serverStack.serverShut:
+			if self.core.serverStack.customServerShut:
+				newVar=self.core.serverStack.gatherValuesServer(newVar)	
 			else:
-				newVar["cron_enabled"]=False
+				newVar["server_cron"]["custom_shutdown"]=False
 		
 		return newVar
 
 	#def gatherValues
+
+	def checkAnyDayChecked(self):
+
+		if self.cronSwitch and not any(self.weekClientValues.values()):
+			return {"error":True,"code":Bridge.NO_DAYS_CHECKED}
+
+		return {"error":False,"code":""}
+
+	#def checkAnyDayChecked
 	
 	@Slot(bool)
 	def getCronSwitchValue(self,state):
@@ -180,58 +195,46 @@ class Bridge(QObject):
 
 	#getCronSwitchValue
 	
-	@Slot('QVariantList')
-	def getClockClientValues(self,values):
+	@Slot('QJSValue')
+	def getClockClientValues(self,data):
 
-		if values[0]=="H":
-			self.clockClientValues[0]=values[1]
-		else:
-			self.clockClientValues[1]=values[1]
+		if hasattr(data,'toVariant'):
+			data=data.toVariant()
+
+		changes={key:value for key,value in data.items() if self.initClockClient[key]!=value}
+
+		if changes:
+			self.initClockClient={**self.initClockClient,**changes}
 		
-		self.initClockClient=self.clockClientValues
+		self.clockClientValues=self.initClockClient
 
 	#def getClokClientValues
 	
-	@Slot('QVariantList')
-	def getWeekClientValues(self,values):
+	@Slot('QJSValue')
+	def getWeekClientValues(self,data):
 
-		if values[0]=="MO":
-			self.weekClientValues[0]=values[1]
-		elif values[0]=="TU":
-			self.weekClientValues[1]=values[1]
-		elif values[0]=="WE":
-			self.weekClientValues[2]=values[1]	
-		elif values[0]=="TH":
-			self.weekClientValues[3]=values[1]
-		elif values[0]=="FR":
-			self.weekClientValues[4]=values[1]	
+		if hasattr(data,'toVariant'):
+			data=data.toVariant()
 
-		self.initWeekDaysClient=self.weekClientValues
-	
+		changes={key:value for key,value in data.items() if self.initWeekDaysClient[key]!=value}
+
+		if changes:
+			self.initWeekDaysClient={**self.initWeekDaysClient,**changes}
+		
+		self.weekClientValues=self.initWeekDaysClient
+
 	#def getWeekClientValues
 
 	@Slot()
 	def shutdownClientsNow(self):
 		
-		Bridge.n4dManager.shutdownClients()
+		self.n4dManager.shutdownClients()
 	
 	#def shutdownClientsNow
 
 	isStandAlone=Property(bool,_getIsStandAlone,constant=True)
 	isClient=Property(bool,_getIsClient,constant=True)
 
-	on_isCronEnabled=Signal()
-	isCronEnabled=Property(bool,_getIsCronEnabled,_setIsCronEnabled,notify=on_isCronEnabled)
-	
-	on_initClockClient=Signal()
-	initClockClient=Property('QVariantList',_getInitClockClient,_setInitClockClient,notify=on_initClockClient)
-	
-	on_initWeekDaysClient=Signal()
-	initWeekDaysClient=Property('QVariantList',_getInitWeekDaysClient,_setInitWeekDaysClient,notify=on_initWeekDaysClient)
-	
-	on_detectedClients=Signal()
-	detectedClients=Property(str,_getDetectedClients,_setDetectedClients, notify=on_detectedClients)
-	
 #class Bridge
 
 import Core

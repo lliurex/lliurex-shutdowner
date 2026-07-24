@@ -26,8 +26,9 @@ engine.load(url)
 if not engine.rootObjects():
 	sys.exit(-1)
 
-engine.quit.connect(QApplication.quit)
+engine.quit.connect(app.quit)
 app.setWindowIcon(QIcon("/usr/share/icons/hicolor/scalable/apps/lliurex-shutdowner.svg"));
+app.aboutToQuit.connect(mainStackBridge.stopServices)
 ret=app.exec_()
 del engine
 del app

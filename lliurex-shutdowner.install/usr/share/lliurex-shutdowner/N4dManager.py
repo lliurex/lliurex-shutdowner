@@ -33,18 +33,20 @@ class N4dManager:
 		tk=n4d.client.Ticket(ticket)
 		self.client=n4d.client.Client(ticket=tk)
 		
-		if self.isClient:
-			if 'https://localhost' in ticket:
-				print("SI")
-				return False
-			else:
-				localUser=ticket.split(' ')[2]
-				self.localClient=n4d.client.Client("https://localhost:9779",localUser,passwd)
-				try:
-					local_t=self.localClient.get_ticket()
-					self.localClient=n4d.client.Client(ticket=local_t)
-				except:
-					pass
+		if not self.isClient:
+			return True
+		
+		if 'https://localhost' in ticket:
+			return False
+		
+		localUser=ticket.split(' ')[2]
+		self.localClient=n4d.client.Client("https://localhost:9779",localUser,passwd)
+		
+		try:
+			local_t=self.localClient.get_ticket()
+			self.localClient=n4d.client.Client(ticket=local_t)
+		except Exception as e:
+			pass
 
 		return True
 
@@ -70,7 +72,7 @@ class N4dManager:
 		try:
 			self.shutdownerVar=self.client.get_variable("SHUTDOWNER")
 			return True
-		except:
+		except Exception as e:
 			return False
 	
 	#def getShutdownerValues
@@ -83,26 +85,27 @@ class N4dManager:
 	
 	def getCronValues(self):
 		
-		try:
-			if self.shutdownerVar["cron_content"]!=None:
-				return self.shutdownerVar["cron_values"]
-		except:
-			pass
-			
+		if not hasattr(self,"shutdownerVar") or self.shutdownerVar is None:
+			return None
+	
+		if self.shutdownerVar.get("cron_content",None) is not None:
+				return self.shutdownerVar.get("cron_values")
+		
 		return None
 		
 	#def getCronValues
 
 	def getServerCronValues(self):
 
-		try:
-			if self.shutdownerVar["server_cron"]["cron_server_values"]!=None:
-				return self.shutdownerVar["server_cron"]["cron_server_values"]
-		except:
-			pass
-
-		return None
-
+		if not hasattr(self,"shutdownerVar") or self.shutdownerVar is None:
+			return None
+		
+		serverCron=self.shutdownerVar.get("server_cron")
+		if not isinstance(serverCron,dict):
+			return None
+		
+		return serverCron.get("cron_server_values")
+		
 	#def getServerCronValues	
 
 	def getClientList(self):
@@ -112,10 +115,11 @@ class N4dManager:
 			self.client.ShutdownerManager.manual_client_list_check()
 			ret=self.client.get_client_list()
 			
-			for item in ret:
-				if ret[item]["missed_pings"]<1:
-					count+=1
-		except:
+			if isinstance(ret,dict):
+				for clientData in ret.values():
+					if isinstance(clientData,dict) and clientData.get("missed_pings",0)<1:
+						count+=1
+		except Exception as e:
 			pass
 			
 		self.detectedClients=count
@@ -130,9 +134,14 @@ class N4dManager:
 			
 	#def updateClientListThread
 	
-	def setShutdownerValues(self):
+	def setShutdownerValues(self,newVar):
 		
-		self.client.ShutdownerManager.save_variable(self.shutdownerVar)
+		self.shutdownerVar=newVar
+		try:
+			self.client.ShutdownerManager.save_variable(self.shutdownerVar)
+		except Exception as e:
+			print(f"ERROR: {e}")
+			pass
 		
 	#def setShutdownerValues
 	
@@ -148,66 +157,59 @@ class N4dManager:
 		self.isClient=False
 		isDesktop=False
 	
-		try:
-			cmd='lliurex-version -v'
-			p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-			result=p.communicate()[0]
-
-			if type(result) is bytes:
-				result=result.decode()
-
-			flavours = [ x.strip() for x in result.split(',') ]
-
-			for item in flavours:
-				if 'server' in item:
-					self.standAlone=False
-					break
-				elif 'client' in item:
-					self.isClient=True
-				elif 'desktop' in item:
-					isDesktop=True
-					if not os.path.exists(self.adiServer):
-						if os.path.exists(self.adiClient):
-							self.isClient=True
-						else:
-							self.standAlone=True
-			
-			if self.isClient:
-				if isDesktop:
-					if self._checkConnectionWithServer():
-						self.standAlone=False
-					else:
-						self.isClient=False
-						self.standAlone=True
-			
+		if os.path.exists(self.adiServer):
 			return self.standAlone,self.isClient
 
-		except Exception as e:
+		try:
+			result=subprocess.check_output(['lliurex-version', '-v'],text=True)
+			flavours=[x.strip() for x in result.split(",")]
+		except (subprocess.CalledProcessError,FileNotFoundError):
 			self.standAlone=True
-			self.isClient=False
-	
+			return self.standAlone,self.isClient
+
+		if any('server' in item for item in flavours):
+			return self.standAlone,self.isClient
+
+		self.isClient=any('client' in item for item in flavours)
+		isDesktop=any('desktop' in item for item in flavours)
+
+		if isDesktop:
+			if os.path.exists(self.adiClient):
+				self.isClient=True
+			else:
+				self.standAlone=True
+			
+		if self.isClient and isDesktop:
+			if self._checkConnectionWithServer():
+				self.standAlone=False
+			else:
+				self.isClient=False
+				self.standAlone=True
+			
+		return self.standAlone,self.isClient
+
 	#def isStandaloneMode
 
 	def isServerShut(self):
 
 		try:
 			ret=self.client.ShutdownerManager.is_server_shutdown_enabled()
-		
-			return [ret['status'],ret['custom_shutdown']]
+			return {"status":ret.get('status'),"data":ret.get('custom_shutdown')}
 		except:
-			return [False]
+			return {"status":False,"data":""}
 	
 	#def isServerShut
 
 	def isClientShutdownOverride(self):
 
-		self.isShutdownOverrideEnabled=False
-
-		if self.isClient:
-			try:
-				self.isShutdownOverrideEnabled=self.localClient.ShutdownerClient.is_shutdown_override_enabled()
-			except:
-				pass
+		if not self.isClient:
+			self.isShutdownOverrideEnabled=False
+			return self.isShutdownOverrideEnabled
+			
+		try:
+			self.isShutdownOverrideEnabled=self.localClient.ShutdownerClient.is_shutdown_override_enabled()
+		except Exception as e:
+			self.isShutdownOverrideEnabled=False
 
 		return self.isShutdownOverrideEnabled
 
@@ -216,21 +218,17 @@ class N4dManager:
 	def switchOverrideShutdown(self,value):
 
 		ret=False
-		action="Enable"
+		action="Enable" if value else "Disable"
 
+		if value==self.isShutdownOverrideEnabled:
+			return {"action":action,"status":ret}
 		try:
-			if value!=self.isShutdownOverrideEnabled:
-				if value:
-					action="Enable"
-					ret=self.localClient.ShutdownerClient.enable_override_shutdown()
+			ret=self.localClient.ShutdownerClient.enable_override_shutdown() if value else self.localClient.ShutdownerClient.disable_override_shutdown()
 
-				else:
-					action="Disable"
-					ret=self.localClient.ShutdownerClient.disable_override_shutdown()
-		except:
+		except Exception as e:
 			pass
 
-		return [action,ret]
+		return {"action":action,"status":ret}
 			
 	#def switchOverrideShutdown
 	
@@ -246,4 +244,5 @@ class N4dManager:
 
 	#def _checkConnectionWithServer
 	
+
 #class N4dManager
