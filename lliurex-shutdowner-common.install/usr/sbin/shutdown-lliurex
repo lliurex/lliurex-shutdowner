@@ -97,14 +97,17 @@ class Shutdowner:
             ).stdout.strip()
             
             if session_type == "wayland":
-                command = f"su -c 'QT_QPA_PLATFORM={waylandCommand} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {user} &"
+                env_var=f"QT_QPA_PLATFORM={waylandCommand}"
             else:
                 if not display:
                     display = ":0"
-                command = f"su -c 'DISPLAY=%{display} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}' {user} &" 
-                    
-            self.dprint("\t%s" % command)
-            os.system(command)
+                env_var=f"DISPLAY={display}"
+
+            inner_command=f"{env_var} /usr/sbin/shutdown-lliurex-dialog.py {wait_time}"
+            command = ["su","-c",inner_command,user]
+
+            self.dprint(f"\t{' '.join(command)}")
+            subprocess.Popen(command)
         
 
         self.dprint("Calling basic_shutdown...")
