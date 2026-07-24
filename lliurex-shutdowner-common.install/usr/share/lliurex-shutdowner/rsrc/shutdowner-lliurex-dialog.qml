@@ -1,137 +1,110 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Window
 
 ApplicationWindow {
-	visible: true
-	title: "LliureX Shutdowner"
-	property int margin: 1
-	color:"#eff0f1"
-	width: 610
-	height: mainLayout.implicitHeight + 2 * margin
-	minimumWidth: 610
-	minimumHeight: mainLayout.Layout.minimumHeight + 2 * margin
-	maximumWidth: 610
-	maximumHeight: mainLayout.Layout.maximumHeight + 2 * margin
-	Component.onCompleted: {
-	    x = Screen.width/2 - width/2 
-        y = Screen.height/2 - height/2
+    id: window
+    visible: true
+    title: "LliureX Shutdowner"
+    color: "#eff0f1"
 
+    width: 610
+    height: btnBox.visible ? 205 : 160
+    minimumWidth: 610
+    maximumWidth: 610
+    minimumHeight: height
+    maximumHeight: height
+
+    Component.onCompleted: {
+        window.x = (screen.width - window.width) / 2
+        window.y = (screen.height - window.height) / 2
     }
 
-    onClosing:(close)=> {
-     	if (bridge.closed(true))
-     		close.accepted=true;
-        else
-        	close.accepted=false;	
-              
+    onClosing: (close) => {
+        if (bridge.closed(true)) {
+            close.accepted = true;
+        } else {
+            close.accepted = false;
+        }
     }
 
-    ColumnLayout {
-    	id: mainLayout
-    	anchors.fill: parent
-    	anchors.margins: margin
-    	Layout.minimumWidth:610	
-    	Layout.maximumWidth:610
-    	Layout.minimumHeight:btnBox.visible?205:160
-    	Layout.maximumHeight:btnBox.visible?205:160
-    	
-	   	GridLayout {
-	   		id: grid
-	   		Layout.topMargin: 5
-	   		Layout.bottomMargin: 0
-	   		rows: 3
-	   		columns: 2
-	   		Rectangle {
-	   			color:"transparent"
-	   			Layout.rowSpan: 1
-	   			Layout.columnSpan: 1
-	   			Layout.leftMargin:10
-	   			width:60
-	   			height:60
-	   			Image{
-	   				source:"/usr/share/icons/breeze/status/64/dialog-warning.svg"
-	   				anchors.centerIn:parent
-	   			}
-	   		}
-	   		Rectangle {
-	   			color:"transparent"
-	   			Layout.rowSpan: 1
-	   			Layout.columnSpan: 1
-	   			height:60
-	   			Layout.fillWidth: true
-	   			Layout.leftMargin:10
-	   			Text{
-	   				id:warningText
-	   				text:bridge.translateMsg[0]
-	   				font.family: "Quattrocento Sans Bold"
-	   				font.pointSize: 11
-	   				anchors.left: parent.left
-	   				anchors.verticalCenter:parent.verticalCenter
-	   			}
-	   		}
-	   		Rectangle {
-	   			color:"transparent"
-	   			Layout.rowSpan: 1
-	   			Layout.columnSpan: 2
-	   			Layout.fillWidth: true
-	   			height:70
-	   			Text {
-	   				id:countDown
-	   				visible:true
-	   				font.family: "Quattrocento Sans Bold"
-	   				font.pointSize: 50
-	   				anchors.centerIn:parent
-	   				text:bridge.timeRemaining[0]
-	   				color:bridge.timeRemaining[1]
-	   			}
-	   		}
-	   		Rectangle {
-	   			id:btnBox
-	   			color:"transparent"
-	   			visible:bridge.visibleCancelBtn
-	   			Layout.rowSpan: 1
-	   			Layout.columnSpan: 2
-	   			Layout.fillWidth: true
-	   			Layout.rightMargin:10
-	   			height:60
-	   			Button {
-	   				id:cancelBtn
-	   				height: 35
-	   				anchors.right: parent.right
-	   				anchors.verticalCenter:parent.verticalCenter
-	   				display:AbstractButton.TextBesideIcon
-	   				icon.source:"/usr/share/icons/breeze/actions/16/dialog-cancel.svg"
-	   				icon.width:16
-	   				icon.height:16
-	   				text:bridge.translateMsg[1]
-	   				background: Rectangle{ 
-	   					color:"#f0f1f2"
-	   					border.color: "#b3b5b6"
-	   					radius:2
-					}
-					MouseArea {
-						id: mouseArea
-						anchors.fill: parent
-						hoverEnabled: true
-						onEntered: {
-							parent.background.border.color="#3daee9"
-						}
-						onExited: {
-							parent.background.border.color="#b3b5b6"
-						}
-						onPressed:{
-							parent.background.color="#94cfeb"
-						}
-						onClicked:{
-							bridge.cancelClicked(),
-							removePropertiesConnect()
-						} 
-					}	 
-				}	
-		    }
-		}
-	
-	 }
-}  		
+    GridLayout {
+        id: grid
+        anchors.fill: parent
+        anchors.margins: 10
+        rows: 3
+        columns: 2
+        rowSpacing: 10
+        columnSpacing: 10
+
+        Item {
+            Layout.preferredWidth: 60
+            Layout.preferredHeight: 60
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+            Image {
+                source: "file:///usr/share/icons/breeze/status/64/dialog-warning.svg"
+                anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 60
+
+            Text {
+                id: warningText
+                text: bridge.translateMsg.msg
+                font.pointSize: 11
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        Item {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.preferredHeight: 70
+
+            Text {
+                id: countDown
+                font.pointSize: 50
+                anchors.centerIn: parent
+                text: bridge.timeRemaining.time
+                color: bridge.timeRemaining.color
+            }
+        }
+
+        Item {
+            id: btnBox
+            visible: bridge.visibleCancelBtn
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.preferredHeight: 40
+
+            Button {
+                id: cancelBtn
+                height: 35
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                display: AbstractButton.TextBesideIcon
+                icon.source: "file:///usr/share/icons/breeze/actions/16/dialog-cancel.svg"
+                icon.width: 16
+                icon.height: 16
+                text: bridge.translateMsg.btnMsg
+
+                onClicked:bridge.cancelClicked()
+
+                background: Rectangle {
+                    implicitWidth: 100
+                    implicitHeight: 35
+                    color: cancelBtn.pressed ? "#94cfeb" : "#f0f1f2"
+                    border.color: cancelBtn.hovered ? "#3daee9" : "#b3b5b6"
+                    border.width: 1
+                    radius: 2
+                }
+            }
+        }
+    }
+}

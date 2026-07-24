@@ -6,47 +6,48 @@ import org.kde.kirigami as Kirigami
 
 Rectangle{
     color:"transparent"
-    Text{ 
-        text:i18nd("lliurex-shutdowner","Server shutdown configuration")
-        font.family: "Quattrocento Sans Bold"
-        font.pointSize: 16
-    }
 
-    GridLayout {
-        id: mainGridServer
-        rows:2
-        flow: GridLayout.TopToBottom
+    ColumnLayout{
+        id:generalLayout
+        anchors.top:parent.top
         anchors.left:parent.left
-        width:parent.width-10
-        height:parent.height-90
+        anchors.right:parent.right
+
+        anchors.leftMargin:5
+        anchors.rightMargin:15
+        anchors.bottomMargin:25
+        spacing: 10
+
+        Text{ 
+            text:i18nd("lliurex-shutdowner","Server shutdown configuration")
+            font.pointSize: 16
+        }
         
         GroupBox {
             id: clockBoxServer
             Layout.fillWidth: true
-            Layout.topMargin: mainStackBridge.showMessage[0]?35:10
+            Layout.topMargin:10
 
             background: Rectangle {
                 color:"#ffffff"
                 border.color: "#d3d3d3"
+                radius:5.0
             }
+
             visible:!clientStackBridge.isStandAlone
 
-            GridLayout {
+            ColumnLayout {
                 id: shutGridServer
-                rows:5
-                flow: GridLayout.TopToBottom
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
-                rowSpacing:5
+                spacing:5
                 anchors.fill:parent
 
                 RowLayout {
                     id: automaticLayoutServer
                     Layout.topMargin: 5
+
                     Text {
                         id:textMessageServer
                         text:i18nd("lliurex-shutdowner","Automatic server shutdown")
-                        font.family: "Quattrocento Sans Bold"
                         font.pointSize: 10
                         Layout.alignment:Qt.AlignVCenter
                         Layout.leftMargin:5
@@ -57,22 +58,6 @@ Rectangle{
                         Layout.alignment:Qt.AlignVCenter
                         Layout.fillWidth: true
                         Layout.rightMargin:5
-                        indicator: Rectangle {
-                            implicitWidth: 40
-                            implicitHeight: 10
-                            x: toggleswitchServer.width - width - toggleswitchServer.rightPadding
-                            y: parent.height/2 - height/2 
-                            radius: 7
-                            color: toggleswitchServer.checked ? "#3daee9" : "#d3d3d3"
-                            Rectangle {
-                                x: toggleswitchServer.checked ? parent.width - width : 0
-                                width: 20
-                                height: 20
-                                y:parent.height/2-height/2
-                                radius: 10
-                                border.color: "#808080"
-                            }
-                        }
                         onToggled: enableLayouts()
         			}
       			}
@@ -81,12 +66,12 @@ Rectangle{
                     Layout.leftMargin: 5
                     Layout.rightMargin:5
                     Layout.bottomMargin: 10
+                    Layout.fillWidth:true
                     Layout.preferredWidth: 555
                     height: 1
-                    border.color:"#000000"
-                    border.width: 5
-                    radius: 10
+                    color:"#000000"
                 }
+
       			RowLayout {
                     id: serverLayoutOp1
                     Layout.fillWidth: true
@@ -107,7 +92,6 @@ Rectangle{
                 RowLayout {
                     id: serverLayoutOp2
                     Layout.fillWidth: true
-                    Layout.bottomMargin: 10
                     enabled:toggleswitchServer.checked
                     visible:true
                     spacing:15
@@ -122,22 +106,23 @@ Rectangle{
                 } 
 
                 RowLayout{
+                    Layout.fillWidth:true
                     Cron{
                         id:cronServer
+                        Layout.fillWidth:true
                         clockLayoutEnabled:enableClock()
-                        currentHour:serverStackBridge.initClockServer[0]				
-                        currentMinutes:serverStackBridge.initClockServer[1]
+                        currentHour:serverStackBridge.initClockServer.hour				
+                        currentMinutes:serverStackBridge.initClockServer.minute
                         daysLayoutEnabled:clockLayoutEnabled
-                        mondayChecked:serverStackBridge.initWeekDaysServer[0]
-                        tuesdayChecked:serverStackBridge.initWeekDaysServer[1]
-                        wednesdayChecked:serverStackBridge.initWeekDaysServer[2]
-                        thursdayChecked:serverStackBridge.initWeekDaysServer[3]
-                        fridayChecked:serverStackBridge.initWeekDaysServer[4]
+                        weekDays:serverStackBridge.initWeekDaysServer
 
                         Connections{
+                            target: cronServer
+
                             function onUpdateClock(value){
                                 serverStackBridge.getClockServerValues(value);
             		    	}
+
                             function onUpdateWeekDays(value){
                                 serverStackBridge.getWeekServerValues(value);	
             		    	}

@@ -3,48 +3,40 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
-
 Rectangle{
-    color:"transparent"
-    Text{ 
-       text:!clientStackBridge.isStandAlone?i18nd("lliurex-shutdowner","Client shutdown configuration"):i18nd("lliurex-shutdowner","Desktop shutdown configuration")
-        font.family: "Quattrocento Sans Bold"
-        font.pointSize: 16
-    }
+	color:"transparent"
 
-    GridLayout {
-		id: mainGridClient
-		rows:2
-		flow: GridLayout.TopToBottom
-		anchors.left:parent.left
-		width:parent.width-10
-		height:parent.height-90
-       
+	ColumnLayout{
+		id:generalLayout
+      	anchors.top:parent.top
+      	anchors.left:parent.left
+      	anchors.right:parent.right
+
+      	anchors.leftMargin:5
+      	anchors.rightMargin:15
+      	anchors.bottomMargin:25
+      	spacing: 10
+
+      	Text{ 
+	      	text:!clientStackBridge.isStandAlone?i18nd("lliurex-shutdowner","Client shutdown configuration"):i18nd("lliurex-shutdowner","Desktop shutdown configuration")
+	      	font.pointSize: 16
+	    }
+
+    
 		GroupBox {
 			id: clockBoxClient
 			Layout.fillWidth: true
-			Layout.topMargin: {
-				if (mainStackBridge.showMessage[0]){
-					35
-				}else{
-					if (!clientStackBridge.isStandAlone){
-						45
-					}
-				}
-			}
-
+			Layout.topMargin:10
+			
 			background: Rectangle {
 				color:"#ffffff"
 				border.color: "#d3d3d3"
+				radius:5.0
         	}
 
-        	GridLayout {
+        	ColumnLayout {
         		id: shutGridClient
-        		rows:5
-        		flow: GridLayout.TopToBottom
-        		Layout.topMargin: 10
-        		Layout.bottomMargin: 10
-        		rowSpacing:5
+        		spacing:5
         		anchors.fill:parent
 
         		RowLayout {
@@ -53,7 +45,6 @@ Rectangle{
         			Text {
         				id:textMessageClient
         				text:!clientStackBridge.isStandAlone? i18nd("lliurex-shutdowner","Automatic client shutdown"):i18nd("lliurex-shutdowner","Automatic shutdown")
-						font.family: "Quattrocento Sans Bold"
 						font.pointSize: 10
 						Layout.alignment:Qt.AlignVCenter
 						Layout.leftMargin:5
@@ -65,29 +56,11 @@ Rectangle{
 						Layout.alignment:Qt.AlignVCenter
 						Layout.fillWidth: true
 						Layout.rightMargin:5
-						indicator: Rectangle {
-							implicitWidth: 40
-							implicitHeight: 10
-							x: toggleswitch.width - width - toggleswitch.rightPadding
-							y: parent.height/2 - height/2 
-							radius: 7
-							color: toggleswitch.checked ? "#3daee9" : "#d3d3d3"
-
-							Rectangle {
-								x: toggleswitch.checked ? parent.width - width : 0
-								width: 20
-								height: 20
-								y:parent.height/2-height/2
-								radius: 10
-								border.color: "#808080"
-					    	}
-						}	
-
 						onToggled: {
-							clientStackBridge.getCronSwitchValue(toggleswitch.checked);
-							cronClient.clockLayoutEnabled=toggleswitch.checked,
-							cronClient.daysLayoutEnabled=toggleswitch.checked,
-							serverOptionsLayout.enabled=toggleswitch.checked;
+							clientStackBridge.getCronSwitchValue(toggleswitch.checked)
+							cronClient.clockLayoutEnabled=toggleswitch.checked
+							cronClient.daysLayoutEnabled=toggleswitch.checked
+							serverOptionsLayout.enabled=toggleswitch.checked
 						}
 					}
 				}
@@ -96,30 +69,31 @@ Rectangle{
 					Layout.leftMargin: 5
 					Layout.rightMargin:5
 					Layout.bottomMargin: 10
+					Layout.fillWidth:true
 					Layout.preferredWidth: 555
 					height: 1
-					border.color:"#000000"
-					border.width: 5
-					radius: 10
+					color:"#000000"
 				}
 
 				RowLayout{
+					Layout.fillWidth:true
+
 					Cron{
 						id:cronClient
+						Layout.fillWidth:true
 						clockLayoutEnabled:clientStackBridge.isCronEnabled
-						currentHour:clientStackBridge.initClockClient[0]
-						currentMinutes:clientStackBridge.initClockClient[1]
+						currentHour:clientStackBridge.initClockClient.hour
+						currentMinutes:clientStackBridge.initClockClient.minute
 						daysLayoutEnabled:clientStackBridge.isCronEnabled
-						mondayChecked:clientStackBridge.initWeekDaysClient[0]
-						tuesdayChecked:clientStackBridge.initWeekDaysClient[1]
-						wednesdayChecked:clientStackBridge.initWeekDaysClient[2]
-						thursdayChecked:clientStackBridge.initWeekDaysClient[3]
-						fridayChecked:clientStackBridge.initWeekDaysClient[4]
+						weekDays:clientStackBridge.initWeekDaysClient
 
 						Connections{
+							target:cronClient
+
 							function onUpdateClock(value){
 								clientStackBridge.getClockClientValues(value);
 							}
+
 							function onUpdateWeekDays(value){
 								clientStackBridge.getWeekClientValues(value);	
 							}
@@ -135,27 +109,27 @@ Rectangle{
 					enabled:clientStackBridge.isCronEnabled
 					visible:!clientStackBridge.isStandAlone
 					spacing:15
+
 					Text{
 						id:serverOptionsText
 						text:i18nd("lliurex-shutdowner","Shutdown server as well:")
-						font.family: "Quattrocento Sans Bold"
 						font.pointSize: 10
 						Layout.alignment:Qt.AlignVCenter
 						Layout.minimumWidth:10
 						Layout.leftMargin:5
 					}
+
 					Text {
 						id:serverConfiguredOpText
 						text:getTextOption()
-						font.family: "Quattrocento Sans Bold"
 						font.pointSize: 10
 						Layout.maximumWidth:240
 					}
+
 					Button {
 						id:serverConfigBtn
 						display:AbstractButton.IconOnly
-						icon.name:"configure.svg"
-						Layout.preferredHeight: 40
+						icon.name:"configure"
 						Layout.topMargin: 5
 						Layout.bottomMargin: 5
 						Layout.rightMargin:5
@@ -176,24 +150,22 @@ Rectangle{
 		GroupBox {
 			id: clientBox
 			Layout.fillWidth: true
-			Layout.maximumHeight:80
 			Layout.alignment:Qt.AlignHCenter
 			visible:!clientStackBridge.isStandAlone
+			
 			background: Rectangle {
 				color:"#ffffff"
 				border.color: "#d3d3d3"
+				radius:5.0
 			}
 
 			RowLayout {
 				id: clientLayout
-				Layout.topMargin: 0
-				Layout.bottomMargin: 10
 				anchors.fill:parent
 
 				Text {
 					id:clientText
 					text:i18nd("lliurex-shutdowner","Currently detected clients:")
-					font.family: "Quattrocento Sans Bold"
 					font.pointSize: 10
 					Layout.alignment:Qt.AlignVCenter
 					Layout.minimumWidth:10
@@ -203,7 +175,6 @@ Rectangle{
 				Text {
 					id:numberclientTex
 					text:clientStackBridge.detectedClients
-					font.family: "Quattrocento Sans Bold"
 					font.pointSize: 10
 					Layout.maximumWidth:240
 					Layout.fillWidth: true
@@ -212,9 +183,8 @@ Rectangle{
 				Button {
 					id:shutnowBtn
 					display:AbstractButton.TextBesideIcon
-					icon.name:"system-shutdown.svg"
+					icon.name:"system-shutdown"
 					text:i18nd("lliurex-shutdowner","Shutdown clients now")
-					Layout.preferredHeight: 40
 					Layout.topMargin: 5
 					Layout.bottomMargin: 5
 					Layout.rightMargin:5

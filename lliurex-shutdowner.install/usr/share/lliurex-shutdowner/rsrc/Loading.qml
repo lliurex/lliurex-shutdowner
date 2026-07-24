@@ -5,70 +5,87 @@ import org.kde.kirigami as Kirigami
 
 
 Rectangle{
+    id:loadRoot
     visible: true
 
-    GridLayout{
-        id: loadGrid
-        rows: 3
-        flow: GridLayout.TopToBottom
-        anchors.centerIn:parent
+    color:"transparent"
 
-        RowLayout{
-            Layout.fillWidth: true
-            Layout.alignment:Qt.AlignHCenter
-            visible:!mainStackBridge.isThereAreError[0]
+    ColumnLayout {
+        id: mainLoaderLayout
+        anchors.centerIn: parent
+        width: parent.width * 0.9
+        spacing: 15
 
-            Rectangle{
-                color:"transparent"
-                width:30
-                height:30
-                
-                AnimatedImage{
-                    source: "/usr/share/lliurex-shutdowner/rsrc/loading.gif"
-                    transform: Scale {xScale:0.45;yScale:0.45}
+        ColumnLayout{
+            Layout.alignment: Qt.AlignHCenter
+            spacing:10
+
+            Image{
+                id:spinnerImage
+                source: "loading.png"
+                visible:!mainStackBridge.isThereAnError.show
+                Layout.preferredWidth: 32
+                Layout.preferredHeight: 32
+                Layout.alignment: Qt.AlignHCenter
+                fillMode: Image.PreserveAspectFit
+                smooth:false
+                antialiasing:false
+
+                rotation:0
+            }
+            
+            Timer{
+                id:rotationTimer
+                running:(spinnerImage!==null && loadRoot!==null) && loadRoot.visible
+                repeat:true
+                interval:100
+
+                onTriggered:{
+
+                    if (spinnerImage && typeof spinnerImage.rotation!="undefined"){
+                        var nextRotation= spinnerImage.rotation-30
+                        if (nextRotation<0){
+                            nextRotation=330
+                        }
+                        spinnerImage.rotation=nextRotation
+                     }else{
+                        stop()
+                     }   
+
                 }
             }
-        }
 
-        RowLayout{
-            Layout.fillWidth: true
-            Layout.alignment:Qt.AlignHCenter
-            visible:!mainStackBridge.isThereAreError[0]
-
-            Text{
-                id:loadtext
-                text:i18nd("lliurex-shutdowner", "Loading. Wait a moment...")
-                font.family: "Quattrocento Sans Bold"
-                font.pointSize: 10
-                Layout.alignment:Qt.AlignHCenter
+            Kirigami.InlineMessage{
+                id:errorLabel
+                visible:mainStackBridge.isThereAnError.show
+                text:getMsgError()
+                type:Kirigami.MessageType.Error
+                Layout.fillWidth:true
             }
+
+            Text {
+                id: loadText
+                text:i18nd("lliurex-access-control", "Loading. Wait a moment...")
+                visible:!mainStackBridge.isThereAnError.show
+                font.pointSize: 10
+                color: palette.windowText
+                Layout.alignment: Qt.AlignHCenter
+            }
+
         }
 
-        Kirigami.InlineMessage{
-            id:errorLabel
-            visible:mainStackBridge.isThereAreError[0]
-            text:getMsgError()
-            type:Kirigami.MessageType.Error
-            Layout.minimumWidth:750
-            Layout.rightMargin:15
-            Layout.leftMargin:15
-
-        }
     }
 
     function getMsgError(){
 
-        switch(mainStackBridge.isThereAreError[1]){
+         switch(mainStackBridge.isThereAnError.msgCode){
             case -50:
-                var msg=i18nd("lliurex-shutdowner","Unable to connect with localhost")
-                break;
+                return i18nd("lliurex-shutdowner","Unable to connect with localhost")
             case -60:
-                var msg=i18nd("lliurex-shutdowner","An error ocurred while loading data. Restart your computer and try again")
-                break;
+                return i18nd("lliurex-shutdowner","An error ocurred when loading data. Restart your computer and try again")
             default:
-                var msg=""
-                break;
-        }
-        return msg;
+                return ""
+         }
+
     }
 }
