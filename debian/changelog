@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.32.8) noble; urgency=medium
+
+  * Refactorized code to improve perfomance and facilitate future maintenance
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Fri, 24 Jul 2026 10:39:29 +0200
+
 lliurex-shutdowner (2.32.7) noble; urgency=medium
 
   * Changed detection of ADI
