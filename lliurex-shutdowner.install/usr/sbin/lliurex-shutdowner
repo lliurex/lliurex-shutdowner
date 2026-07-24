@@ -118,11 +118,10 @@ class Tunnel(QObject):
 	def on_ticket(self,ticket):
 
 		ticket=ticket.replace(' ','##U+0020##')
-		passwd=None
-		if self._isClient:
-			passwd=f"'{self.passwd}'"
-		os.system(f"python3 /usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py {ticket} {passwd} &")
-		app.quit()
+		passwd=f"'{self.passwd}'" if self._isClient else "None"
+		cmd=["python3","/usr/share/lliurex-shutdowner/lliurex-shutdowner-gui.py",ticket,passwd]
+		subprocess.Popen(cmd)
+		QApplication.quit()
 
 	#def on_ticket
 	

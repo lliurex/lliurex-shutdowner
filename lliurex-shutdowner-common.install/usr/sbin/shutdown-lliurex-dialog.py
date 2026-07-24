@@ -148,7 +148,7 @@ class Bridge(QObject):
 			ret=self.client.cancel_shutdown('','ShutdownerManager')
 		except:
 			pass
-		app.quit()
+		QApplication.quit()
 
 	#def cancelClicked
 
