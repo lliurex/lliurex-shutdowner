@@ -65,7 +65,6 @@ class Tunnel(QObject):
 		if os.path.exists(packageVersionFile):
 			with open(packageVersionFile,'r') as fd:
 				pkgVersion=fd.readline()
-				fd.close()
 
 		return pkgVersion
 

@@ -10,6 +10,7 @@ import subprocess
 import gettext
 import xmlrpc.client as n4dclient
 import ssl
+import shutil
 gettext.textdomain("lliurex-shutdowner-common")
 _=gettext.gettext
 
@@ -21,7 +22,6 @@ class Bridge(QObject):
 	def __init__(self,wait_time):
 
 		QObject.__init__(self)
-
 		self.adiServer="/usr/bin/natfree-adi"
 		self.adiClient="/usr/bin/natfree-tie"
 		self.indicatorColor="#3daee9"
@@ -36,6 +36,7 @@ class Bridge(QObject):
 		else:
 			self._timeRemaining={"time":"01:00","color":self.indicatorColor}
 
+		self.clearCache()
 		self.initValues()
 
 	#def __init__
@@ -65,7 +66,50 @@ class Bridge(QObject):
 
 		return self._visibleCancelBtn
 
-	#def _getVisibleCancelBtn	
+	#def _getVisibleCancelBtn
+
+	def clearCache(self):
+
+		clear=False
+		userHome=os.path.expanduser("~")
+		versionFile=os.path.join(userHome,".config/lliurex-shutdowner.conf")
+		cachePath=os.path.join(userHome,".cache/shutdown-lliurex-dialog.py")
+
+		installedVersion=self._getPackageVersion()
+
+		if not os.path.exists(versionFile):
+			with open(versionFile,'w') as fd:
+				fd.write(installedVersion)
+
+			clear=True
+
+		else:
+			with open(versionFile,'r') as fd:
+				fileVersion=fd.readline()
+
+			if fileVersion!=installedVersion:
+				with open(versionFile,'w') as fd:
+					fd.write(installedVersion)
+				clear=True
+		
+		if clear:
+			if os.path.exists(cachePath):
+				shutil.rmtree(cachePath)
+
+	#def clearCache
+
+	def _getPackageVersion(self):
+
+		packageVersionFile="/var/lib/lliurex-shutdowner/version"
+		pkgVersion=""
+
+		if os.path.exists(packageVersionFile):
+			with open(packageVersionFile,'r') as fd:
+				pkgVersion=fd.readline()
+
+		return pkgVersion
+
+	#def _getPackageVersion
 
 	def initValues(self):
 		
@@ -142,6 +186,7 @@ class Bridge(QObject):
 
 	@Slot()
 	def cancelClicked(self):
+		
 		self.countdownTimer.stop()
 		subprocess.run(["shutdown","-c"])
 		QApplication.quit()
