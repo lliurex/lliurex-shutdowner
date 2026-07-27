@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.21.7) jammy; urgency=medium
+
+  * Changed to remove countdown message cache when version is updated
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 27 Jul 2026 11:39:21 +0200
+
 lliurex-shutdowner (2.21.6) jammy; urgency=medium
 
   * Refactorized code to improve performance and facilitate future maintenance
