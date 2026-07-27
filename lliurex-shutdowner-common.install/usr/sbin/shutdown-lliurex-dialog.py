@@ -73,7 +73,9 @@ class Bridge(QObject):
 		clear=False
 		userHome=os.path.expanduser("~")
 		versionFile=os.path.join(userHome,".config/lliurex-shutdowner.conf")
-		cachePath=os.path.join(userHome,".cache/shutdown-lliurex-dialog.py")
+		cachePath1=os.path.join(userHome,".cache/lliurex-shutdowner")
+		cachePath2=os.path.join(userHome,".cache/lliurex-shutdowner-gui.py")
+		cachePath3=os.path.join(userHome,".cache/shutdown-lliurex-dialog.py")
 
 		installedVersion=self._getPackageVersion()
 
@@ -93,8 +95,12 @@ class Bridge(QObject):
 				clear=True
 		
 		if clear:
-			if os.path.exists(cachePath):
-				shutil.rmtree(cachePath)
+			if os.path.exists(cachePath1):
+				shutil.rmtree(cachePath1)
+			if os.path.exists(cachePath2):
+				shutil.rmtree(cachePath2)
+			if os.path.exists(cachePath3):
+				shutil.rmtree(cachePath3)
 
 	#def clearCache
 
