@@ -1,3 +1,9 @@
+lliurex-shutdowner (2.32.9) noble; urgency=medium
+
+  * Changed to remove countdown message cache when the versión is updated
+  
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Mon, 27 Jul 2026 11:35:12 +0200
+
 lliurex-shutdowner (2.32.8) noble; urgency=medium
 
   * Refactorized code to improve perfomance and facilitate future maintenance
